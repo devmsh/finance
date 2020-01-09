@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Events\GoalAchieved;
 use Illuminate\Database\Eloquent\Model;
 
 class Goal extends Model
@@ -15,6 +16,21 @@ class Goal extends Model
 
     public function addTransaction($data)
     {
-        return $this->transcations()->create($data);
+        $transaction = $this->transcations()->create($data);
+
+        if ($this->isAchieved()) event(new GoalAchieved($this));
+
+        return $transaction;
     }
+
+    public function isAchieved()
+    {
+        return $this->total <= $this->trackedAmount();
+    }
+
+    private function trackedAmount()
+    {
+        return $this->transcations()->sum('amount');
+    }
+
 }

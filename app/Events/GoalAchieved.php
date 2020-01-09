@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+use App\Goal;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -13,15 +14,19 @@ use Illuminate\Queue\SerializesModels;
 class GoalAchieved
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
+    /**
+     * @var Goal
+     */
+    public $goal;
 
     /**
      * Create a new event instance.
      *
-     * @return void
+     * @param Goal $goal
      */
-    public function __construct()
+    public function __construct(Goal $goal)
     {
-        //
+        $this->goal = $goal;
     }
 
     /**

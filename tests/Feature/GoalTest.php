@@ -39,7 +39,7 @@ class GoalTest extends TestCase
         $this->assertEquals($due_date,$goal->due_date);
     }
 
-    public function test_goal_may_track_some_transactions()
+    public function test_goal_tracks_some_transactions()
     {
         $this->withoutExceptionHandling();
         /** @var Goal $goal */
@@ -73,9 +73,10 @@ class GoalTest extends TestCase
             'total' => 1000,
         ]);
 
-        factory(Transaction::class)->create([
+        $goal->addTransaction([
+            "description" => "abc",
             "goal_id" => $goal->id,
-            "amount" => 950
+            "amount" => 800
         ]);
 
         $response = $this->post("/api/goals/{$goal->id}/transactions",[
@@ -83,6 +84,15 @@ class GoalTest extends TestCase
             'amount' => 100,
         ]);
 
-        Event::assertDispatched(GoalAchieved::class);
+        Event::assertNotDispatched(GoalAchieved::class);
+
+        $response = $this->post("/api/goals/{$goal->id}/transactions",[
+            'description' => "feb amount",
+            'amount' => 100,
+        ]);
+
+        Event::assertDispatched(GoalAchieved::class,function(GoalAchieved $event) use ($goal){
+            return $event->goal->id == $goal->id;
+        });
     }
 }
