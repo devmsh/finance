@@ -2,11 +2,14 @@
 
 namespace Tests\Feature;
 
+use App\Events\GoalAchieved;
 use App\Goal;
+use App\Transaction;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
 class GoalTest extends TestCase
@@ -15,6 +18,7 @@ class GoalTest extends TestCase
 
     public function test_can_specify_a_goal()
     {
+        $this->withoutExceptionHandling();
         $response = $this->post('/api/goals',[
             'name' => "Home",
             'total' => 1000,
@@ -37,6 +41,7 @@ class GoalTest extends TestCase
 
     public function test_goal_may_track_some_transactions()
     {
+        $this->withoutExceptionHandling();
         /** @var Goal $goal */
         $goal = factory(Goal::class)->create();
 
@@ -59,5 +64,25 @@ class GoalTest extends TestCase
         $this->assertEquals(100,$transaction->amount);
     }
 
+    public function test_detect_that_goal_is_achieved()
+    {
+        Event::fake();
 
+        /** @var Goal $goal */
+        $goal = factory(Goal::class)->create([
+            'total' => 1000,
+        ]);
+
+        factory(Transaction::class)->create([
+            "goal_id" => $goal->id,
+            "amount" => 950
+        ]);
+
+        $response = $this->post("/api/goals/{$goal->id}/transactions",[
+            'description' => "feb amount",
+            'amount' => 100,
+        ]);
+
+        Event::assertDispatched(GoalAchieved::class);
+    }
 }
