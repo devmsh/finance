@@ -2,11 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="20a5f363-79c0-48d3-9327-c1d6da710333" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/finance.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/finance.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Goal.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Goal.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/factories/GoalFactory.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/factories/GoalFactory.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/api.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/Feature/GoalTest.php" beforeDir="false" afterPath="$PROJECT_DIR$/tests/Feature/GoalTest.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -138,13 +138,9 @@
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
-  <component name="RunManager" selected="PHPUnit.GoalTest.test_can_specify_a_goal">
+  <component name="RunManager" selected="PHPUnit.GoalTest">
     <configuration name="ExampleTest (1)" type="PHPUnitRunConfigurationType" factoryName="PHPUnit" temporary="true">
       <TestRunner class="Tests\Unit\ExampleTest" configuration_file="$PROJECT_DIR$/phpunit.xml" file="$PROJECT_DIR$/tests/Unit/ExampleTest.php" scope="Class" />
-      <method v="2" />
-    </configuration>
-    <configuration name="ExampleTest" type="PHPUnitRunConfigurationType" factoryName="PHPUnit" temporary="true">
-      <TestRunner class="Tests\Feature\ExampleTest" configuration_file="$PROJECT_DIR$/phpunit.xml" file="$PROJECT_DIR$/tests/Feature/ExampleTest.php" scope="Class" />
       <method v="2" />
     </configuration>
     <configuration name="ExampleTest.testBasicTest" type="PHPUnitRunConfigurationType" factoryName="PHPUnit" temporary="true">
@@ -159,17 +155,21 @@
       <TestRunner class="Tests\Feature\GoalTest" configuration_file="$PROJECT_DIR$/phpunit.xml" file="$PROJECT_DIR$/tests/Feature/GoalTest.php" method="test_can_specify_a_goal" scope="Method" />
       <method v="2" />
     </configuration>
+    <configuration name="GoalTest.test_goal_may_track_some_transactions" type="PHPUnitRunConfigurationType" factoryName="PHPUnit" temporary="true">
+      <TestRunner class="Tests\Feature\GoalTest" configuration_file="$PROJECT_DIR$/phpunit.xml" file="$PROJECT_DIR$/tests/Feature/GoalTest.php" method="test_goal_may_track_some_transactions" scope="Method" />
+      <method v="2" />
+    </configuration>
     <configuration name="phpunit.xml" type="PHPUnitRunConfigurationType" factoryName="PHPUnit">
       <TestRunner scope="XML" />
       <method v="2" />
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="PHPUnit.GoalTest.test_can_specify_a_goal" />
         <item itemvalue="PHPUnit.GoalTest" />
+        <item itemvalue="PHPUnit.GoalTest.test_goal_may_track_some_transactions" />
+        <item itemvalue="PHPUnit.GoalTest.test_can_specify_a_goal" />
         <item itemvalue="PHPUnit.ExampleTest.testBasicTest" />
         <item itemvalue="PHPUnit.ExampleTest (1)" />
-        <item itemvalue="PHPUnit.ExampleTest" />
       </list>
     </recent_temporary>
   </component>
@@ -200,7 +200,7 @@
       <workItem from="1578567130955" duration="158000" />
       <workItem from="1578567364854" duration="226000" />
       <workItem from="1578567593120" duration="787000" />
-      <workItem from="1578585528536" duration="1468000" />
+      <workItem from="1578585528536" duration="2620000" />
     </task>
     <servers />
   </component>
@@ -212,34 +212,34 @@
       <screen x="0" y="23" width="1440" height="821" />
     </state>
     <state x="407" y="23" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.23.1440.821@0.23.1440.821" timestamp="1578586318444" />
-    <state width="1398" height="364" key="GridCell.Tab.0.bottom" timestamp="1578586995539">
+    <state width="1398" height="364" key="GridCell.Tab.0.bottom" timestamp="1578588131206">
       <screen x="0" y="23" width="1440" height="821" />
     </state>
-    <state width="1398" height="364" key="GridCell.Tab.0.bottom/0.23.1440.821@0.23.1440.821" timestamp="1578586995539" />
-    <state width="1398" height="364" key="GridCell.Tab.0.center" timestamp="1578586995538">
+    <state width="1398" height="364" key="GridCell.Tab.0.bottom/0.23.1440.821@0.23.1440.821" timestamp="1578588131206" />
+    <state width="1398" height="364" key="GridCell.Tab.0.center" timestamp="1578588131205">
       <screen x="0" y="23" width="1440" height="821" />
     </state>
-    <state width="1398" height="364" key="GridCell.Tab.0.center/0.23.1440.821@0.23.1440.821" timestamp="1578586995538" />
-    <state width="1398" height="364" key="GridCell.Tab.0.left" timestamp="1578586995535">
+    <state width="1398" height="364" key="GridCell.Tab.0.center/0.23.1440.821@0.23.1440.821" timestamp="1578588131205" />
+    <state width="1398" height="364" key="GridCell.Tab.0.left" timestamp="1578588131205">
       <screen x="0" y="23" width="1440" height="821" />
     </state>
-    <state width="1398" height="364" key="GridCell.Tab.0.left/0.23.1440.821@0.23.1440.821" timestamp="1578586995535" />
-    <state width="1398" height="364" key="GridCell.Tab.0.right" timestamp="1578586995539">
+    <state width="1398" height="364" key="GridCell.Tab.0.left/0.23.1440.821@0.23.1440.821" timestamp="1578588131205" />
+    <state width="1398" height="364" key="GridCell.Tab.0.right" timestamp="1578588131206">
       <screen x="0" y="23" width="1440" height="821" />
     </state>
-    <state width="1398" height="364" key="GridCell.Tab.0.right/0.23.1440.821@0.23.1440.821" timestamp="1578586995539" />
+    <state width="1398" height="364" key="GridCell.Tab.0.right/0.23.1440.821@0.23.1440.821" timestamp="1578588131206" />
     <state x="221" y="72" key="SettingsEditor" timestamp="1578567453135">
       <screen x="0" y="23" width="1440" height="821" />
     </state>
     <state x="221" y="72" key="SettingsEditor/0.23.1440.821@0.23.1440.821" timestamp="1578567453135" />
-    <state width="500" height="445" key="SwitcherDM" timestamp="1578586571434">
+    <state width="500" height="445" key="SwitcherDM" timestamp="1578587946619">
       <screen x="0" y="23" width="1440" height="821" />
     </state>
-    <state width="500" height="445" key="SwitcherDM/0.23.1440.821@0.23.1440.821" timestamp="1578586571434" />
-    <state x="385" y="168" width="670" height="676" key="search.everywhere.popup" timestamp="1578586639838">
+    <state width="500" height="445" key="SwitcherDM/0.23.1440.821@0.23.1440.821" timestamp="1578587946619" />
+    <state x="385" y="168" width="670" height="676" key="search.everywhere.popup" timestamp="1578587973640">
       <screen x="0" y="23" width="1440" height="821" />
     </state>
-    <state x="385" y="168" width="670" height="676" key="search.everywhere.popup/0.23.1440.821@0.23.1440.821" timestamp="1578586639838" />
+    <state x="385" y="168" width="670" height="676" key="search.everywhere.popup/0.23.1440.821@0.23.1440.821" timestamp="1578587973640" />
   </component>
   <component name="masterDetails">
     <states>

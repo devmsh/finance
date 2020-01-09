@@ -34,4 +34,30 @@ class GoalTest extends TestCase
         $this->assertEquals(1000,$goal->total);
         $this->assertEquals($due_date,$goal->due_date);
     }
+
+    public function test_goal_may_track_some_transactions()
+    {
+        /** @var Goal $goal */
+        $goal = factory(Goal::class)->create();
+
+        $response = $this->post("/api/goals/{$goal->id}/transactions",[
+            'description' => "feb amount",
+            'amount' => 100,
+        ]);
+
+        $response->assertSuccessful();
+        $response->assertJsonStructure([
+            "id",
+            "description",
+            "amount",
+        ]);
+
+        $this->assertCount(1,$goal->transcations);
+
+        $transaction = $goal->transcations->first();
+        $this->assertEquals("feb amount",$transaction->description);
+        $this->assertEquals(100,$transaction->amount);
+    }
+
+
 }
