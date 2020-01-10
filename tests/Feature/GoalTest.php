@@ -4,7 +4,6 @@ namespace Tests\Feature;
 
 use App\Events\GoalAchieved;
 use App\Goal;
-use App\Transaction;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -18,7 +17,6 @@ class GoalTest extends TestCase
 
     public function test_can_specify_a_goal()
     {
-        $this->withoutExceptionHandling();
         $response = $this->post('/api/goals',[
             'name' => "Home",
             'total' => 1000,
@@ -41,7 +39,6 @@ class GoalTest extends TestCase
 
     public function test_goal_tracks_some_transactions()
     {
-        $this->withoutExceptionHandling();
         /** @var Goal $goal */
         $goal = factory(Goal::class)->create();
 
@@ -57,9 +54,9 @@ class GoalTest extends TestCase
             "amount",
         ]);
 
-        $this->assertCount(1,$goal->transcations);
+        $this->assertCount(1,$goal->transactions);
 
-        $transaction = $goal->transcations->first();
+        $transaction = $goal->transactions->first();
         $this->assertEquals("feb amount",$transaction->description);
         $this->assertEquals(100,$transaction->amount);
     }
@@ -73,20 +70,14 @@ class GoalTest extends TestCase
             'total' => 1000,
         ]);
 
-        $goal->addTransaction([
-            "description" => "abc",
-            "goal_id" => $goal->id,
-            "amount" => 800
-        ]);
-
-        $response = $this->post("/api/goals/{$goal->id}/transactions",[
+        $this->post("/api/goals/{$goal->id}/transactions",[
             'description' => "feb amount",
-            'amount' => 100,
+            'amount' => 900,
         ]);
 
         Event::assertNotDispatched(GoalAchieved::class);
 
-        $response = $this->post("/api/goals/{$goal->id}/transactions",[
+        $this->post("/api/goals/{$goal->id}/transactions",[
             'description' => "feb amount",
             'amount' => 100,
         ]);

@@ -9,14 +9,14 @@ class Goal extends Model
 {
     protected $guarded = [];
 
-    public function transcations()
+    public function transactions()
     {
         return $this->hasMany(Transaction::class);
     }
 
     public function addTransaction($data)
     {
-        $transaction = $this->transcations()->create($data);
+        $transaction = $this->transactions()->create($data);
 
         if ($this->isAchieved()) event(new GoalAchieved($this));
 
@@ -28,9 +28,9 @@ class Goal extends Model
         return $this->total <= $this->trackedAmount();
     }
 
-    private function trackedAmount()
+    public function trackedAmount()
     {
-        return $this->transcations()->sum('amount');
+        return $this->transactions()->sum('amount');
     }
 
 }
