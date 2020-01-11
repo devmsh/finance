@@ -6,7 +6,6 @@ use App\Exceptions\NotAbleToSaveException;
 use App\Goal;
 use App\Plan;
 use Carbon\Carbon;
-use Carbon\Carbons;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
