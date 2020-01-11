@@ -77,6 +77,4 @@ class WalletTest extends TestCase
         $this->assertEquals(-100, $transaction->amount);
         $this->assertInstanceOf(Wallet::class, $transaction->trackable);
     }
-
-    // transfer (Wallet >> Goal, Wallet >> Wallet)
 }

@@ -4,7 +4,6 @@ namespace Tests\Feature;
 
 use App\Events\GoalAchieved;
 use App\Goal;
-use App\Wallet;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -21,7 +20,7 @@ class GoalTest extends TestCase
         $response = $this->post('/api/goals',[
             'name' => "Home",
             'total' => 1000,
-            "due_date" => $due_date = Carbon::now()->addYear()
+            "due_date" => $due_date = Carbon::today()->addYear()
         ]);
 
         $response->assertSuccessful();
@@ -32,6 +31,7 @@ class GoalTest extends TestCase
             "due_date"
         ]);
 
+        /** @var Goal $goal */
         $goal = Goal::find(1);
         $this->assertEquals("Home",$goal->name);
         $this->assertEquals(1000,$goal->total);
