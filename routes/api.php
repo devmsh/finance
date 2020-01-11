@@ -18,4 +18,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::resource('goals','GoalController');
+Route::resource('wallets','WalletController');
 Route::resource('goals.transactions','GoalTransactionController');
+Route::resource('wallets.income','WalletIncomeController');

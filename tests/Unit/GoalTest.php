@@ -11,7 +11,7 @@ class GoalTest extends TestCase
 {
     use DatabaseMigrations;
 
-    public function test_goal_may_track_some_transactions()
+    public function test_goal_track_some_transactions()
     {
         $goal = factory(Goal::class)->create();
 
