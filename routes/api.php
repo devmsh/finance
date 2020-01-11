@@ -21,3 +21,4 @@ Route::resource('goals','GoalController');
 Route::resource('wallets','WalletController');
 Route::resource('goals.transactions','GoalTransactionController');
 Route::resource('wallets.income','WalletIncomeController');
+Route::resource('wallets.expenses','WalletExpenseController');

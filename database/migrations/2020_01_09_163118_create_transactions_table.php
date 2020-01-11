@@ -15,10 +15,9 @@ class CreateTransactionsTable extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('goal_id')->nullable();
-            $table->unsignedBigInteger('wallet_id')->nullable();
             $table->string('note');
             $table->bigInteger('amount');
+            $table->morphs('trackable');
             $table->timestamps();
         });
     }

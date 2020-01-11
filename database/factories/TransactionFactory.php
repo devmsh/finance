@@ -10,8 +10,5 @@ $factory->define(Transaction::class, function (Faker $faker) {
     return [
         'note' => $faker->sentence,
         'amount' => $faker->numberBetween(1,500),
-        'goal_id' => function(){
-            return factory(Goal::class)->create()->id;
-        }
     ];
 });

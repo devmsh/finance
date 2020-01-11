@@ -3,16 +3,14 @@
 namespace App;
 
 use App\Events\GoalAchieved;
+use App\Traits\HasTransactions;
 use Illuminate\Database\Eloquent\Model;
 
 class Goal extends Model
 {
-    protected $guarded = [];
+    use HasTransactions;
 
-    public function transactions()
-    {
-        return $this->hasMany(Transaction::class);
-    }
+    protected $guarded = [];
 
     public function addTransaction($data)
     {
@@ -25,12 +23,6 @@ class Goal extends Model
 
     public function isAchieved()
     {
-        return $this->total <= $this->trackedAmount();
+        return $this->total <= $this->balance();
     }
-
-    public function trackedAmount()
-    {
-        return $this->transactions()->sum('amount');
-    }
-
 }

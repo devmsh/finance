@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Events\GoalAchieved;
 use App\Goal;
+use App\Wallet;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -43,22 +44,23 @@ class GoalTest extends TestCase
         $goal = factory(Goal::class)->create();
 
         $response = $this->post("/api/goals/{$goal->id}/transactions",[
-            'description' => "feb amount",
+            'note' => "feb amount",
             'amount' => 100,
         ]);
 
         $response->assertSuccessful();
         $response->assertJsonStructure([
             "id",
-            "description",
+            "note",
             "amount",
         ]);
 
         $this->assertCount(1,$goal->transactions);
 
         $transaction = $goal->transactions->first();
-        $this->assertEquals("feb amount",$transaction->description);
+        $this->assertEquals("feb amount",$transaction->note);
         $this->assertEquals(100,$transaction->amount);
+        $this->assertInstanceOf(Goal::class, $transaction->trackable);
     }
 
     public function test_detect_that_goal_is_achieved()
@@ -71,14 +73,14 @@ class GoalTest extends TestCase
         ]);
 
         $this->post("/api/goals/{$goal->id}/transactions",[
-            'description' => "feb amount",
+            'note' => "feb amount",
             'amount' => 900,
         ]);
 
         Event::assertNotDispatched(GoalAchieved::class);
 
         $this->post("/api/goals/{$goal->id}/transactions",[
-            'description' => "feb amount",
+            'note' => "feb amount",
             'amount' => 100,
         ]);
 

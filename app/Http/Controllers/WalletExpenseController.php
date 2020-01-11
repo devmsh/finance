@@ -2,17 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Transaction;
 use App\Wallet;
 use Illuminate\Http\Request;
 
-class WalletController extends Controller
+class WalletExpenseController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
+     * @param  \App\Wallet  $wallet
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Wallet $wallet)
     {
         //
     }
@@ -21,20 +23,22 @@ class WalletController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Wallet  $wallet
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, Wallet $wallet)
     {
-        return Wallet::open($request->all());
+        return $wallet->addExpense($request->all());
     }
 
     /**
      * Display the specified resource.
      *
      * @param  \App\Wallet  $wallet
+     * @param  \App\Transaction  $transaction
      * @return \Illuminate\Http\Response
      */
-    public function show(Wallet $wallet)
+    public function show(Wallet $wallet, Transaction $transaction)
     {
         //
     }
@@ -44,9 +48,10 @@ class WalletController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Wallet  $wallet
+     * @param  \App\Transaction  $transaction
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Wallet $wallet)
+    public function update(Request $request, Wallet $wallet, Transaction $transaction)
     {
         //
     }
@@ -55,9 +60,10 @@ class WalletController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  \App\Wallet  $wallet
+     * @param  \App\Transaction  $transaction
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Wallet $wallet)
+    public function destroy(Wallet $wallet, Transaction $transaction)
     {
         //
     }

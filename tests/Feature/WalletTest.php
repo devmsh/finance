@@ -28,13 +28,14 @@ class WalletTest extends TestCase
 
         $wallet = Wallet::find(1);
         $this->assertEquals("Cash", $wallet->name);
-        $this->assertEquals(1000, $wallet->initial_balance);
+
+        $transaction = Transaction::find(1);
+        $this->assertEquals(1000, $transaction->amount);
+        $this->assertInstanceOf(Wallet::class, $transaction->trackable);
     }
 
-    // income +
-    public function test_wallet_can_receive_income()
+    public function test_wallet_can_track_income()
     {
-        $this->withoutExceptionHandling();
         $wallet = factory(Wallet::class)->create();
 
         $response = $this->post("api/wallets/{$wallet->id}/income",[
@@ -45,7 +46,6 @@ class WalletTest extends TestCase
         $response->assertSuccessful();
         $response->assertJsonStructure([
             'id',
-            'wallet_id',
             'note',
             'amount'
         ]);
@@ -53,9 +53,30 @@ class WalletTest extends TestCase
         $transaction = Transaction::find(1);
         $this->assertEquals('Salary', $transaction->note);
         $this->assertEquals(1000, $transaction->amount);
-        $this->assertEquals($wallet->id, $transaction->wallet_id);
+        $this->assertInstanceOf(Wallet::class, $transaction->trackable);
     }
 
-    // expenses -
+    public function test_wallet_can_track_expenses()
+    {
+        $wallet = factory(Wallet::class)->create();
+
+        $response = $this->post("api/wallets/{$wallet->id}/expenses",[
+            'note' => 'Restaurant',
+            'amount' => 100,
+        ]);
+
+        $response->assertSuccessful();
+        $response->assertJsonStructure([
+            'id',
+            'note',
+            'amount'
+        ]);
+
+        $transaction = Transaction::find(1);
+        $this->assertEquals('Restaurant', $transaction->note);
+        $this->assertEquals(-100, $transaction->amount);
+        $this->assertInstanceOf(Wallet::class, $transaction->trackable);
+    }
+
     // transfer (Wallet >> Goal, Wallet >> Wallet)
 }
