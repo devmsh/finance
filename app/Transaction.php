@@ -12,4 +12,9 @@ class Transaction extends Model
     {
         return $this->morphTo();
     }
+
+    public function causedby()
+    {
+        return $this->belongsTo(Loan::class);
+    }
 }

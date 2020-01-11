@@ -40,6 +40,8 @@ class GoalTest extends TestCase
 
     public function test_goal_tracks_some_transactions()
     {
+        $this->withoutExceptionHandling();
+
         /** @var Goal $goal */
         $goal = factory(Goal::class)->create();
 
