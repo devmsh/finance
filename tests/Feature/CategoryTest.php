@@ -10,38 +10,28 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
-class WalletTest extends TestCase
+/**
+ * @property Category salary
+ * @property Category commission
+ * @property Category food
+ * @property Category health
+ */
+class CategoryTest extends TestCase
 {
     use DatabaseMigrations;
 
-    public function test_can_create_wallet()
-    {
-        $response = $this->post('api/wallets',[
-            'name' => 'Cash',
-            'initial_balance' => 1000,
-        ]);
-
-        $response->assertSuccessful();
-        $response->assertJsonStructure([
-            "id",
-            "name",
-        ]);
-
-        $wallet = Wallet::find(1);
-        $this->assertEquals("Cash", $wallet->name);
-
-        $transaction = Transaction::find(1);
-        $this->assertEquals(1000, $transaction->amount);
-        $this->assertInstanceOf(Wallet::class, $transaction->trackable);
-    }
-
-    public function test_wallet_can_track_income()
+    public function test_wallet_can_track_income_with_category()
     {
         $wallet = factory(Wallet::class)->create();
+
+        $category = factory(Category::class)->create([
+            'type' => Category::INCOME,
+        ]);
 
         $response = $this->post("api/wallets/{$wallet->id}/income",[
             'note' => 'Salary',
             'amount' => 1000,
+            'category_id' => $category->id,
         ]);
 
         $response->assertSuccessful();
@@ -57,13 +47,18 @@ class WalletTest extends TestCase
         $this->assertInstanceOf(Wallet::class, $transaction->trackable);
     }
 
-    public function test_wallet_can_track_expenses()
+    public function test_wallet_can_track_expenses_with_category()
     {
         $wallet = factory(Wallet::class)->create();
+
+        $category = factory(Category::class)->create([
+            'type' => Category::EXPENSES,
+        ]);
 
         $response = $this->post("api/wallets/{$wallet->id}/expenses",[
             'note' => 'Restaurant',
             'amount' => 100,
+            'category_id' => $category->id,
         ]);
 
         $response->assertSuccessful();

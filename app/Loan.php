@@ -23,6 +23,7 @@ class Loan extends Model
         /** @var Loan $loan */
         $loan = self::create($data);
 
+        // TODO refactoring needed
         $loan->wallet->addIncome([
             'note' => 'caused by loan',
             'amount' => $loan->total,
