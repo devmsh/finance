@@ -25,6 +25,7 @@ class Goal extends Model
         if ($this->isAchieved()) {
             event(new GoalAchieved($this));
         }
+        
 
         return $transaction;
     }
