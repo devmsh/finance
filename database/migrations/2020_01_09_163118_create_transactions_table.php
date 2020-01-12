@@ -18,6 +18,8 @@ class CreateTransactionsTable extends Migration
             $table->string('note');
             $table->bigInteger('amount');
 
+            // todo what if we have real data in the production env.
+            $table->bigInteger('category_id');
             $table->morphs('trackable');
             $table->bigInteger('causedby_id')->nullable();
             $table->timestamps();
