@@ -23,14 +23,14 @@ class LoanTest extends TestCase
         $response = $this->post('api/loans', [
             'total' => 1000,
             'payoff_at' => Carbon::today()->addYear(),
-            'wallet_id' => $wallet->id
+            'wallet_id' => $wallet->id,
         ]);
 
         $response->assertSuccessful();
         $response->assertJsonStructure([
             'id',
             'total',
-            'payoff_at'
+            'payoff_at',
         ]);
 
         $loan = Loan::find(1);
@@ -46,7 +46,7 @@ class LoanTest extends TestCase
         $this->post('api/loans', [
             'total' => 1000,
             'payoff_at' => Carbon::today()->addYear(),
-            'wallet_id' => $wallet->id
+            'wallet_id' => $wallet->id,
         ]);
 
         $loan = Loan::find(1);
@@ -56,7 +56,7 @@ class LoanTest extends TestCase
         $this->assertInstanceOf(Transaction::class, $transaction);
         $this->assertEquals($loan->id, $transaction->causedby->id);
         $this->assertEquals($loan->total, $transaction->amount);
-        $this->assertEquals(1000,$wallet->balance());
+        $this->assertEquals(1000, $wallet->balance());
     }
 
     public function test_loan_generate_corresponding_goal()
@@ -66,7 +66,7 @@ class LoanTest extends TestCase
         $this->post('api/loans', [
             'total' => 1000,
             'payoff_at' => Carbon::today()->addYear(),
-            'wallet_id' => $wallet->id
+            'wallet_id' => $wallet->id,
         ]);
 
         $loan = Loan::find(1);
@@ -74,7 +74,7 @@ class LoanTest extends TestCase
         $goal = $loan->goal;
 
         $this->assertInstanceOf(Goal::class, $goal);
-        $this->assertEquals($goal->total,$loan->total);
+        $this->assertEquals($goal->total, $loan->total);
         $this->assertEquals($goal->due_date, $loan->payoff_at);
     }
 }

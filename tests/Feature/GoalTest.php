@@ -17,25 +17,25 @@ class GoalTest extends TestCase
 
     public function test_can_specify_a_goal()
     {
-        $response = $this->post('/api/goals',[
-            'name' => "Home",
+        $response = $this->post('/api/goals', [
+            'name' => 'Home',
             'total' => 1000,
-            "due_date" => $due_date = Carbon::today()->addYear()
+            'due_date' => $due_date = Carbon::today()->addYear(),
         ]);
 
         $response->assertSuccessful();
         $response->assertJsonStructure([
-            "id",
-            "name",
-            "total",
-            "due_date"
+            'id',
+            'name',
+            'total',
+            'due_date',
         ]);
 
         /** @var Goal $goal */
         $goal = Goal::find(1);
-        $this->assertEquals("Home",$goal->name);
-        $this->assertEquals(1000,$goal->total);
-        $this->assertEquals($due_date,$goal->due_date);
+        $this->assertEquals('Home', $goal->name);
+        $this->assertEquals(1000, $goal->total);
+        $this->assertEquals($due_date, $goal->due_date);
     }
 
     public function test_goal_tracks_some_transactions()
@@ -43,23 +43,23 @@ class GoalTest extends TestCase
         /** @var Goal $goal */
         $goal = factory(Goal::class)->create();
 
-        $response = $this->post("/api/goals/{$goal->id}/transactions",[
-            'note' => "feb amount",
+        $response = $this->post("/api/goals/{$goal->id}/transactions", [
+            'note' => 'feb amount',
             'amount' => 100,
         ]);
 
         $response->assertSuccessful();
         $response->assertJsonStructure([
-            "id",
-            "note",
-            "amount",
+            'id',
+            'note',
+            'amount',
         ]);
 
-        $this->assertCount(1,$goal->transactions);
+        $this->assertCount(1, $goal->transactions);
 
         $transaction = $goal->transactions->first();
-        $this->assertEquals("feb amount",$transaction->note);
-        $this->assertEquals(100,$transaction->amount);
+        $this->assertEquals('feb amount', $transaction->note);
+        $this->assertEquals(100, $transaction->amount);
         $this->assertInstanceOf(Goal::class, $transaction->trackable);
     }
 
@@ -72,19 +72,19 @@ class GoalTest extends TestCase
             'total' => 1000,
         ]);
 
-        $this->post("/api/goals/{$goal->id}/transactions",[
-            'note' => "feb amount",
+        $this->post("/api/goals/{$goal->id}/transactions", [
+            'note' => 'feb amount',
             'amount' => 900,
         ]);
 
         Event::assertNotDispatched(GoalAchieved::class);
 
-        $this->post("/api/goals/{$goal->id}/transactions",[
-            'note' => "feb amount",
+        $this->post("/api/goals/{$goal->id}/transactions", [
+            'note' => 'feb amount',
             'amount' => 100,
         ]);
 
-        Event::assertDispatched(GoalAchieved::class,function(GoalAchieved $event) use ($goal){
+        Event::assertDispatched(GoalAchieved::class, function (GoalAchieved $event) use ($goal) {
             return $event->goal->id == $goal->id;
         });
     }

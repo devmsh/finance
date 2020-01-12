@@ -16,13 +16,13 @@ class GoalTest extends TestCase
         $goal = factory(Goal::class)->create();
 
         $goal->addTransaction(factory(Transaction::class)->data([
-            'note' => "feb amount",
+            'note' => 'feb amount',
             'amount' => 100,
         ]));
 
         $transaction = $goal->transactions->first();
-        $this->assertEquals("feb amount",$transaction->note);
-        $this->assertEquals(100,$transaction->amount);
+        $this->assertEquals('feb amount', $transaction->note);
+        $this->assertEquals(100, $transaction->amount);
     }
 
     public function test_can_check_if_goal_is_achieved()
@@ -56,12 +56,12 @@ class GoalTest extends TestCase
             'amount' => 100,
         ]));
 
-        $this->assertEquals(100,$goal->balance());
+        $this->assertEquals(100, $goal->balance());
 
         $goal->addTransaction(factory(Transaction::class)->data([
             'amount' => 100,
         ]));
 
-        $this->assertEquals(200,$goal->balance());
+        $this->assertEquals(200, $goal->balance());
     }
 }

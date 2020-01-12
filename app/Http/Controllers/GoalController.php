@@ -32,7 +32,7 @@ class GoalController extends Controller
     {
         $data = $request->all();
 
-        if($request->missing('due_date')){
+        if ($request->missing('due_date')) {
             $periods = Plan::find(1)->expectedPeriods($request->get('total'));
             $data['due_date'] = Carbon::today()->addMonths($periods);
         }

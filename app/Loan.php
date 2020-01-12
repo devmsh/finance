@@ -41,6 +41,6 @@ class Loan extends Model
 
     public function transaction()
     {
-        return $this->hasOne(Transaction::class,'causedby_id');
+        return $this->hasOne(Transaction::class, 'causedby_id');
     }
 }
