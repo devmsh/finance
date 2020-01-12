@@ -15,7 +15,7 @@ class CategoryTest extends TestCase
         $this->seed(\CategorySeeder::class);
 
         $category = Category::find(1);
-        $this->assertEquals("Others", $category->name);
+        $this->assertEquals('Others', $category->name);
         $this->assertEquals(Category::EXPENSES, $category->type);
     }
 }
