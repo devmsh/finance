@@ -28,7 +28,7 @@ class CategoryTest extends TestCase
             'type' => Category::INCOME,
         ]);
 
-        $response = $this->post("api/wallets/{$wallet->id}/income",[
+        $response = $this->post("api/wallets/{$wallet->id}/income", [
             'note' => 'Salary',
             'amount' => 1000,
             'category_id' => $category->id,
@@ -38,7 +38,7 @@ class CategoryTest extends TestCase
         $response->assertJsonStructure([
             'id',
             'note',
-            'amount'
+            'amount',
         ]);
 
         $transaction = Transaction::find(1);
@@ -55,7 +55,7 @@ class CategoryTest extends TestCase
             'type' => Category::EXPENSES,
         ]);
 
-        $response = $this->post("api/wallets/{$wallet->id}/expenses",[
+        $response = $this->post("api/wallets/{$wallet->id}/expenses", [
             'note' => 'Restaurant',
             'amount' => 100,
             'category_id' => $category->id,
@@ -65,7 +65,7 @@ class CategoryTest extends TestCase
         $response->assertJsonStructure([
             'id',
             'note',
-            'amount'
+            'amount',
         ]);
 
         $transaction = Transaction::find(1);

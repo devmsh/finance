@@ -18,6 +18,8 @@ class CategorySeeder extends Seeder
             ['name' => 'Food', 'type' => Category::EXPENSES],
         ];
 
-        foreach ($categories as $category) Category::create($category);
+        foreach ($categories as $category) {
+            Category::create($category);
+        }
     }
 }

@@ -11,6 +11,6 @@ $factory->define(Category::class, function (Faker $faker) {
         'type' => $faker->randomElement([
             Category::INCOME,
             Category::EXPENSES,
-        ])
+        ]),
     ];
 });
