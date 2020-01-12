@@ -58,7 +58,7 @@ class CategoryTest extends TestCase
         $response = $this->post("api/wallets/{$wallet->id}/expenses",[
             'note' => 'Restaurant',
             'amount' => 100,
-            'category_id' => $category->id,
+            'category_id' => $category->id, 
         ]);
 
         $response->assertSuccessful();
