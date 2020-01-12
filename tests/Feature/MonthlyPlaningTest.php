@@ -16,7 +16,7 @@ class MonthlyPlaningTest extends TestCase
 
     public function test_can_set_our_monthly_plan()
     {
-        $response = $this->post('api/plans',[
+        $response = $this->post('api/plans', [
             'total_income' => 3000,
             'must_have' => 1000,
             'min_saving' => 500,
@@ -28,7 +28,7 @@ class MonthlyPlaningTest extends TestCase
             'total_income',
             'must_have',
             'pocket_money',
-            'min_saving'
+            'min_saving',
         ]);
 
         $plan = Plan::find(1);
@@ -46,8 +46,8 @@ class MonthlyPlaningTest extends TestCase
             'min_saving' => 500,
         ]);
 
-        $response = $this->post('/api/goals',[
-            'name' => "Home",
+        $response = $this->post('/api/goals', [
+            'name' => 'Home',
             'total' => 1000,
         ]);
 

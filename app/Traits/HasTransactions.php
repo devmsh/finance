@@ -8,7 +8,7 @@ trait HasTransactions
 {
     public function transactions()
     {
-        return $this->morphMany(Transaction::class,'trackable');
+        return $this->morphMany(Transaction::class, 'trackable');
     }
 
     public function balance()

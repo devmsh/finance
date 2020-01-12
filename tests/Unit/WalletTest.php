@@ -53,13 +53,13 @@ class WalletTest extends TestCase
         $this->assertEquals(200, $wallet->balance());
 
         $wallet->addIncome(factory(Transaction::class)->data([
-            'amount' => 100
+            'amount' => 100,
         ]));
 
         $this->assertEquals(300, $wallet->balance());
 
         $wallet->addExpense(factory(Transaction::class)->data([
-            'amount' => 50
+            'amount' => 50,
         ]));
 
         $this->assertEquals(250, $wallet->balance());

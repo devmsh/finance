@@ -21,7 +21,7 @@ class PlanTest extends TestCase
 
         $periods = $plan->expectedPeriods(1000);
 
-        $this->assertEquals(2,$periods);
+        $this->assertEquals(2, $periods);
     }
 
     public function test_plan_throw_exception_if_no_saving_can_be_done()

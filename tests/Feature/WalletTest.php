@@ -15,19 +15,19 @@ class WalletTest extends TestCase
 
     public function test_can_create_wallet()
     {
-        $response = $this->post('api/wallets',[
+        $response = $this->post('api/wallets', [
             'name' => 'Cash',
             'initial_balance' => 1000,
         ]);
 
         $response->assertSuccessful();
         $response->assertJsonStructure([
-            "id",
-            "name",
+            'id',
+            'name',
         ]);
 
         $wallet = Wallet::find(1);
-        $this->assertEquals("Cash", $wallet->name);
+        $this->assertEquals('Cash', $wallet->name);
 
         $transaction = Transaction::find(1);
         $this->assertEquals(1000, $transaction->amount);
@@ -38,7 +38,7 @@ class WalletTest extends TestCase
     {
         $wallet = factory(Wallet::class)->create();
 
-        $response = $this->post("api/wallets/{$wallet->id}/income",[
+        $response = $this->post("api/wallets/{$wallet->id}/income", [
             'note' => 'Salary',
             'amount' => 1000,
         ]);
@@ -47,7 +47,7 @@ class WalletTest extends TestCase
         $response->assertJsonStructure([
             'id',
             'note',
-            'amount'
+            'amount',
         ]);
 
         $transaction = Transaction::find(1);
@@ -60,7 +60,7 @@ class WalletTest extends TestCase
     {
         $wallet = factory(Wallet::class)->create();
 
-        $response = $this->post("api/wallets/{$wallet->id}/expenses",[
+        $response = $this->post("api/wallets/{$wallet->id}/expenses", [
             'note' => 'Restaurant',
             'amount' => 100,
         ]);
@@ -69,7 +69,7 @@ class WalletTest extends TestCase
         $response->assertJsonStructure([
             'id',
             'note',
-            'amount'
+            'amount',
         ]);
 
         $transaction = Transaction::find(1);

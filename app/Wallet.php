@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class Wallet extends Model
 {
     use HasTransactions;
-    
 
     protected $fillable = ['name'];
 
@@ -21,8 +20,9 @@ class Wallet extends Model
 
         $wallet->addIncome([
             'note' => 'initial balance',
-            'amount' => $initial_balance
+            'amount' => $initial_balance,
         ]);
+
         return $wallet;
     }
 
@@ -34,6 +34,7 @@ class Wallet extends Model
     public function addExpense($data)
     {
         $data['amount'] *= -1;
+
         return $this->transactions()->create($data);
     }
 }
