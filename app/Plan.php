@@ -24,9 +24,9 @@ class Plan extends Model
 
     public function expectedPeriods($amount)
     {
-        try{
+        try {
             return $amount / $this->min_saving;
-        }catch (\Exception $exception){
+        } catch (\Exception $exception) {
             throw new NotAbleToSaveException();
         }
     }

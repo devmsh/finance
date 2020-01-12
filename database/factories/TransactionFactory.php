@@ -9,6 +9,6 @@ use Faker\Generator as Faker;
 $factory->define(Transaction::class, function (Faker $faker) {
     return [
         'note' => $faker->sentence,
-        'amount' => $faker->numberBetween(1,500),
+        'amount' => $faker->numberBetween(1, 500),
     ];
 });

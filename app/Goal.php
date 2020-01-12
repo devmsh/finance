@@ -22,7 +22,9 @@ class Goal extends Model
     {
         $transaction = $this->transactions()->create($data);
 
-        if ($this->isAchieved()) event(new GoalAchieved($this));
+        if ($this->isAchieved()) {
+            event(new GoalAchieved($this));
+        }
 
         return $transaction;
     }
