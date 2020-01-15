@@ -2,11 +2,16 @@
 
 namespace App;
 
+use App\Events\LoanRecorded;
 use Illuminate\Database\Eloquent\Model;
 
 class Loan extends Model
 {
     protected $guarded = [];
+
+    protected $dispatchesEvents = [
+        'created' => LoanRecorded::class,
+    ];
 
     public function wallet()
     {
@@ -16,27 +21,6 @@ class Loan extends Model
     public function goal()
     {
         return $this->hasOne(Goal::class);
-    }
-
-    public static function record($data)
-    {
-        /** @var Loan $loan */
-        $loan = self::create($data);
-
-        // TODO refactoring needed
-        $loan->wallet->deposit([
-            'note' => 'caused by loan',
-            'amount' => $loan->total,
-            'causedby_id'=> $loan->id,
-        ]);
-
-        $loan->goal()->create([
-            'name' => 'Pay off loan',
-            'total' => $loan->total,
-            'due_date' => $loan->payoff_at,
-        ]);
-
-        return $loan;
     }
 
     public function transaction()
