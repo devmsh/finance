@@ -26,7 +26,7 @@ class EventServiceProvider extends ServiceProvider
         ],
         LoanRecorded::class => [
             DepositLoanToWallet::class,
-            PayoffTheLoanGoal::class
+            PayoffTheLoanGoal::class,
         ],
     ];
 
