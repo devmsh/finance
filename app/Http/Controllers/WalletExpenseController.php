@@ -28,7 +28,7 @@ class WalletExpenseController extends Controller
      */
     public function store(Request $request, Wallet $wallet)
     {
-        return $wallet->addExpense($request->all());
+        return $wallet->withdraw($request->all());
     }
 
     /**

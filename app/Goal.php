@@ -20,7 +20,7 @@ class Goal extends Model
 
     public function addTransaction($data)
     {
-        $transaction = $this->transactions()->create($data);
+        $transaction = $this->deposit($data);
 
         if ($this->isAchieved()) {
             event(new GoalAchieved($this));

@@ -28,7 +28,7 @@ class WalletIncomeController extends Controller
      */
     public function store(Request $request, Wallet $wallet)
     {
-        return $wallet->addIncome($request->all());
+        return $wallet->deposit($request->all());
     }
 
     /**

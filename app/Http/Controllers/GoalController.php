@@ -8,6 +8,7 @@ use App\Plan;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 
 class GoalController extends Controller
 {
@@ -18,7 +19,6 @@ class GoalController extends Controller
      */
     public function index()
     {
-        //
     }
 
     /**

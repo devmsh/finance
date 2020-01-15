@@ -16,7 +16,7 @@ class WalletTest extends TestCase
         /** @var Wallet $wallet */
         $wallet = factory(Wallet::class)->create();
 
-        $wallet->addIncome(factory(Transaction::class)->data([
+        $wallet->deposit(factory(Transaction::class)->data([
             'note' => 'Salary',
             'amount' => 1000,
         ]));
@@ -32,7 +32,7 @@ class WalletTest extends TestCase
         /** @var Wallet $wallet */
         $wallet = factory(Wallet::class)->create();
 
-        $wallet->addExpense(factory(Transaction::class)->data([
+        $wallet->withdraw(factory(Transaction::class)->data([
             'note' => 'Restaurant',
             'amount' => 100,
         ]));
@@ -52,16 +52,33 @@ class WalletTest extends TestCase
 
         $this->assertEquals(200, $wallet->balance());
 
-        $wallet->addIncome(factory(Transaction::class)->data([
+        $wallet->deposit(factory(Transaction::class)->data([
             'amount' => 100,
         ]));
 
         $this->assertEquals(300, $wallet->balance());
 
-        $wallet->addExpense(factory(Transaction::class)->data([
+        $wallet->withdraw(factory(Transaction::class)->data([
             'amount' => 50,
         ]));
 
         $this->assertEquals(250, $wallet->balance());
+    }
+
+    public function test_can_transfer_amount_to_other_account()
+    {
+        /** @var Wallet $firstWallet */
+        $firstWallet = Wallet::open(factory(Wallet::class)->data([
+            'initial_balance' => 1000,
+        ]));
+
+        $secondWallet = Wallet::open(factory(Wallet::class)->data([
+            'initial_balance' => 1000,
+        ]));
+
+        $firstWallet->transfer($secondWallet, 400);
+
+        $this->assertEquals(600, $firstWallet->balance());
+        $this->assertEquals(1400, $secondWallet->balance());
     }
 }
