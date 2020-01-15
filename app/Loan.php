@@ -24,7 +24,7 @@ class Loan extends Model
         $loan = self::create($data);
 
         // TODO refactoring needed
-        $loan->wallet->addIncome([
+        $loan->wallet->deposit([
             'note' => 'caused by loan',
             'amount' => $loan->total,
             'causedby_id'=> $loan->id,

@@ -22,18 +22,21 @@ class CategoryTest extends TestCase
 
     public function test_wallet_can_track_income_with_category()
     {
+        // Arrange
         $wallet = factory(Wallet::class)->create();
 
         $category = factory(Category::class)->create([
             'type' => Category::INCOME,
         ]);
 
+        // Act
         $response = $this->post("api/wallets/{$wallet->id}/income", [
             'note' => 'Salary',
             'amount' => 1000,
             'category_id' => $category->id,
         ]);
 
+        // Assert
         $response->assertSuccessful();
         $response->assertJsonStructure([
             'id',

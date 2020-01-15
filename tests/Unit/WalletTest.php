@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+use App\Goal;
 use App\Transaction;
 use App\Wallet;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -16,7 +17,7 @@ class WalletTest extends TestCase
         /** @var Wallet $wallet */
         $wallet = factory(Wallet::class)->create();
 
-        $wallet->addIncome(factory(Transaction::class)->data([
+        $wallet->deposit(factory(Transaction::class)->data([
             'note' => 'Salary',
             'amount' => 1000,
         ]));
@@ -52,7 +53,7 @@ class WalletTest extends TestCase
 
         $this->assertEquals(200, $wallet->balance());
 
-        $wallet->addIncome(factory(Transaction::class)->data([
+        $wallet->deposit(factory(Transaction::class)->data([
             'amount' => 100,
         ]));
 
@@ -63,5 +64,21 @@ class WalletTest extends TestCase
         ]));
 
         $this->assertEquals(250, $wallet->balance());
+    }
+
+    public function test_can_transfer_amount_to_other_account()
+    {
+        /** @var Wallet $wallet */
+        $wallet = Wallet::open(factory(Wallet::class)->data([
+            'initial_balance' => 1000
+        ]));
+
+        /** @var Goal $goal */
+        $goal = factory(Goal::class)->create();
+
+        $wallet->transfer($goal, 400);
+
+        $this->assertEquals(600,$wallet->balance());
+        $this->assertEquals(400,$goal->balance());
     }
 }

@@ -18,7 +18,7 @@ class Wallet extends Model
         /** @var Wallet $wallet */
         $wallet = self::create($data);
 
-        $wallet->addIncome([
+        $wallet->deposit([
             'note' => 'initial balance',
             'amount' => $initial_balance,
         ]);
@@ -26,15 +26,8 @@ class Wallet extends Model
         return $wallet;
     }
 
-    public function addIncome($data)
-    {
-        return $this->transactions()->create($data);
-    }
-
     public function addExpense($data)
     {
-        $data['amount'] *= -1;
-
-        return $this->transactions()->create($data);
+        return $this->withdraw($data);
     }
 }
