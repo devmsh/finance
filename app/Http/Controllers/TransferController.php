@@ -26,6 +26,7 @@ class TransferController extends Controller
      */
     public function store(Request $request)
     {
+        // todo need more refactoring
         $from_id = $request->from_id;
         $to_id = $request->to_id;
 

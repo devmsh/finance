@@ -17,19 +17,8 @@ class GoalController extends Controller
      *
      * @return Response
      */
-    public function index(/* DI */ Cache $cache)
+    public function index()
     {
-        $books = App\Book::all();
-
-        foreach ($books as $book) {
-            echo $book->author->name;
-        }
-
-        $books = App\Book::with('author')->get();
-
-        foreach ($books as $book) {
-            echo $book->author->name;
-        }
     }
 
     /**

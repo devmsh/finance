@@ -109,6 +109,6 @@ class TransferTest extends TestCase
 
         $response->assertSuccessful();
         $this->assertEquals(600,$firstWallet->balance());
-        $this->assertEquals(900,$secondWallet->balance());s
+        $this->assertEquals(900,$secondWallet->balance());
     }
 }
