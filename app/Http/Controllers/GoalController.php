@@ -13,15 +13,6 @@ use Illuminate\Support\Facades\DB;
 class GoalController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return Response
-     */
-    public function index()
-    {
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param Request $request
@@ -38,39 +29,5 @@ class GoalController extends Controller
         }
 
         return Goal::create($data);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param Goal $goal
-     * @return Response
-     */
-    public function show(Goal $goal)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param Request $request
-     * @param Goal $goal
-     * @return Response
-     */
-    public function update(Request $request, Goal $goal)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param Goal $goal
-     * @return Response
-     */
-    public function destroy(Goal $goal)
-    {
-        //
     }
 }
