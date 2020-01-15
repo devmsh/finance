@@ -17,6 +17,7 @@ class AppServiceProvider extends ServiceProvider
         FactoryBuilder::macro('data', function ($attributes) {
             return $this->make($attributes)->toArray();
         });
+        
     }
 
     /**
