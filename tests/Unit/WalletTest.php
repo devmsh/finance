@@ -70,7 +70,7 @@ class WalletTest extends TestCase
     {
         /** @var Wallet $wallet */
         $wallet = Wallet::open(factory(Wallet::class)->data([
-            'initial_balance' => 1000
+            'initial_balance' => 1000,
         ]));
 
         /** @var Goal $goal */
@@ -78,7 +78,7 @@ class WalletTest extends TestCase
 
         $wallet->transfer($goal, 400);
 
-        $this->assertEquals(600,$wallet->balance());
-        $this->assertEquals(400,$goal->balance());
+        $this->assertEquals(600, $wallet->balance());
+        $this->assertEquals(400, $goal->balance());
     }
 }

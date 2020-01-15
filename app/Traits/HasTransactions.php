@@ -20,7 +20,7 @@ trait HasTransactions
     {
         $data = [
             'note' => 'transfer between X and Y',
-            'amount' => $amount
+            'amount' => $amount,
         ];
         $this->withdraw($data);
         $account->deposit($data);

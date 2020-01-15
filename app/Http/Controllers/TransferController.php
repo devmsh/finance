@@ -40,7 +40,7 @@ class TransferController extends Controller
         $from->transfer($to, $request->amount);
 
         return [
-            'success' => 'amount transferred'
+            'success' => 'amount transferred',
         ];
     }
 
