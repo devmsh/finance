@@ -8,6 +8,7 @@ use App\Plan;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 
 class GoalController extends Controller
 {
@@ -16,9 +17,19 @@ class GoalController extends Controller
      *
      * @return Response
      */
-    public function index()
+    public function index(/* DI */ Cache $cache)
     {
-        //
+        $books = App\Book::all();
+
+        foreach ($books as $book) {
+            echo $book->author->name;
+        }
+
+        $books = App\Book::with('author')->get();
+
+        foreach ($books as $book) {
+            echo $book->author->name;
+        }
     }
 
     /**

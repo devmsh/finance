@@ -25,9 +25,4 @@ class Wallet extends Model
 
         return $wallet;
     }
-
-    public function addExpense($data)
-    {
-        return $this->withdraw($data);
-    }
 }

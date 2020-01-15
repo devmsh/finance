@@ -33,7 +33,7 @@ class WalletTest extends TestCase
         /** @var Wallet $wallet */
         $wallet = factory(Wallet::class)->create();
 
-        $wallet->addExpense(factory(Transaction::class)->data([
+        $wallet->withdraw(factory(Transaction::class)->data([
             'note' => 'Restaurant',
             'amount' => 100,
         ]));
@@ -59,7 +59,7 @@ class WalletTest extends TestCase
 
         $this->assertEquals(300, $wallet->balance());
 
-        $wallet->addExpense(factory(Transaction::class)->data([
+        $wallet->withdraw(factory(Transaction::class)->data([
             'amount' => 50,
         ]));
 
