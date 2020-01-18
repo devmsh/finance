@@ -2,6 +2,8 @@
 
 namespace Tests\Unit;
 
+use App\Budget;
+use App\Category;
 use App\Exceptions\NotAbleToSaveException;
 use App\Goal;
 use App\Plan;
@@ -34,5 +36,35 @@ class PlanTest extends TestCase
         $this->expectException(NotAbleToSaveException::class);
 
         $plan->expectedPeriods(1000);
+    }
+
+    public function test_can_set_detailed_budget()
+    {
+        /** @var Plan $plan */
+        $plan = factory(Plan::class)->create([
+            'min_saving' => 0,
+        ]);
+
+        $firstCategory = factory(Category::class)->create([
+            'type' => Category::EXPENSES,
+        ]);
+
+        $secondCategory = factory(Category::class)->create([
+            'type' => Category::EXPENSES,
+        ]);
+
+        $plan->setBudget([
+            "{$firstCategory->id}" => 100,
+            "{$secondCategory->id}" => 200,
+        ]);
+
+        $budgets = Budget::with('category')->get();
+        $this->assertCount(2,$budgets);
+        $this->assertEquals(100, $budgets[0]->amount);
+        $this->assertEquals($firstCategory->id, $budgets[0]->category->id);
+
+        $this->assertEquals(200, $budgets[1]->amount);
+        $this->assertEquals($secondCategory->id, $budgets[1]->category->id);
+
     }
 }

@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Events\GoalAchieved;
 use App\Goal;
+use App\Plan;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -87,5 +88,22 @@ class GoalTest extends TestCase
         Event::assertDispatched(GoalAchieved::class, function (GoalAchieved $event) use ($goal) {
             return $event->goal->id == $goal->id;
         });
+    }
+
+    public function test_monthly_plan_can_suggest_goal_due_date()
+    {
+        $plan = factory(Plan::class)->create([
+            'total_income' => 3000,
+            'must_have' => 1000,
+            'min_saving' => 500,
+        ]);
+
+        $response = $this->post('/api/goals', [
+            'name' => 'Home',
+            'total' => 1000,
+        ]);
+
+        $goal = Goal::find(1);
+        $this->assertEquals(Carbon::today()->addMonths(2), $goal->due_date);
     }
 }

@@ -20,6 +20,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::resource('transfers', 'TransferController');
 Route::resource('loans', 'LoanController');
 Route::resource('plans', 'PlanController');
+Route::post('plans/{plan}/budget', 'PlanController@createBudget');
 Route::resource('goals', 'GoalController');
 Route::resource('wallets', 'WalletController');
 Route::resource('goals.transactions', 'GoalTransactionController');

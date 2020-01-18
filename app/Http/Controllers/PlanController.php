@@ -17,4 +17,9 @@ class PlanController extends Controller
     {
         return Plan::create($request->all());
     }
+
+    public function createBudget(Plan $plan, Request $request)
+    {
+        $plan->setBudget($request->all());
+    }
 }

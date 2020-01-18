@@ -2,9 +2,8 @@
 
 namespace Tests\Feature;
 
-use App\Goal;
+use App\Category;
 use App\Plan;
-use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -38,7 +37,7 @@ class MonthlyPlaningTest extends TestCase
         $this->assertEquals(1500, $plan->pocket_money);
     }
 
-    public function test_monthly_plan_can_suggest_goal_due_date()
+    public function test_can_specify_monthly_budget_details()
     {
         $plan = factory(Plan::class)->create([
             'total_income' => 3000,
@@ -46,12 +45,25 @@ class MonthlyPlaningTest extends TestCase
             'min_saving' => 500,
         ]);
 
-        $response = $this->post('/api/goals', [
-            'name' => 'Home',
-            'total' => 1000,
+        $firstCategory = factory(Category::class)->create([
+            'type' => Category::EXPENSES,
         ]);
 
-        $goal = Goal::find(1);
-        $this->assertEquals(Carbon::today()->addMonths(2), $goal->due_date);
+        $secondCategory = factory(Category::class)->create([
+            'type' => Category::EXPENSES,
+        ]);
+
+        $response = $this->post("api/plans/{$plan->id}/budget", [
+            "{$firstCategory->id}" => 100,
+            "{$secondCategory->id}" => 200,
+        ]);
+
+        $response->assertSuccessful();
+        $response->assertJsonStructure([
+            "categories" => [
+                "id", "name", "amount"
+            ]
+        ]);
     }
+
 }
