@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Loan;
+use App\Wallet;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 

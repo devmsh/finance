@@ -3,8 +3,10 @@
 namespace Tests\Feature;
 
 use App\Goal;
+use App\Loan;
 use App\Transaction;
 use App\Wallet;
+use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -40,8 +42,6 @@ class MultiCurrencyTest extends TestCase
 
     public function test_can_transfer_amount_from_wallet_to_wallet()
     {
-        $this->withoutExceptionHandling();
-
         $firstWallet = Wallet::open(factory(Wallet::class)->data([
             'initial_balance' => 1000,
         ]));
@@ -62,5 +62,31 @@ class MultiCurrencyTest extends TestCase
         $response->assertSuccessful();
         $this->assertEquals(500, $firstWallet->balance());
         $this->assertEquals(700, $secondWallet->balance());
+    }
+
+    public function test_can_log_a_loan()
+    {
+        $wallet = factory(Wallet::class)->create([
+            'currency' => 'USD'
+        ]);
+
+        $response = $this->post('api/loans', [
+            'total' => 1000,
+            'payoff_at' => Carbon::today()->addYear(),
+            'wallet_id' => $wallet->id,
+        ]);
+
+        $response->assertSuccessful();
+        $response->assertJsonStructure([
+            'id',
+            'total',
+            'currency',
+            'payoff_at',
+        ]);
+
+        $loan = Loan::find(1);
+        $this->assertEquals(1000, $loan->total);
+        $this->assertEquals(Carbon::today()->addYear(), $loan->payoff_at);
+        $this->assertEquals('USD', $loan->currency);
     }
 }
