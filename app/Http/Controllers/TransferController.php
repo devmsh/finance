@@ -28,10 +28,28 @@ class TransferController extends Controller
             Wallet::find($to_id) :
             Goal::find($to_id);
 
-        $from->transfer($to, $request->amount);
+        [$to_amount, $from_amount] = $this->singleToManyCurrency($request);
+
+        $from->transfer($to, $from_amount, $to_amount);
 
         return [
             'success' => 'amount transferred',
         ];
+    }
+
+    /**
+     * @deprecated
+     * @param Request $request
+     * @return array
+     */
+    private function singleToManyCurrency(Request $request): array
+    {
+        if ($request->amount) {
+            $from_amount = $to_amount = $request->amount;
+        } else {
+            $from_amount = $request->from_amount;
+            $to_amount = $request->to_amount;
+        }
+        return array($to_amount, $from_amount);
     }
 }
