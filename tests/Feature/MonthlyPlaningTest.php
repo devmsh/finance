@@ -60,8 +60,13 @@ class MonthlyPlaningTest extends TestCase
 
         $response->assertSuccessful();
         $response->assertJsonStructure([
-            "categories" => [
-                "id", "name", "amount"
+            [
+                "id",
+                "amount",
+                "category" => [
+                    "id",
+                    "name"
+                ]
             ]
         ]);
     }
