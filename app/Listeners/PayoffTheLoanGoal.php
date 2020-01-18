@@ -32,6 +32,7 @@ class PayoffTheLoanGoal
             'name' => 'Pay off loan',
             'total' => $loan->total,
             'due_date' => $loan->payoff_at,
+            'currency' => $loan->currency,
         ]);
     }
 }

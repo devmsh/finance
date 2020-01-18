@@ -12,7 +12,7 @@ class Wallet extends Model
     protected $guarded = [];
 
     protected $attributes = [
-        'currency' => 'USD',
+        'currency' => Currency::USD,
     ];
 
     public static function open($data)

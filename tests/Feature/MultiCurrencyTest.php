@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Currency;
 use App\Goal;
 use App\Loan;
 use App\Transaction;
@@ -20,7 +21,7 @@ class MultiCurrencyTest extends TestCase
     {
         $response = $this->post('api/wallets', [
             'name' => 'Cash',
-            'currency' => 'USD',
+            'currency' => Currency::USD,
             'initial_balance' => 1000,
         ]);
 
@@ -33,7 +34,7 @@ class MultiCurrencyTest extends TestCase
 
         $wallet = Wallet::find(1);
         $this->assertEquals('Cash', $wallet->name);
-        $this->assertEquals('USD', $wallet->currency);
+        $this->assertEquals(Currency::USD, $wallet->currency);
 
         $transaction = Transaction::find(1);
         $this->assertEquals(1000, $transaction->amount);
@@ -67,7 +68,7 @@ class MultiCurrencyTest extends TestCase
     public function test_can_log_a_loan()
     {
         $wallet = factory(Wallet::class)->create([
-            'currency' => 'USD'
+            'currency' => Currency::USD
         ]);
 
         $response = $this->post('api/loans', [
@@ -87,6 +88,54 @@ class MultiCurrencyTest extends TestCase
         $loan = Loan::find(1);
         $this->assertEquals(1000, $loan->total);
         $this->assertEquals(Carbon::today()->addYear(), $loan->payoff_at);
-        $this->assertEquals('USD', $loan->currency);
+        $this->assertEquals(Currency::USD, $loan->currency);
+    }
+
+    public function test_loan_generate_corresponding_goal()
+    {
+        $wallet = factory(Wallet::class)->create([
+            'currency' => Currency::USD
+        ]);
+
+        $this->post('api/loans', [
+            'total' => 1000,
+            'payoff_at' => Carbon::today()->addYear(),
+            'wallet_id' => $wallet->id,
+        ]);
+
+        $loan = Loan::find(1);
+        /** @var Goal $goal */
+        $goal = $loan->goal;
+
+        $this->assertInstanceOf(Goal::class, $goal);
+        $this->assertEquals($goal->total, $loan->total);
+        $this->assertEquals($goal->due_date, $loan->payoff_at);
+        $this->assertEquals("USD", $goal->currency);
+    }
+
+    public function test_can_specify_a_goal()
+    {
+        $response = $this->post('/api/goals', [
+            'name' => 'Home',
+            'total' => 1000,
+            'currency' => Currency::USD,
+            'due_date' => $due_date = Carbon::today()->addYear(),
+        ]);
+
+        $response->assertSuccessful();
+        $response->assertJsonStructure([
+            'id',
+            'name',
+            'total',
+            'currency',
+            'due_date',
+        ]);
+
+        /** @var Goal $goal */
+        $goal = Goal::find(1);
+        $this->assertEquals('Home', $goal->name);
+        $this->assertEquals(1000, $goal->total);
+        $this->assertEquals($due_date, $goal->due_date);
+        $this->assertEquals("USD", $goal->currency);
     }
 }
