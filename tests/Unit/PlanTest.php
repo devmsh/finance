@@ -59,12 +59,11 @@ class PlanTest extends TestCase
         ]);
 
         $budgets = Budget::with('category')->get();
-        $this->assertCount(2,$budgets);
+        $this->assertCount(2, $budgets);
         $this->assertEquals(100, $budgets[0]->amount);
         $this->assertEquals($firstCategory->id, $budgets[0]->category->id);
 
         $this->assertEquals(200, $budgets[1]->amount);
         $this->assertEquals($secondCategory->id, $budgets[1]->category->id);
-
     }
 }

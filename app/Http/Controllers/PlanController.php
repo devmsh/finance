@@ -23,6 +23,5 @@ class PlanController extends Controller
         $plan->setBudget($request->all());
 
         return $plan->budgets()->get();
-
     }
 }

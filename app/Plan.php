@@ -38,7 +38,7 @@ class Plan extends Model
 
     public function setBudget($budget)
     {
-        foreach ($budget as $category_id => $amount){
+        foreach ($budget as $category_id => $amount) {
             $this->budgets()->create([
                 'category_id' => $category_id,
                 'amount' => $amount,
