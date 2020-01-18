@@ -17,6 +17,11 @@ class Plan extends Model
 
     protected $appends = ['pocket_money'];
 
+    public function budgets()
+    {
+        return $this->hasMany(Budget::class);
+    }
+
     public function getPocketMoneyAttribute()
     {
         return $this->total_income - $this->must_have - $this->min_saving;
@@ -28,6 +33,16 @@ class Plan extends Model
             return $amount / $this->min_saving;
         } catch (\Exception $exception) {
             throw new NotAbleToSaveException();
+        }
+    }
+
+    public function setBudget($budget)
+    {
+        foreach ($budget as $category_id => $amount) {
+            $this->budgets()->create([
+                'category_id' => $category_id,
+                'amount' => $amount,
+            ]);
         }
     }
 }
