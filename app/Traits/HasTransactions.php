@@ -16,14 +16,16 @@ trait HasTransactions
         return $this->transactions()->sum('amount');
     }
 
-    public function transfer($account, $amount)
+    public function transfer($account, $from_amount, $to_amount = null)
     {
-        $data = [
+        $this->withdraw([
             'note' => 'transfer between X and Y',
-            'amount' => $amount,
-        ];
-        $this->withdraw($data);
-        $account->deposit($data);
+            'amount' => $from_amount,
+        ]);
+        $account->deposit([
+            'note' => 'transfer between X and Y',
+            'amount' => $to_amount ?? $from_amount,
+        ]);
     }
 
     public function withdraw($data)

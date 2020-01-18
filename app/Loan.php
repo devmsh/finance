@@ -13,6 +13,10 @@ class Loan extends Model
         'created' => LoanRecorded::class,
     ];
 
+    protected $appends = [
+        'currency',
+    ];
+
     public function wallet()
     {
         return $this->belongsTo(Wallet::class);
@@ -26,5 +30,10 @@ class Loan extends Model
     public function transaction()
     {
         return $this->hasOne(Transaction::class, 'causedby_id');
+    }
+
+    public function getCurrencyAttribute()
+    {
+        return $this->wallet->currency;
     }
 }
