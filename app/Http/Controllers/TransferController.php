@@ -50,6 +50,7 @@ class TransferController extends Controller
             $from_amount = $request->from_amount;
             $to_amount = $request->to_amount;
         }
-        return array($to_amount, $from_amount);
+
+        return [$to_amount, $from_amount];
     }
 }

@@ -4,5 +4,5 @@ namespace App;
 
 class Currency
 {
-    const USD = "USD";
+    const USD = 'USD';
 }

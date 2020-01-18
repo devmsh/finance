@@ -14,7 +14,7 @@ class Loan extends Model
     ];
 
     protected $appends = [
-        'currency'
+        'currency',
     ];
 
     public function wallet()

@@ -17,7 +17,7 @@ class Goal extends Model
     protected $guarded = [];
 
     protected $attributes = [
-        'currency' => Currency::USD
+        'currency' => Currency::USD,
     ];
 
     protected $dates = ['due_date'];

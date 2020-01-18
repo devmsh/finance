@@ -68,7 +68,7 @@ class MultiCurrencyTest extends TestCase
     public function test_can_log_a_loan()
     {
         $wallet = factory(Wallet::class)->create([
-            'currency' => Currency::USD
+            'currency' => Currency::USD,
         ]);
 
         $response = $this->post('api/loans', [
@@ -94,7 +94,7 @@ class MultiCurrencyTest extends TestCase
     public function test_loan_generate_corresponding_goal()
     {
         $wallet = factory(Wallet::class)->create([
-            'currency' => Currency::USD
+            'currency' => Currency::USD,
         ]);
 
         $this->post('api/loans', [
@@ -110,7 +110,7 @@ class MultiCurrencyTest extends TestCase
         $this->assertInstanceOf(Goal::class, $goal);
         $this->assertEquals($goal->total, $loan->total);
         $this->assertEquals($goal->due_date, $loan->payoff_at);
-        $this->assertEquals("USD", $goal->currency);
+        $this->assertEquals('USD', $goal->currency);
     }
 
     public function test_can_specify_a_goal()
@@ -136,6 +136,6 @@ class MultiCurrencyTest extends TestCase
         $this->assertEquals('Home', $goal->name);
         $this->assertEquals(1000, $goal->total);
         $this->assertEquals($due_date, $goal->due_date);
-        $this->assertEquals("USD", $goal->currency);
+        $this->assertEquals('USD', $goal->currency);
     }
 }
