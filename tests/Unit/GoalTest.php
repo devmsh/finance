@@ -92,7 +92,7 @@ class GoalTest extends TestCase
     public function test_detect_that_goal_is_achieved()
     {
         Event::fake([
-            GoalAchieved::class
+            GoalAchieved::class,
         ]);
 
         /** @var Goal $goal */

@@ -3,8 +3,7 @@
 namespace App;
 
 /**
- * Class Model
- * @package App
+ * Class Model.
  * @property string $uuid
  */
 class Model extends \Illuminate\Database\Eloquent\Model

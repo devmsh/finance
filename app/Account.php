@@ -18,10 +18,10 @@ class Account extends Model
 
     public static function factory($type, $id)
     {
-        if ($type == Account::TYPE_WALLET) {
+        if ($type == self::TYPE_WALLET) {
             return Wallet::uuid($id);
         }
-        if ($type == Account::TYPE_GOAL) {
+        if ($type == self::TYPE_GOAL) {
             return Goal::uuid($id);
         }
     }

@@ -19,7 +19,7 @@ final class GoalProjector implements Projector
     {
         $attributes = $event->attributes;
 
-        if(!isset($attributes['due_date'])){
+        if (! isset($attributes['due_date'])) {
             $periods = Plan::find(1)->expectedPeriods($attributes['total']);
             $attributes['due_date'] = Carbon::today()->addMonths($periods);
         }
