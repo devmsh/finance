@@ -31,29 +31,4 @@ final class WalletProjector implements Projector
         ]);
     }
 
-    public function onMoneyWithdrawn(MoneyWithdrawn $event)
-    {
-        $data = $event->attributes;
-        $data['amount'] *= -1;
-        return Wallet::uuid($event->wallet_id)->transactions()->create($data);
-    }
-
-    public function onMoneyDeposited(MoneyDeposited $event)
-    {
-        return Wallet::uuid($event->wallet_id)->transactions()->create($event->attributes);
-    }
-
-    public function onMoneyTransferred(MoneyTransferred $event)
-    {
-        Account::factory($event->from_type, $event->from_id)->withdraw([
-            'note' => 'transfer between X and Y',
-            'amount' => $event->from_amount,
-        ]);
-
-        Account::factory($event->to_type, $event->to_id)->deposit([
-            'note' => 'transfer between X and Y',
-            'amount' => $event->to_amount ?? $event->from_amount,
-        ]);
-    }
-
 }

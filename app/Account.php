@@ -43,11 +43,11 @@ class Account extends Model
 
     public function withdraw($data)
     {
-        event(new MoneyWithdrawn($this->uuid, $data));
+        event(new MoneyWithdrawn($this->type(),$this->uuid, $data));
     }
 
     public function deposit($data)
     {
-        event(new MoneyDeposited($this->uuid, $data));
+        event(new MoneyDeposited($this->type(),$this->uuid, $data));
     }
 }

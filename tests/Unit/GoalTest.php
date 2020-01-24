@@ -4,12 +4,32 @@ namespace Tests\Unit;
 
 use App\Goal;
 use App\Transaction;
+use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Ramsey\Uuid\Uuid;
 use Tests\TestCase;
 
 class GoalTest extends TestCase
 {
     use DatabaseMigrations;
+
+    public function test_can_specify_a_goal()
+    {
+        $due_date = Carbon::today()->addYear();
+
+        Goal::specify([
+            'uuid' => $uuid = Uuid::uuid4()->toString(),
+            'name' => 'Home',
+            'total' => 1000,
+            'due_date' => $due_date->timestamp,
+        ]);
+
+        /** @var Goal $goal */
+        $goal = Goal::uuid($uuid);
+        $this->assertEquals('Home', $goal->name);
+        $this->assertEquals(1000, $goal->total);
+        $this->assertEquals($due_date, $goal->due_date);
+    }
 
     public function test_goal_track_some_transactions()
     {

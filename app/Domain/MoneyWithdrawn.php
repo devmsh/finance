@@ -6,17 +6,20 @@ use Spatie\EventSourcing\ShouldBeStored;
 
 final class MoneyWithdrawn implements ShouldBeStored
 {
-    public $wallet_id;
     public $attributes;
+    public $account_type;
+    public $account_id;
 
     /**
      * WalletOpened constructor.
-     * @param $wallet_id
+     * @param $account_type
+     * @param $account_id
      * @param $attributes
      */
-    public function __construct($wallet_id, $attributes)
+    public function __construct($account_type, $account_id, $attributes)
     {
         $this->attributes = $attributes;
-        $this->wallet_id = $wallet_id;
+        $this->account_type = $account_type;
+        $this->account_id = $account_id;
     }
 }

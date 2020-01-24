@@ -2,8 +2,8 @@
 
 namespace App;
 
-use App\Events\GoalAchieved;
-use App\Traits\HasTransactions;
+use App\Domain\GoalAchieved;
+use App\Domain\GoalSpecified;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
@@ -20,15 +20,18 @@ class Goal extends Account
 
     protected $dates = ['due_date'];
 
+    public static function specify($attributes)
+    {
+        event(new GoalSpecified($attributes));
+    }
+
     public function addTransaction($data)
     {
-        $transaction = $this->deposit($data);
+        $this->deposit($data);
 
         if ($this->isAchieved()) {
-            event(new GoalAchieved($this));
+            event(new GoalAchieved($this->uuid));
         }
-
-        return $transaction;
     }
 
     public function isAchieved()
