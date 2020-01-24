@@ -17,6 +17,7 @@ final class TransactionProjector implements Projector
     {
         $data = $event->attributes;
         $data['amount'] *= -1;
+
         return Account::factory($event->account_type, $event->account_id)
             ->transactions()
             ->create($data);

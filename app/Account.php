@@ -15,10 +15,10 @@ class Account extends Model
 
     public static function factory($type, $id)
     {
-        if ($type == "Wallet") {
+        if ($type == 'Wallet') {
             return Wallet::uuid($id);
         }
-        if ($type == "Goal") {
+        if ($type == 'Goal') {
             return Goal::uuid($id);
         }
     }
@@ -43,11 +43,11 @@ class Account extends Model
 
     public function withdraw($data)
     {
-        event(new MoneyWithdrawn($this->type(),$this->uuid, $data));
+        event(new MoneyWithdrawn($this->type(), $this->uuid, $data));
     }
 
     public function deposit($data)
     {
-        event(new MoneyDeposited($this->type(),$this->uuid, $data));
+        event(new MoneyDeposited($this->type(), $this->uuid, $data));
     }
 }

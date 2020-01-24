@@ -30,5 +30,4 @@ final class WalletProjector implements Projector
             'amount' => $initial_balance,
         ]);
     }
-
 }

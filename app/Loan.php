@@ -13,7 +13,7 @@ class Loan extends Model
     ];
 
     protected $dates = [
-        'payoff_at'
+        'payoff_at',
     ];
 
     public static function record($attributes)
