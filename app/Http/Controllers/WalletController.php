@@ -3,18 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\Wallet;
+use Exception;
 use Illuminate\Http\Request;
+use Ramsey\Uuid\Uuid;
 
 class WalletController extends Controller
 {
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return void
+     * @throws Exception
      */
     public function store(Request $request)
     {
-        return Wallet::open($request->all());
+        Wallet::open($request->all());
     }
 }

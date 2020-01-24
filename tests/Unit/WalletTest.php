@@ -2,14 +2,34 @@
 
 namespace Tests\Unit;
 
+use App\Account;
 use App\Transaction;
 use App\Wallet;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Ramsey\Uuid\Uuid;
 use Tests\TestCase;
 
 class WalletTest extends TestCase
 {
     use DatabaseMigrations;
+
+    public function test_can_open_wallet()
+    {
+        $uuid = Uuid::uuid4()->toString();
+
+        Wallet::open(factory(Wallet::class)->data([
+            'uuid' => $uuid,
+            'name' => 'Cash',
+            'initial_balance' => 1000,
+        ]));
+
+        $wallet = Wallet::uuid($uuid);
+        $this->assertEquals('Cash', $wallet->name);
+
+        $transaction = Transaction::find(1);
+        $this->assertEquals(1000, $transaction->amount);
+        $this->assertInstanceOf(Wallet::class, $transaction->trackable);
+    }
 
     public function test_wallet_can_track_income()
     {
@@ -45,10 +65,12 @@ class WalletTest extends TestCase
 
     public function test_wallet_total_balance()
     {
-        /** @var Wallet $wallet */
-        $wallet = Wallet::open(factory(Wallet::class)->data([
+        Wallet::open(factory(Wallet::class)->data([
             'initial_balance' => 200,
         ]));
+
+        /** @var Wallet $wallet */
+        $wallet = Wallet::find(1);
 
         $this->assertEquals(200, $wallet->balance());
 
@@ -67,16 +89,18 @@ class WalletTest extends TestCase
 
     public function test_can_transfer_amount_to_other_account()
     {
+        Wallet::open(factory(Wallet::class)->data([
+            'initial_balance' => 1000,
+        ]));
         /** @var Wallet $firstWallet */
-        $firstWallet = Wallet::open(factory(Wallet::class)->data([
+        $firstWallet = Wallet::find(1);
+
+        Wallet::open(factory(Wallet::class)->data([
             'initial_balance' => 1000,
         ]));
+        $secondWallet = Wallet::find(2);
 
-        $secondWallet = Wallet::open(factory(Wallet::class)->data([
-            'initial_balance' => 1000,
-        ]));
-
-        $firstWallet->transfer($secondWallet, 400);
+        Account::transfer($firstWallet, $secondWallet, 400);
 
         $this->assertEquals(600, $firstWallet->balance());
         $this->assertEquals(1400, $secondWallet->balance());

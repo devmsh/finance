@@ -2,13 +2,10 @@
 
 namespace App;
 
-use App\Traits\HasTransactions;
-use Illuminate\Database\Eloquent\Model;
+use App\Domain\WalletOpened;
 
-class Wallet extends Model
+class Wallet extends Account
 {
-    use HasTransactions;
-
     protected $guarded = [];
 
     protected $attributes = [
@@ -17,17 +14,6 @@ class Wallet extends Model
 
     public static function open($data)
     {
-        $initial_balance = $data['initial_balance'];
-        unset($data['initial_balance']);
-
-        /** @var Wallet $wallet */
-        $wallet = self::create($data);
-
-        $wallet->deposit([
-            'note' => 'initial balance',
-            'amount' => $initial_balance,
-        ]);
-
-        return $wallet;
+        event(new WalletOpened($data));
     }
 }
