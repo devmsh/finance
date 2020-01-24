@@ -8,11 +8,28 @@ use App\Exceptions\NotAbleToSaveException;
 use App\Goal;
 use App\Plan;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Ramsey\Uuid\Uuid;
 use Tests\TestCase;
 
 class PlanTest extends TestCase
 {
     use DatabaseMigrations;
+
+    public function test_can_define_our_monthly_plan()
+    {
+        Plan::define([
+            'uuid' => $uuid = Uuid::uuid4()->toString(),
+            'total_income' => 3000,
+            'must_have' => 1000,
+            'min_saving' => 500,
+        ]);
+
+        $plan = Plan::uuid($uuid);
+        $this->assertEquals(3000, $plan->total_income);
+        $this->assertEquals(1000, $plan->must_have);
+        $this->assertEquals(500, $plan->min_saving);
+        $this->assertEquals(1500, $plan->pocket_money);
+    }
 
     public function test_plan_can_suggest_needed_periods_based_on_amount()
     {

@@ -15,6 +15,7 @@ class CreatePlansTable extends Migration
     {
         Schema::create('plans', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('uuid');
             $table->bigInteger('total_income');
             $table->bigInteger('must_have');
             $table->bigInteger('min_saving');

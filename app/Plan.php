@@ -2,8 +2,9 @@
 
 namespace App;
 
+use App\Domain\MonthlyCategoriesBudgetSet;
+use App\Domain\MonthlyPlanDefined;
 use App\Exceptions\NotAbleToSaveException;
-use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property mixed total_income the total expected income
@@ -16,6 +17,11 @@ class Plan extends Model
     protected $guarded = [];
 
     protected $appends = ['pocket_money'];
+
+    public static function define($attributes)
+    {
+        event(new MonthlyPlanDefined($attributes));
+    }
 
     public function budgets()
     {
@@ -38,11 +44,6 @@ class Plan extends Model
 
     public function setBudget($budget)
     {
-        foreach ($budget as $category_id => $amount) {
-            $this->budgets()->create([
-                'category_id' => $category_id,
-                'amount' => $amount,
-            ]);
-        }
+        event(new MonthlyCategoriesBudgetSet($this->uuid, $budget));
     }
 }
