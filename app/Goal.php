@@ -5,7 +5,6 @@ namespace App;
 use App\Domain\GoalAchieved;
 use App\Domain\GoalSpecified;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property Carbon due_date
