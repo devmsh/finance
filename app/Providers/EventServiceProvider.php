@@ -22,12 +22,6 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
-        GoalAchieved::class => [
-        ],
-        LoanRecorded::class => [
-            DepositLoanToWallet::class,
-            PayoffTheLoanGoal::class,
-        ],
     ];
 
     /**

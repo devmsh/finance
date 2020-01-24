@@ -2,20 +2,24 @@
 
 namespace App;
 
-use App\Events\LoanRecorded;
-use Illuminate\Database\Eloquent\Model;
+use App\Domain\LoanRecorded;
 
 class Loan extends Model
 {
     protected $guarded = [];
 
-    protected $dispatchesEvents = [
-        'created' => LoanRecorded::class,
-    ];
-
     protected $appends = [
         'currency',
     ];
+
+    protected $dates = [
+        'payoff_at'
+    ];
+
+    public static function record($attributes)
+    {
+        event(new LoanRecorded($attributes));
+    }
 
     public function wallet()
     {

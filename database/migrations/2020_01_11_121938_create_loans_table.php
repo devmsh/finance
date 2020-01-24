@@ -15,6 +15,7 @@ class CreateLoansTable extends Migration
     {
         Schema::create('loans', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('uuid');
             $table->bigInteger('wallet_id');
             $table->bigInteger('total');
             $table->date('payoff_at');
