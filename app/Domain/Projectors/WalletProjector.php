@@ -8,6 +8,7 @@ use App\Domain\MoneyTransferred;
 use App\Domain\MoneyWithdrawn;
 use App\Domain\WalletOpened;
 use App\Wallet;
+use Ramsey\Uuid\Uuid;
 use Spatie\EventSourcing\Projectors\Projector;
 use Spatie\EventSourcing\Projectors\ProjectsEvents;
 
@@ -26,6 +27,7 @@ final class WalletProjector implements Projector
         $wallet = Wallet::create($data);
 
         $wallet->deposit([
+            'uuid' => $uuid = Uuid::uuid4()->toString(),
             'note' => 'initial balance',
             'amount' => $initial_balance,
         ]);

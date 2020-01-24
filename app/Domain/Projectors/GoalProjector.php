@@ -7,6 +7,7 @@ use App\Domain\MonthlyCategoriesBudgetSet;
 use App\Domain\MonthlyPlanDefined;
 use App\Goal;
 use App\Plan;
+use Carbon\Carbon;
 use Spatie\EventSourcing\Projectors\Projector;
 use Spatie\EventSourcing\Projectors\ProjectsEvents;
 
@@ -16,7 +17,14 @@ final class GoalProjector implements Projector
 
     public function onGoalSpecified(GoalSpecified $event)
     {
-        Goal::create($event->attributes);
+        $attributes = $event->attributes;
+
+        if(!isset($attributes['due_date'])){
+            $periods = Plan::find(1)->expectedPeriods($attributes['total']);
+            $attributes['due_date'] = Carbon::today()->addMonths($periods);
+        }
+
+        Goal::create($attributes);
     }
 
     public function onMonthlyPlanDefined(MonthlyPlanDefined $event)

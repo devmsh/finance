@@ -8,6 +8,9 @@ use App\Domain\MoneyWithdrawn;
 
 class Account extends Model
 {
+    const TYPE_WALLET = 'Wallet';
+    const TYPE_GOAL = 'Goal';
+
     public function transactions()
     {
         return $this->morphMany(Transaction::class, 'trackable');
@@ -15,10 +18,10 @@ class Account extends Model
 
     public static function factory($type, $id)
     {
-        if ($type == 'Wallet') {
+        if ($type == Account::TYPE_WALLET) {
             return Wallet::uuid($id);
         }
-        if ($type == 'Goal') {
+        if ($type == Account::TYPE_GOAL) {
             return Goal::uuid($id);
         }
     }
@@ -33,12 +36,9 @@ class Account extends Model
         return (new \ReflectionClass($this))->getShortName();
     }
 
-    public static function transfer($from, $to, $from_amount, $to_amount = null)
+    public static function transfer($from_type, $from_id, $from_amount, $to_type, $to_id, $to_amount)
     {
-        event(new MoneyTransferred(
-            $from->type(), $from->uuid, $from_amount,
-            $to->type(), $to->uuid, $to_amount
-        ));
+        event(new MoneyTransferred($from_type, $from_id, $from_amount, $to_type, $to_id, $to_amount));
     }
 
     public function withdraw($data)

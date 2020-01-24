@@ -15,10 +15,10 @@ class CreateTransactionsTable extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('uuid');
             $table->string('note');
             $table->bigInteger('amount');
 
-            // todo what if we have real data in the production env.
             $table->bigInteger('category_id');
             $table->morphs('trackable');
             $table->bigInteger('causedby_id')->nullable();

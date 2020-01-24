@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Ramsey\Uuid\Uuid;
 use Tests\TestCase;
 
 class LoanTest extends TestCase
@@ -21,19 +22,15 @@ class LoanTest extends TestCase
         $wallet = factory(Wallet::class)->create();
 
         $response = $this->post('api/loans', [
+            'uuid' => $uuid = Uuid::uuid4()->toString(),
             'total' => 1000,
-            'payoff_at' => Carbon::today()->addYear(),
+            'payoff_at' => Carbon::today()->addYear()->timestamp,
             'wallet_id' => $wallet->id,
         ]);
 
         $response->assertSuccessful();
-        $response->assertJsonStructure([
-            'id',
-            'total',
-            'payoff_at',
-        ]);
 
-        $loan = Loan::find(1);
+        $loan = Loan::uuid($uuid);
         $this->assertEquals(1000, $loan->total);
         $this->assertEquals(Carbon::today()->addYear(), $loan->payoff_at);
     }

@@ -18,6 +18,7 @@ final class LoanProjector implements Projector
         $loan = Loan::create($event->attributes);
 
         $loan->wallet->deposit([
+            'uuid' => $uuid = Uuid::uuid4()->toString(),
             'note' => 'caused by loan',
             'amount' => $loan->total,
             'causedby_id'=> $loan->id,

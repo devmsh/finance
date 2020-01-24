@@ -100,7 +100,9 @@ class WalletTest extends TestCase
         ]));
         $secondWallet = Wallet::find(2);
 
-        Account::transfer($firstWallet, $secondWallet, 400);
+        Account::transfer(
+            $firstWallet->type(), $firstWallet->uuid, 400,
+            $secondWallet->type(), $secondWallet->uuid, 400);
 
         $this->assertEquals(600, $firstWallet->balance());
         $this->assertEquals(1400, $secondWallet->balance());

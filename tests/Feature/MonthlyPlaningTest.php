@@ -7,6 +7,7 @@ use App\Plan;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Ramsey\Uuid\Uuid;
 use Tests\TestCase;
 
 class MonthlyPlaningTest extends TestCase
@@ -16,21 +17,15 @@ class MonthlyPlaningTest extends TestCase
     public function test_can_set_our_monthly_plan()
     {
         $response = $this->post('api/plans', [
+            'uuid' => $uuid = Uuid::uuid4()->toString(),
             'total_income' => 3000,
             'must_have' => 1000,
             'min_saving' => 500,
         ]);
 
         $response->assertSuccessful();
-        $response->assertJsonStructure([
-            'id',
-            'total_income',
-            'must_have',
-            'pocket_money',
-            'min_saving',
-        ]);
 
-        $plan = Plan::find(1);
+        $plan = Plan::uuid($uuid);
         $this->assertEquals(3000, $plan->total_income);
         $this->assertEquals(1000, $plan->must_have);
         $this->assertEquals(500, $plan->min_saving);

@@ -16,18 +16,12 @@ class GoalController extends Controller
      * Store a newly created resource in storage.
      *
      * @param Request $request
-     * @return Response
-     * @throws NotAbleToSaveException
+     * @return void
      */
     public function store(Request $request)
     {
         $data = $request->all();
 
-        if ($request->missing('due_date')) {
-            $periods = Plan::find(1)->expectedPeriods($request->get('total'));
-            $data['due_date'] = Carbon::today()->addMonths($periods);
-        }
-
-        return Goal::create($data);
+        Goal::specify($data);
     }
 }
