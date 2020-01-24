@@ -10,10 +10,8 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * @property Carbon due_date
  */
-class Goal extends Model
+class Goal extends Account
 {
-    use HasTransactions;
-
     protected $guarded = [];
 
     protected $attributes = [
