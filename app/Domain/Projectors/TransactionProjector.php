@@ -24,9 +24,9 @@ final class TransactionProjector implements Projector
             ->create($data);
     }
 
-    public function onMoneyDeposited(MoneyDeposited $event)
+    public function onMoneyDeposited(MoneyDeposited $event, string $aggregateUuid)
     {
-        return Account::factory($event->account_type, $event->account_id)
+        return Account::factory(Account::TYPE_WALLET, $aggregateUuid)
             ->transactions()
             ->create($event->attributes);
     }

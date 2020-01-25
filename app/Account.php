@@ -40,14 +40,4 @@ class Account extends Model
     {
         event(new MoneyTransferred($from_type, $from_id, $from_amount, $to_type, $to_id, $to_amount));
     }
-
-    public function withdraw($data)
-    {
-        event(new MoneyWithdrawn($this->type(), $this->uuid, $data));
-    }
-
-    public function deposit($data)
-    {
-        event(new MoneyDeposited($this->type(), $this->uuid, $data));
-    }
 }

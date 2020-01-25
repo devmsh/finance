@@ -9,6 +9,7 @@ use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Ramsey\Uuid\Uuid;
+use Spatie\EventSourcing\Models\EloquentStoredEvent;
 use Tests\TestCase;
 
 class WalletTest extends TestCase
@@ -30,7 +31,7 @@ class WalletTest extends TestCase
         $wallet = Wallet::uuid($uuid);
         $this->assertEquals('Cash', $wallet->name);
 
-        $transaction = Transaction::find(1);
+        $transaction = $wallet->transactions()->first();
         $this->assertEquals(1000, $transaction->amount);
         $this->assertInstanceOf(Wallet::class, $transaction->trackable);
     }
@@ -40,14 +41,13 @@ class WalletTest extends TestCase
         $wallet = factory(Wallet::class)->create();
 
         $response = $this->post("api/wallets/{$wallet->id}/income", [
-            'uuid' => $uuid = Uuid::uuid4()->toString(),
             'note' => 'Salary',
             'amount' => 1000,
         ]);
 
         $response->assertSuccessful();
 
-        $transaction = Transaction::uuid($uuid);
+        $transaction = Transaction::find(1);
         $this->assertEquals('Salary', $transaction->note);
         $this->assertEquals(1000, $transaction->amount);
         $this->assertInstanceOf(Wallet::class, $transaction->trackable);

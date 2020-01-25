@@ -3,28 +3,26 @@
 namespace Tests\Unit;
 
 use App\Account;
+use App\Domain\WalletAggregateRoot;
 use App\Transaction;
 use App\Wallet;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Ramsey\Uuid\Uuid;
 use Tests\TestCase;
 
-class WalletTest extends TestCase
+class TransactionProjectorTest extends TestCase
 {
     use DatabaseMigrations;
 
-    public function test_can_open_wallet()
+    public function test_wallet_initial_balance()
     {
         $uuid = Uuid::uuid4()->toString();
 
-        Wallet::open(factory(Wallet::class)->data([
+        WalletAggregateRoot::retrieve($uuid)->open([
             'uuid' => $uuid,
             'name' => 'Cash',
             'initial_balance' => 1000,
-        ]));
-
-        $wallet = Wallet::uuid($uuid);
-        $this->assertEquals('Cash', $wallet->name);
+        ])->persist();
 
         $transaction = Transaction::find(1);
         $this->assertEquals(1000, $transaction->amount);
@@ -33,13 +31,16 @@ class WalletTest extends TestCase
 
     public function test_wallet_can_track_income()
     {
-        /** @var Wallet $wallet */
-        $wallet = factory(Wallet::class)->create();
+        $uuid = Uuid::uuid4()->toString();
 
-        $wallet->deposit(factory(Transaction::class)->data([
+        WalletAggregateRoot::retrieve($uuid)->open([
+            'uuid' => $uuid,
+            'name' => 'Cash',
+            'initial_balance' => 1000,
+        ])->deposit([
             'note' => 'Salary',
             'amount' => 1000,
-        ]));
+        ])->persist();
 
         $transaction = Transaction::find(1);
         $this->assertEquals('Salary', $transaction->note);

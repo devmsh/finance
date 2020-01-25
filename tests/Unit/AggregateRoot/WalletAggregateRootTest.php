@@ -3,7 +3,11 @@
 namespace Tests\Unit\AggregateRoot;
 
 use App\Account;
+use App\Domain\Events\MoneyDeposited;
+use App\Domain\Events\MoneyTransferred;
+use App\Domain\Events\MoneyWithdrawn;
 use App\Domain\Events\WalletOpened;
+use App\Domain\TransferAggregateRoot;
 use App\Domain\WalletAggregateRoot;
 use App\Transaction;
 use App\Wallet;
@@ -21,87 +25,64 @@ class WalletAggregateRootTest extends TestCase
             'uuid' => $uuid = Uuid::uuid4()->toString(),
             'name' => 'Cash',
             'initial_balance' => 1000,
-        ])->assertRecorded(new WalletOpened([
-            'uuid' => $uuid,
-            'name' => 'Cash',
-            'initial_balance' => 1000,
-        ]));
+        ])->assertRecorded([
+            new WalletOpened([
+                'uuid' => $uuid,
+                'name' => 'Cash',
+                'initial_balance' => 1000,
+            ]),
+            new MoneyDeposited([
+                'note' => 'initial balance',
+                'amount' => 1000,
+            ]),
+        ]);
     }
 
     public function test_wallet_can_track_income()
     {
-        /** @var Wallet $wallet */
-        $wallet = factory(Wallet::class)->create();
-
-        $wallet->deposit(factory(Transaction::class)->data([
+        WalletAggregateRoot::fake()->deposit([
+            'note' => 'Salary',
+            'amount' => 1000,
+        ])->assertRecorded(new MoneyDeposited([
             'note' => 'Salary',
             'amount' => 1000,
         ]));
-
-        $transaction = Transaction::find(1);
-        $this->assertEquals('Salary', $transaction->note);
-        $this->assertEquals(1000, $transaction->amount);
-        $this->assertInstanceOf(Wallet::class, $transaction->trackable);
     }
 
     public function test_wallet_can_track_expense()
     {
-        /** @var Wallet $wallet */
-        $wallet = factory(Wallet::class)->create();
-
-        $wallet->withdraw(factory(Transaction::class)->data([
-            'note' => 'Restaurant',
-            'amount' => 100,
+        WalletAggregateRoot::fake()->withdraw([
+            'note' => 'Salary',
+            'amount' => 1000,
+        ])->assertRecorded(new MoneyWithdrawn([
+            'note' => 'Salary',
+            'amount' => 1000,
         ]));
-
-        $transaction = Transaction::find(1);
-        $this->assertEquals('Restaurant', $transaction->note);
-        $this->assertEquals(-100, $transaction->amount);
-        $this->assertInstanceOf(Wallet::class, $transaction->trackable);
-    }
-
-    public function test_wallet_total_balance()
-    {
-        Wallet::open(factory(Wallet::class)->data([
-            'initial_balance' => 200,
-        ]));
-
-        /** @var Wallet $wallet */
-        $wallet = Wallet::find(1);
-
-        $this->assertEquals(200, $wallet->balance());
-
-        $wallet->deposit(factory(Transaction::class)->data([
-            'amount' => 100,
-        ]));
-
-        $this->assertEquals(300, $wallet->balance());
-
-        $wallet->withdraw(factory(Transaction::class)->data([
-            'amount' => 50,
-        ]));
-
-        $this->assertEquals(250, $wallet->balance());
     }
 
     public function test_can_transfer_amount_to_other_account()
     {
-        Wallet::open(factory(Wallet::class)->data([
-            'initial_balance' => 1000,
-        ]));
-        /** @var Wallet $firstWallet */
-        $firstWallet = Wallet::find(1);
+        $firstUuid = Uuid::uuid4()->toString();
+        $secondUuid = Uuid::uuid4()->toString();
 
-        Wallet::open(factory(Wallet::class)->data([
-            'initial_balance' => 1000,
-        ]));
-        $secondWallet = Wallet::find(2);
+        TransferAggregateRoot::fake()->transfer([
+            'from_type' => Account::TYPE_WALLET,
+            'from_id' => $firstUuid,
+            'from_amount' => 400,
+            'to_type' => Account::TYPE_WALLET,
+            'to_id' => $secondUuid,
+            'to_amount' => 500
+        ])->assertRecorded([
+            new MoneyTransferred([
+                'from_type' => Account::TYPE_WALLET,
+                'from_id' => $firstUuid,
+                'from_amount' => 400,
+                'to_type' => Account::TYPE_WALLET,
+                'to_id' => $secondUuid,
+                'to_amount' => 500
+            ])
+        ]);
 
-        Account::transfer(
-            $firstWallet->type(), $firstWallet->uuid, 400,
-            $secondWallet->type(), $secondWallet->uuid, 400);
-
-        $this->assertEquals(600, $firstWallet->balance());
-        $this->assertEquals(1400, $secondWallet->balance());
+        // TODO what about the rest of the events?
     }
 }

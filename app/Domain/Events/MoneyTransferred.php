@@ -16,13 +16,13 @@ final class MoneyTransferred implements ShouldBeStored
     /**
      * MoneyTransferred constructor.
      */
-    public function __construct($from_type, $from_id, $from_amount, $to_type, $to_id, $to_amount)
+    public function __construct($attributes)
     {
-        $this->from_type = $from_type;
-        $this->from_id = $from_id;
-        $this->to_type = $to_type;
-        $this->to_id = $to_id;
-        $this->from_amount = $from_amount;
-        $this->to_amount = $to_amount;
+        $this->from_type = $attributes['from_type'];
+        $this->from_id = $attributes['from_id'];
+        $this->to_type = $attributes['to_type'];
+        $this->to_id = $attributes['to_id'];
+        $this->from_amount = $attributes['from_amount'];
+        $this->to_amount = $attributes['to_amount'];
     }
 }

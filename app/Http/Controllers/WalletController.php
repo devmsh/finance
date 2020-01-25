@@ -17,9 +17,9 @@ class WalletController extends Controller
      * @return void
      * @throws Exception
      */
-    public function store(Request $request,WalletAggregateRoot $walletAggregateRoot)
+    public function store(Request $request)
     {
-        $walletAggregateRoot
+        WalletAggregateRoot::retrieve($request->uuid)
             ->open($request->all())
             ->persist();
     }

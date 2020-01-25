@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Transaction;
+use App\Domain\WalletAggregateRoot;
 use App\Wallet;
 use Illuminate\Http\Request;
 
@@ -11,12 +11,14 @@ class WalletIncomeController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Wallet  $wallet
-     * @return \Illuminate\Http\Response
+     * @param Wallet $wallet
+     * @param Request $request
+     * @return void
      */
-    public function store(Request $request, Wallet $wallet)
+    public function store(Wallet $wallet, Request $request)
     {
-        return $wallet->deposit($request->all());
+        WalletAggregateRoot::retrieve($wallet->uuid)
+            ->deposit($request->all())
+            ->persist();
     }
 }

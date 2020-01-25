@@ -25,11 +25,5 @@ final class WalletProjector implements Projector
 
         /** @var Wallet $wallet */
         $wallet = Wallet::create($data);
-
-        $wallet->deposit([
-            'uuid' => $uuid = Uuid::uuid4()->toString(),
-            'note' => 'initial balance',
-            'amount' => $initial_balance,
-        ]);
     }
 }
