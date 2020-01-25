@@ -71,7 +71,7 @@ class WalletAggregateRootTest extends TestCase
             'from_amount' => 400,
             'to_type' => Account::TYPE_WALLET,
             'to_id' => $secondUuid,
-            'to_amount' => 500
+            'to_amount' => 500,
         ])->assertRecorded([
             new MoneyTransferred([
                 'from_type' => Account::TYPE_WALLET,
@@ -79,8 +79,8 @@ class WalletAggregateRootTest extends TestCase
                 'from_amount' => 400,
                 'to_type' => Account::TYPE_WALLET,
                 'to_id' => $secondUuid,
-                'to_amount' => 500
-            ])
+                'to_amount' => 500,
+            ]),
         ]);
 
         // TODO what about the rest of the events?

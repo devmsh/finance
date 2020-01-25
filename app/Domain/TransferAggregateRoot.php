@@ -19,12 +19,12 @@ final class TransferAggregateRoot extends AggregateRoot
     {
         WalletAggregateRoot::retrieve($event->from_id)->deposit([
             'note' => 'transfer between X and Y',
-            'amount' => $event->from_amount
+            'amount' => $event->from_amount,
         ])->persist();
 
         WalletAggregateRoot::retrieve($event->to_id)->deposit([
             'note' => 'transfer between X and Y',
-            'amount' => $event->to_amount
+            'amount' => $event->to_amount,
         ])->persist();
     }
 }
