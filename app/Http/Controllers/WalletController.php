@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Domain\WalletAggregateRoot;
 use App\Wallet;
 use Exception;
 use Illuminate\Http\Request;
@@ -16,8 +17,10 @@ class WalletController extends Controller
      * @return void
      * @throws Exception
      */
-    public function store(Request $request)
+    public function store(Request $request,WalletAggregateRoot $walletAggregateRoot)
     {
-        Wallet::open($request->all());
+        $walletAggregateRoot
+            ->open($request->all())
+            ->persist();
     }
 }
