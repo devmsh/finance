@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Domain;
+namespace App\Domain\Events;
 
 use Spatie\EventSourcing\ShouldBeStored;
 
-final class WalletOpened implements ShouldBeStored
+final class CategoryCreated implements ShouldBeStored
 {
     public $attributes;
 

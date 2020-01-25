@@ -2,8 +2,8 @@
 
 namespace App;
 
-use App\Domain\GoalAchieved;
-use App\Domain\GoalSpecified;
+use App\Domain\Events\GoalAchieved;
+use App\Domain\Events\GoalSpecified;
 use Carbon\Carbon;
 
 /**

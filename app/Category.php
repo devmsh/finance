@@ -2,7 +2,7 @@
 
 namespace App;
 
-use App\Domain\CategoryCreated;
+use App\Domain\Events\CategoryCreated;
 use Illuminate\Database\Eloquent\Model;
 
 class Category extends Model

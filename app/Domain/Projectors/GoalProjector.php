@@ -2,9 +2,9 @@
 
 namespace App\Domain\Projectors;
 
-use App\Domain\GoalSpecified;
-use App\Domain\MonthlyCategoriesBudgetSet;
-use App\Domain\MonthlyPlanDefined;
+use App\Domain\Events\GoalSpecified;
+use App\Domain\Events\MonthlyCategoriesBudgetSet;
+use App\Domain\Events\MonthlyPlanDefined;
 use App\Goal;
 use App\Plan;
 use Carbon\Carbon;

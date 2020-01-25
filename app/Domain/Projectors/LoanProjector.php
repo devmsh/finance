@@ -2,7 +2,7 @@
 
 namespace App\Domain\Projectors;
 
-use App\Domain\LoanRecorded;
+use App\Domain\Events\LoanRecorded;
 use App\Goal;
 use App\Loan;
 use Ramsey\Uuid\Uuid;

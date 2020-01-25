@@ -2,7 +2,7 @@
 
 namespace App;
 
-use App\Domain\WalletOpened;
+use App\Domain\Events\WalletOpened;
 
 class Wallet extends Account
 {

@@ -2,7 +2,7 @@
 
 namespace App;
 
-use App\Domain\LoanRecorded;
+use App\Domain\Events\LoanRecorded;
 
 class Loan extends Model
 {

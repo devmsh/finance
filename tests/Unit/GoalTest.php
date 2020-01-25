@@ -2,7 +2,7 @@
 
 namespace Tests\Unit;
 
-use App\Domain\GoalAchieved;
+use App\Domain\Events\GoalAchieved;
 use App\Goal;
 use App\Plan;
 use App\Transaction;

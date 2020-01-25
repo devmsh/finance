@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Domain;
+namespace App\Domain\Events;
 
 use Spatie\EventSourcing\ShouldBeStored;
 
-final class MoneyWithdrawn implements ShouldBeStored
+final class MoneyDeposited implements ShouldBeStored
 {
     public $attributes;
     public $account_type;

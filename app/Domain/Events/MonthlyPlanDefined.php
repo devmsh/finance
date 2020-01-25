@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Domain;
+namespace App\Domain\Events;
 
 use Spatie\EventSourcing\ShouldBeStored;
 
-final class CategoryCreated implements ShouldBeStored
+final class MonthlyPlanDefined implements ShouldBeStored
 {
     public $attributes;
 
     /**
-     * WalletOpened constructor.
+     * MonthlyPlanDefined constructor.
      * @param $attributes
      */
     public function __construct($attributes)

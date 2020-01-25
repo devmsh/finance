@@ -2,9 +2,9 @@
 
 namespace App;
 
-use App\Domain\MoneyDeposited;
-use App\Domain\MoneyTransferred;
-use App\Domain\MoneyWithdrawn;
+use App\Domain\Events\MoneyDeposited;
+use App\Domain\Events\MoneyTransferred;
+use App\Domain\Events\MoneyWithdrawn;
 
 class Account extends Model
 {

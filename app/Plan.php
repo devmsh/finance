@@ -2,8 +2,8 @@
 
 namespace App;
 
-use App\Domain\MonthlyCategoriesBudgetSet;
-use App\Domain\MonthlyPlanDefined;
+use App\Domain\Events\MonthlyCategoriesBudgetSet;
+use App\Domain\Events\MonthlyPlanDefined;
 use App\Exceptions\NotAbleToSaveException;
 
 /**
