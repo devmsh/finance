@@ -5,11 +5,13 @@ namespace Tests\Feature;
 use App\Goal;
 use App\Loan;
 use App\Transaction;
+use App\User;
 use App\Wallet;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Laravel\Passport\Passport;
 use Tests\TestCase;
 
 class LoanTest extends TestCase
@@ -18,7 +20,11 @@ class LoanTest extends TestCase
 
     public function test_can_log_a_loan()
     {
-        $wallet = factory(Wallet::class)->create();
+        Passport::actingAs($user = factory(User::class)->create());
+
+        $wallet = factory(Wallet::class)->create([
+            'user_id' => $user->id
+        ]);
 
         $response = $this->post('api/loans', [
             'total' => 1000,
@@ -35,13 +41,18 @@ class LoanTest extends TestCase
 
         $loan = Loan::find(1);
         $this->assertEquals(1000, $loan->total);
+        $this->assertEquals($user->id, $loan->user_id);
         $this->assertEquals(Carbon::today()->addYear(), $loan->payoff_at);
     }
 
     public function test_loan_generate_corresponding_transaction()
     {
+        Passport::actingAs($user = factory(User::class)->create());
+
         /** @var Wallet $wallet */
-        $wallet = factory(Wallet::class)->create();
+        $wallet = factory(Wallet::class)->create([
+            'user_id' => $user->id
+        ]);
 
         $this->post('api/loans', [
             'total' => 1000,
@@ -56,12 +67,17 @@ class LoanTest extends TestCase
         $this->assertInstanceOf(Transaction::class, $transaction);
         $this->assertEquals($loan->id, $transaction->causedby->id);
         $this->assertEquals($loan->total, $transaction->amount);
+        $this->assertEquals($user->id, $transaction->user_id);
         $this->assertEquals(1000, $wallet->balance());
     }
 
     public function test_loan_generate_corresponding_goal()
     {
-        $wallet = factory(Wallet::class)->create();
+        Passport::actingAs($user = factory(User::class)->create());
+
+        $wallet = factory(Wallet::class)->create([
+            'user_id' => $user->id
+        ]);
 
         $this->post('api/loans', [
             'total' => 1000,
@@ -75,6 +91,7 @@ class LoanTest extends TestCase
 
         $this->assertInstanceOf(Goal::class, $goal);
         $this->assertEquals($goal->total, $loan->total);
+        $this->assertEquals($goal->user_id, $loan->user_id);
         $this->assertEquals($goal->due_date, $loan->payoff_at);
     }
 }

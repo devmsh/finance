@@ -18,6 +18,8 @@ class CreateLoansTable extends Migration
             $table->bigInteger('wallet_id');
             $table->bigInteger('total');
             $table->date('payoff_at');
+
+            $table->bigInteger('user_id');
             $table->timestamps();
         });
     }

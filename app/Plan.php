@@ -4,6 +4,7 @@ namespace App;
 
 use App\Exceptions\NotAbleToSaveException;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * @property mixed total_income the total expected income
@@ -42,6 +43,7 @@ class Plan extends Model
             $this->budgets()->create([
                 'category_id' => $category_id,
                 'amount' => $amount,
+                'user_id' => Auth::id()
             ]);
         }
     }

@@ -33,6 +33,7 @@ class PayoffTheLoanGoal
             'total' => $loan->total,
             'due_date' => $loan->payoff_at,
             'currency' => $loan->currency,
+            'user_id' => $loan->user_id,
         ]);
     }
 }

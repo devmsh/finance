@@ -4,9 +4,11 @@ namespace Tests\Feature;
 
 use App\Category;
 use App\Plan;
+use App\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Laravel\Passport\Passport;
 use Tests\TestCase;
 
 class MonthlyPlaningTest extends TestCase
@@ -15,6 +17,7 @@ class MonthlyPlaningTest extends TestCase
 
     public function test_can_set_our_monthly_plan()
     {
+        Passport::actingAs($user = factory(User::class)->create());
         $response = $this->post('api/plans', [
             'total_income' => 3000,
             'must_have' => 1000,
@@ -39,18 +42,22 @@ class MonthlyPlaningTest extends TestCase
 
     public function test_can_specify_monthly_budget_details()
     {
+        Passport::actingAs($user = factory(User::class)->create());
         $plan = factory(Plan::class)->create([
             'total_income' => 3000,
             'must_have' => 1000,
             'min_saving' => 500,
+            'user_id' => $user->id,
         ]);
 
         $firstCategory = factory(Category::class)->create([
             'type' => Category::EXPENSES,
+            'user_id' => $user->id,
         ]);
 
         $secondCategory = factory(Category::class)->create([
             'type' => Category::EXPENSES,
+            'user_id' => $user->id,
         ]);
 
         $response = $this->post("api/plans/{$plan->id}/budget", [
