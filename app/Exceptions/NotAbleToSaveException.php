@@ -2,6 +2,8 @@
 
 namespace App\Exceptions;
 
-class NotAbleToSaveException extends \Exception
+use Exception;
+
+class NotAbleToSaveException extends Exception
 {
 }

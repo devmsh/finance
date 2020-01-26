@@ -105,13 +105,12 @@ class GoalTest extends TestCase
             'total_income' => 3000,
             'must_have' => 1000,
             'min_saving' => 500,
-            'user_id' => $user->id
         ]);
 
         $goal = Goal::create([
             'name' => 'Home',
             'total' => 1000,
-            'user_id' => $user->id
+            'user_id' => $user->id,
         ]);
 
         $this->assertEquals(Carbon::today()->addMonths(2), $goal->due_date);

@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Exceptions\NotAbleToSaveException;
+use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
@@ -18,11 +19,6 @@ class Plan extends Model
 
     protected $appends = ['pocket_money'];
 
-    public function budgets()
-    {
-        return $this->hasMany(Budget::class);
-    }
-
     public function getPocketMoneyAttribute()
     {
         return $this->total_income - $this->must_have - $this->min_saving;
@@ -32,7 +28,7 @@ class Plan extends Model
     {
         try {
             return $amount / $this->min_saving;
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             throw new NotAbleToSaveException();
         }
     }
@@ -46,5 +42,10 @@ class Plan extends Model
                 'user_id' => Auth::id()
             ]);
         }
+    }
+
+    public function budgets()
+    {
+        return $this->hasMany(Budget::class);
     }
 }

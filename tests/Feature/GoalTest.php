@@ -2,15 +2,10 @@
 
 namespace Tests\Feature;
 
-use App\Events\GoalAchieved;
 use App\Goal;
-use App\Plan;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Support\Facades\Event;
 use Laravel\Passport\Passport;
 use Tests\TestCase;
 
@@ -48,9 +43,7 @@ class GoalTest extends TestCase
         Passport::actingAs($user = factory(User::class)->create());
 
         /** @var Goal $goal */
-        $goal = factory(Goal::class)->create([
-            'user_id' => $user->id
-        ]);
+        $goal = factory(Goal::class)->create();
 
         $response = $this->post("/api/goals/{$goal->id}/transactions", [
             'note' => 'feb amount',

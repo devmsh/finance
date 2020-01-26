@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Wallet;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 
 class WalletExpenseController extends Controller
 {
@@ -17,6 +18,8 @@ class WalletExpenseController extends Controller
      */
     public function store(Request $request, Wallet $wallet)
     {
-        return $wallet->withdraw($request->all());
+        return $wallet->withdraw(array_merge($request->all(), [
+            'user_id' => Auth::id()
+        ]));
     }
 }

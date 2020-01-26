@@ -32,4 +32,10 @@ class Category extends Model
 
         return $query;
     }
+
+    public static function scopeDefaultCategories($query)
+    {
+        $query->where('source_id', null);
+        return $query;
+    }
 }

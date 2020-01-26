@@ -3,10 +3,10 @@
 namespace Tests\Feature;
 
 use App\Goal;
+use App\User;
 use App\Wallet;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
+use Laravel\Passport\Passport;
 use Tests\TestCase;
 
 class TransferTest extends TestCase
@@ -15,6 +15,8 @@ class TransferTest extends TestCase
 
     public function test_can_transfer_amount_from_wallet_to_goal()
     {
+        Passport::actingAs($user = factory(User::class)->create());
+
         $wallet = Wallet::open(factory(Wallet::class)->data([
             'initial_balance' => 1000,
         ]));
@@ -36,12 +38,15 @@ class TransferTest extends TestCase
 
     public function test_can_transfer_amount_from_goal_to_wallet()
     {
+        Passport::actingAs($user = factory(User::class)->create());
+
         $wallet = Wallet::open(factory(Wallet::class)->data([
             'initial_balance' => 1000,
         ]));
 
         /** @var Goal $goal */
         $goal = factory(Goal::class)->create();
+
         $goal->deposit([
             'note' => 'test',
             'amount' => 500,
@@ -62,6 +67,8 @@ class TransferTest extends TestCase
 
     public function test_can_transfer_amount_from_goal_to_goal()
     {
+        Passport::actingAs($user = factory(User::class)->create());
+
         /** @var Goal $firstGoal */
         $firstGoal = factory(Goal::class)->create();
         $firstGoal->deposit([
@@ -91,6 +98,8 @@ class TransferTest extends TestCase
 
     public function test_can_transfer_amount_from_wallet_to_wallet()
     {
+        Passport::actingAs($user = factory(User::class)->create());
+
         $firstWallet = Wallet::open(factory(Wallet::class)->data([
             'initial_balance' => 1000,
         ]));

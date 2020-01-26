@@ -4,10 +4,10 @@ namespace Tests\Feature;
 
 use App\Category;
 use App\Transaction;
+use App\User;
 use App\Wallet;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
+use Laravel\Passport\Passport;
 use Tests\TestCase;
 
 class TrackingTest extends TestCase
@@ -16,6 +16,8 @@ class TrackingTest extends TestCase
 
     public function test_wallet_can_track_income_with_category()
     {
+        Passport::actingAs($user = factory(User::class)->create());
+
         $wallet = factory(Wallet::class)->create();
 
         $category = factory(Category::class)->create([
@@ -38,11 +40,14 @@ class TrackingTest extends TestCase
         $transaction = Transaction::find(1);
         $this->assertEquals('Salary', $transaction->note);
         $this->assertEquals(1000, $transaction->amount);
+        $this->assertEquals($user->id, $transaction->user_id);
         $this->assertInstanceOf(Wallet::class, $transaction->trackable);
     }
 
     public function test_wallet_can_track_expenses_with_category()
     {
+        Passport::actingAs($user = factory(User::class)->create());
+
         $wallet = factory(Wallet::class)->create();
 
         $category = factory(Category::class)->create([
@@ -65,11 +70,14 @@ class TrackingTest extends TestCase
         $transaction = Transaction::find(1);
         $this->assertEquals('Restaurant', $transaction->note);
         $this->assertEquals(-100, $transaction->amount);
+        $this->assertEquals($user->id, $transaction->user_id);
         $this->assertInstanceOf(Wallet::class, $transaction->trackable);
     }
 
     public function test_can_track_bulk_daily_expenses()
     {
+        Passport::actingAs($user = factory(User::class)->create());
+
         $firstWallet = factory(Wallet::class)->create();
         $firstCategory = factory(Category::class)->create([
             'type' => Category::EXPENSES,
@@ -108,6 +116,7 @@ class TrackingTest extends TestCase
         $this->assertEquals(-100, $transaction->amount);
         $this->assertEquals($firstCategory->id, $transaction->category_id);
         $this->assertInstanceOf(Wallet::class, $transaction->trackable);
+        $this->assertEquals($user->id, $transaction->user_id);
         $this->assertEquals($firstWallet->id, $transaction->trackable->id);
 
         $transaction = Transaction::find(2);
@@ -115,6 +124,7 @@ class TrackingTest extends TestCase
         $this->assertEquals(-200, $transaction->amount);
         $this->assertEquals($secondCategory->id, $transaction->category_id);
         $this->assertInstanceOf(Wallet::class, $transaction->trackable);
+        $this->assertEquals($user->id, $transaction->user_id);
         $this->assertEquals($secondWallet->id, $transaction->trackable->id);
     }
 }

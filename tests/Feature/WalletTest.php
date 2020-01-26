@@ -2,13 +2,10 @@
 
 namespace Tests\Feature;
 
-use App\Category;
 use App\Transaction;
 use App\User;
 use App\Wallet;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Laravel\Passport\Passport;
 use Tests\TestCase;
 
@@ -45,12 +42,8 @@ class WalletTest extends TestCase
     {
         factory(Wallet::class)->create();
 
-        $user = factory(User::class)->create();
-        factory(Wallet::class)->create([
-            'user_id' => $user->id,
-        ]);
-
-        Passport::actingAs($user);
+        Passport::actingAs($user = factory(User::class)->create());
+        factory(Wallet::class)->create();
         $response = $this->get('api/wallets');
 
         $response->assertSuccessful();
@@ -59,15 +52,12 @@ class WalletTest extends TestCase
 
     public function test_can_access_wallets_details()
     {
-        $user = factory(User::class)->create();
-        factory(Wallet::class)->create([
-            'user_id' => $user->id,
-        ]);
-
         factory(Wallet::class)->create();
 
-        Passport::actingAs($user);
-        $response = $this->get('api/wallets/1');
+        Passport::actingAs($user = factory(User::class)->create());
+        factory(Wallet::class)->create();
+
+        $response = $this->get('api/wallets/2');
 
         $response->assertSuccessful();
         $response->assertJsonStructure([
@@ -81,9 +71,7 @@ class WalletTest extends TestCase
         factory(Wallet::class)->create();
 
         $user = factory(User::class)->create();
-        factory(Wallet::class)->create([
-            'user_id' => $user->id,
-        ]);
+        factory(Wallet::class)->create();
 
         Passport::actingAs($user);
         $response = $this->get('api/wallets/1');

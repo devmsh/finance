@@ -4,10 +4,10 @@ namespace Tests\Feature;
 
 use App\Category;
 use App\Transaction;
+use App\User;
 use App\Wallet;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
+use Laravel\Passport\Passport;
 use Tests\TestCase;
 
 /**
@@ -24,9 +24,11 @@ class CategoryTest extends TestCase
     {
         factory(Category::class, 5)->create();
 
+        Passport::actingAs($user = factory(User::class)->create());
         $response = $this->get('api/categories');
 
         $response->assertSuccessful();
+        $response->assertJsonCount(5);
         $response->assertJsonStructure([
             [
                 'id',
@@ -38,29 +40,40 @@ class CategoryTest extends TestCase
 
     public function test_can_filter_categories_per_type()
     {
-        factory(Category::class, 3)->create(['type' => Category::INCOME]);
-        factory(Category::class, 2)->create(['type' => Category::EXPENSES]);
+        Passport::actingAs($user = factory(User::class)->create());
+        factory(Category::class, 3)->create([
+            'type' => Category::INCOME,
+            'user_id' => $user->id,
+        ]);
 
-        $response = $this->get('api/categories?type='.Category::INCOME);
+        factory(Category::class, 2)->create([
+            'type' => Category::EXPENSES,
+            'user_id' => $user->id,
+        ]);
+
+        $response = $this->get('api/categories?type=' . Category::INCOME);
         $response->assertSuccessful();
         $response->assertJsonCount(3);
 
-        $response = $this->get('api/categories?type='.Category::EXPENSES);
+        $response = $this->get('api/categories?type=' . Category::EXPENSES);
         $response->assertSuccessful();
         $response->assertJsonCount(2);
     }
 
     public function test_can_sort_categories_based_on_usage()
     {
+        Passport::actingAs($user = factory(User::class)->create());
         $categoriesTransactions = collect([
             1 => 5,
             2 => 3,
             3 => 7,
         ]);
 
-        factory(Category::class, $categoriesTransactions->count())->create();
+        factory(Category::class, $categoriesTransactions->count())->create([
+            'user_id' => $user->id,
+        ]);
         $wallet = factory(Wallet::class)->create();
-        $categoriesTransactions->each(function ($category_id, $count) use ($wallet) {
+        $categoriesTransactions->each(function ($category_id, $count) use ($user, $wallet) {
             factory(Transaction::class, $count)->create([
                 'trackable_type' => Wallet::class,
                 'trackable_id' => $wallet->id,

@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Transaction;
 use App\Wallet;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 
 class ExpenseController extends Controller
 {
@@ -19,7 +19,9 @@ class ExpenseController extends Controller
             $wallet = Wallet::find($expense['wallet_id']);
             unset($expense['wallet_id']);
 
-            return $wallet->withdraw($expense);
+            return $wallet->withdraw(array_merge($expense, [
+                'user_id' => Auth::id()
+            ]));
         });
     }
 }

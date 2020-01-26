@@ -2,18 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Category;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 
 class CategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return Response
      */
     public function index(Request $request)
     {
-        return Category::filter($request->all())->sort($request->all())->get();
+        return Auth::user()->categories()->filter($request->all())->sort($request->all())->get();
     }
 }

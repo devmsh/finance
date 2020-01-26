@@ -2,13 +2,13 @@
 
 namespace Tests\Unit;
 
-use App\Events\LoanRecorded;
 use App\Loan;
 use App\User;
 use App\Wallet;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Event;
+use Laravel\Passport\Passport;
 use Tests\TestCase;
 
 class LoanTest extends TestCase
@@ -18,11 +18,10 @@ class LoanTest extends TestCase
     public function test_can_log_a_loan()
     {
         Event::fake();
-        $user = factory(User::class)->create();
 
-        $wallet = factory(Wallet::class)->create([
-            'user_id' => $user->id
-        ]);
+        Passport::actingAs($user = factory(User::class)->create());
+
+        $wallet = factory(Wallet::class)->create();
 
         Loan::create([
             'total' => 1000,

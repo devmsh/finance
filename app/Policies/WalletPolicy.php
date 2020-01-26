@@ -13,7 +13,7 @@ class WalletPolicy
     /**
      * Determine whether the user can view any wallets.
      *
-     * @param  \App\User  $user
+     * @param User $user
      * @return mixed
      */
     public function viewAny(User $user)
@@ -24,8 +24,8 @@ class WalletPolicy
     /**
      * Determine whether the user can view the wallet.
      *
-     * @param  \App\User  $user
-     * @param  \App\Wallet  $wallet
+     * @param User $user
+     * @param Wallet $wallet
      * @return mixed
      */
     public function view(User $user, Wallet $wallet)
@@ -36,7 +36,7 @@ class WalletPolicy
     /**
      * Determine whether the user can create wallets.
      *
-     * @param  \App\User  $user
+     * @param User $user
      * @return mixed
      */
     public function create(User $user)
@@ -47,8 +47,8 @@ class WalletPolicy
     /**
      * Determine whether the user can update the wallet.
      *
-     * @param  \App\User  $user
-     * @param  \App\Wallet  $wallet
+     * @param User $user
+     * @param Wallet $wallet
      * @return mixed
      */
     public function update(User $user, Wallet $wallet)
@@ -59,8 +59,8 @@ class WalletPolicy
     /**
      * Determine whether the user can delete the wallet.
      *
-     * @param  \App\User  $user
-     * @param  \App\Wallet  $wallet
+     * @param User $user
+     * @param Wallet $wallet
      * @return mixed
      */
     public function delete(User $user, Wallet $wallet)
@@ -71,8 +71,8 @@ class WalletPolicy
     /**
      * Determine whether the user can restore the wallet.
      *
-     * @param  \App\User  $user
-     * @param  \App\Wallet  $wallet
+     * @param User $user
+     * @param Wallet $wallet
      * @return mixed
      */
     public function restore(User $user, Wallet $wallet)
@@ -83,8 +83,8 @@ class WalletPolicy
     /**
      * Determine whether the user can permanently delete the wallet.
      *
-     * @param  \App\User  $user
-     * @param  \App\Wallet  $wallet
+     * @param User $user
+     * @param Wallet $wallet
      * @return mixed
      */
     public function forceDelete(User $user, Wallet $wallet)

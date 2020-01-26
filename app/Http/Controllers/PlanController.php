@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Plan;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
 class PlanController extends Controller
@@ -11,12 +12,12 @@ class PlanController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return Response
      */
     public function store(Request $request)
     {
-        return Plan::create(array_merge($request->all(),[
+        return Plan::create(array_merge($request->all(), [
             'user_id' => Auth::id()
         ]));
     }

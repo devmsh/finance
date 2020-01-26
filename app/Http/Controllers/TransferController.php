@@ -5,14 +5,15 @@ namespace App\Http\Controllers;
 use App\Goal;
 use App\Wallet;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class TransferController extends Controller
 {
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return Response
      */
     public function store(Request $request)
     {
@@ -38,9 +39,9 @@ class TransferController extends Controller
     }
 
     /**
-     * @deprecated
      * @param Request $request
      * @return array
+     * @deprecated
      */
     private function singleToManyCurrency(Request $request): array
     {

@@ -9,8 +9,6 @@ use App\User;
 use App\Wallet;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Laravel\Passport\Passport;
 use Tests\TestCase;
 
@@ -22,9 +20,7 @@ class LoanTest extends TestCase
     {
         Passport::actingAs($user = factory(User::class)->create());
 
-        $wallet = factory(Wallet::class)->create([
-            'user_id' => $user->id
-        ]);
+        $wallet = factory(Wallet::class)->create();
 
         $response = $this->post('api/loans', [
             'total' => 1000,
@@ -50,9 +46,7 @@ class LoanTest extends TestCase
         Passport::actingAs($user = factory(User::class)->create());
 
         /** @var Wallet $wallet */
-        $wallet = factory(Wallet::class)->create([
-            'user_id' => $user->id
-        ]);
+        $wallet = factory(Wallet::class)->create();
 
         $this->post('api/loans', [
             'total' => 1000,
@@ -75,9 +69,7 @@ class LoanTest extends TestCase
     {
         Passport::actingAs($user = factory(User::class)->create());
 
-        $wallet = factory(Wallet::class)->create([
-            'user_id' => $user->id
-        ]);
+        $wallet = factory(Wallet::class)->create();
 
         $this->post('api/loans', [
             'total' => 1000,
