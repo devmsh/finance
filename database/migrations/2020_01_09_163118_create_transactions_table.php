@@ -22,6 +22,7 @@ class CreateTransactionsTable extends Migration
             $table->bigInteger('category_id');
             $table->morphs('trackable');
             $table->bigInteger('causedby_id')->nullable();
+            $table->bigInteger('user_id')->nullable();
             $table->timestamps();
         });
     }

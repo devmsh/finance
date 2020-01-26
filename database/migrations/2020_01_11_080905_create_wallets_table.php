@@ -17,6 +17,8 @@ class CreateWalletsTable extends Migration
             $table->bigIncrements('id');
             $table->string('name');
             $table->string('currency');
+
+            $table->bigInteger('user_id');
             $table->timestamps();
         });
     }
