@@ -31,8 +31,8 @@ class CategoryTest extends TestCase
             [
                 'id',
                 'name',
-                'type'
-            ]
+                'type',
+            ],
         ]);
     }
 
@@ -41,11 +41,11 @@ class CategoryTest extends TestCase
         factory(Category::class, 3)->create(['type' => Category::INCOME]);
         factory(Category::class, 2)->create(['type' => Category::EXPENSES]);
 
-        $response = $this->get('api/categories?type=' . Category::INCOME);
+        $response = $this->get('api/categories?type='.Category::INCOME);
         $response->assertSuccessful();
         $response->assertJsonCount(3);
 
-        $response = $this->get('api/categories?type=' . Category::EXPENSES);
+        $response = $this->get('api/categories?type='.Category::EXPENSES);
         $response->assertSuccessful();
         $response->assertJsonCount(2);
     }
@@ -61,7 +61,7 @@ class CategoryTest extends TestCase
         factory(Category::class, $categoriesTransactions->count())->create();
         $wallet = factory(Wallet::class)->create();
         $categoriesTransactions->each(function ($category_id, $count) use ($wallet) {
-            factory(Transaction::class,$count)->create([
+            factory(Transaction::class, $count)->create([
                 'trackable_type' => Wallet::class,
                 'trackable_id' => $wallet->id,
                 'category_id' => $category_id,
@@ -72,8 +72,8 @@ class CategoryTest extends TestCase
         $response->assertSuccessful();
 
         $body = json_decode($response->content());
-        $this->assertEquals(3,$body[0]->id);
-        $this->assertEquals(1,$body[1]->id);
-        $this->assertEquals(2,$body[2]->id);
+        $this->assertEquals(3, $body[0]->id);
+        $this->assertEquals(1, $body[1]->id);
+        $this->assertEquals(2, $body[2]->id);
     }
 }

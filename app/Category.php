@@ -13,20 +13,20 @@ class Category extends Model
 
     protected $guarded = [];
 
-    public static function scopeFilter($query,$filters)
+    public static function scopeFilter($query, $filters)
     {
-        if(isset($filters['type'])){
-            $query->where('type',$filters['type']);
+        if (isset($filters['type'])) {
+            $query->where('type', $filters['type']);
         }
 
         return $query;
     }
 
-    public static function scopeSort($query,$filters)
+    public static function scopeSort($query, $filters)
     {
-        if(isset($filters['sort']) && $filters['sort'] == 'usage'){
+        if (isset($filters['sort']) && $filters['sort'] == 'usage') {
             $query->orderByDesc(
-                Transaction::selectRaw('count(*) as count')->whereColumn('category_id','categories.id')
+                Transaction::selectRaw('count(*) as count')->whereColumn('category_id', 'categories.id')
             );
         }
 

@@ -15,9 +15,10 @@ class ExpenseController extends Controller
      */
     public function store(Request $request)
     {
-        return collect($request->all())->map(function($expense){
+        return collect($request->all())->map(function ($expense) {
             $wallet = Wallet::find($expense['wallet_id']);
             unset($expense['wallet_id']);
+
             return $wallet->withdraw($expense);
         });
     }

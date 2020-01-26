@@ -80,7 +80,7 @@ class TrackingTest extends TestCase
             'type' => Category::EXPENSES,
         ]);
 
-        $response = $this->post("api/expenses", [
+        $response = $this->post('api/expenses', [
             [
                 'note' => 'Restaurant',
                 'amount' => 100,
@@ -91,7 +91,7 @@ class TrackingTest extends TestCase
                 'amount' => 200,
                 'wallet_id' => $secondWallet->id,
                 'category_id' => $secondCategory->id,
-            ]
+            ],
         ]);
 
         $response->assertSuccessful();
@@ -100,7 +100,7 @@ class TrackingTest extends TestCase
                 'id',
                 'note',
                 'amount',
-            ]
+            ],
         ]);
 
         $transaction = Transaction::find(1);
