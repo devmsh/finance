@@ -6,6 +6,7 @@ use App\Events\GoalAchieved;
 use App\Goal;
 use App\Transaction;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class GoalTransactionController extends Controller
 {
@@ -18,6 +19,8 @@ class GoalTransactionController extends Controller
      */
     public function store(Request $request, Goal $goal)
     {
-        return $goal->addTransaction($request->all());
+        return $goal->addTransaction(array_merge($request->all(),[
+            'user_id' => Auth::id()
+        ]));
     }
 }

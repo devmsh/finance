@@ -21,6 +21,7 @@ class CreateGoalsTable extends Migration
             $table->date('due_date');
 
             $table->bigInteger('loan_id')->nullable();
+            $table->bigInteger('user_id');
             $table->timestamps();
         });
     }

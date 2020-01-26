@@ -5,11 +5,13 @@ namespace Tests\Feature;
 use App\Events\GoalAchieved;
 use App\Goal;
 use App\Plan;
+use App\User;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Event;
+use Laravel\Passport\Passport;
 use Tests\TestCase;
 
 class GoalTest extends TestCase
@@ -18,6 +20,7 @@ class GoalTest extends TestCase
 
     public function test_can_specify_a_goal()
     {
+        Passport::actingAs($user = factory(User::class)->create());
         $response = $this->post('/api/goals', [
             'name' => 'Home',
             'total' => 1000,
@@ -36,13 +39,18 @@ class GoalTest extends TestCase
         $goal = Goal::find(1);
         $this->assertEquals('Home', $goal->name);
         $this->assertEquals(1000, $goal->total);
+        $this->assertEquals($user->id, $goal->user_id);
         $this->assertEquals($due_date, $goal->due_date);
     }
 
     public function test_goal_tracks_some_transactions()
     {
+        Passport::actingAs($user = factory(User::class)->create());
+
         /** @var Goal $goal */
-        $goal = factory(Goal::class)->create();
+        $goal = factory(Goal::class)->create([
+            'user_id' => $user->id
+        ]);
 
         $response = $this->post("/api/goals/{$goal->id}/transactions", [
             'note' => 'feb amount',
@@ -61,49 +69,7 @@ class GoalTest extends TestCase
         $transaction = $goal->transactions->first();
         $this->assertEquals('feb amount', $transaction->note);
         $this->assertEquals(100, $transaction->amount);
+        $this->assertEquals($user->id, $transaction->user_id);
         $this->assertInstanceOf(Goal::class, $transaction->trackable);
-    }
-
-    public function test_detect_that_goal_is_achieved()
-    {
-        Event::fake();
-
-        /** @var Goal $goal */
-        $goal = factory(Goal::class)->create([
-            'total' => 1000,
-        ]);
-
-        $this->post("/api/goals/{$goal->id}/transactions", [
-            'note' => 'feb amount',
-            'amount' => 900,
-        ]);
-
-        Event::assertNotDispatched(GoalAchieved::class);
-
-        $this->post("/api/goals/{$goal->id}/transactions", [
-            'note' => 'feb amount',
-            'amount' => 100,
-        ]);
-
-        Event::assertDispatched(GoalAchieved::class, function (GoalAchieved $event) use ($goal) {
-            return $event->goal->id == $goal->id;
-        });
-    }
-
-    public function test_monthly_plan_can_suggest_goal_due_date()
-    {
-        $plan = factory(Plan::class)->create([
-            'total_income' => 3000,
-            'must_have' => 1000,
-            'min_saving' => 500,
-        ]);
-
-        $response = $this->post('/api/goals', [
-            'name' => 'Home',
-            'total' => 1000,
-        ]);
-
-        $goal = Goal::find(1);
-        $this->assertEquals(Carbon::today()->addMonths(2), $goal->due_date);
     }
 }

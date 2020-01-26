@@ -2,9 +2,15 @@
 
 namespace Tests\Unit;
 
+use App\Events\GoalAchieved;
 use App\Goal;
+use App\Plan;
 use App\Transaction;
+use App\User;
+use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Support\Facades\Event;
+use Laravel\Passport\Passport;
 use Tests\TestCase;
 
 class GoalTest extends TestCase
@@ -63,5 +69,51 @@ class GoalTest extends TestCase
         ]));
 
         $this->assertEquals(200, $goal->balance());
+    }
+
+    public function test_detect_that_goal_is_achieved()
+    {
+        Event::fake();
+
+        /** @var Goal $goal */
+        $goal = factory(Goal::class)->create([
+            'total' => 1000,
+        ]);
+
+        $goal->addTransaction([
+            'note' => 'feb amount',
+            'amount' => 900,
+        ]);
+
+        Event::assertNotDispatched(GoalAchieved::class);
+
+        $goal->addTransaction([
+            'note' => 'feb amount',
+            'amount' => 100,
+        ]);
+
+        Event::assertDispatched(GoalAchieved::class, function (GoalAchieved $event) use ($goal) {
+            return $event->goal->id == $goal->id;
+        });
+    }
+
+    public function test_monthly_plan_can_suggest_goal_due_date()
+    {
+        Passport::actingAs($user = factory(User::class)->create());
+
+        factory(Plan::class)->create([
+            'total_income' => 3000,
+            'must_have' => 1000,
+            'min_saving' => 500,
+            'user_id' => $user->id
+        ]);
+
+        $goal = Goal::create([
+            'name' => 'Home',
+            'total' => 1000,
+            'user_id' => $user->id
+        ]);
+
+        $this->assertEquals(Carbon::today()->addMonths(2), $goal->due_date);
     }
 }
