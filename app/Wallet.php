@@ -26,7 +26,7 @@ class Wallet extends Model
         $wallet->deposit([
             'note' => 'initial balance',
             'amount' => $initial_balance,
-            'user_id' => $data['user_id']
+            'user_id' => $data['user_id'],
         ]);
 
         return $wallet;

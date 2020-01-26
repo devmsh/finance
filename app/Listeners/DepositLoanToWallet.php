@@ -30,7 +30,7 @@ class DepositLoanToWallet
             'note' => 'caused by loan',
             'amount' => $loan->total,
             'causedby_id' => $loan->id,
-            'user_id' => $loan->user_id
+            'user_id' => $loan->user_id,
         ]);
     }
 }

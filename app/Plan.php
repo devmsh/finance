@@ -39,7 +39,7 @@ class Plan extends Model
             $this->budgets()->create([
                 'category_id' => $category_id,
                 'amount' => $amount,
-                'user_id' => Auth::id()
+                'user_id' => Auth::id(),
             ]);
         }
     }

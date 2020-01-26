@@ -20,7 +20,7 @@ class ExpenseController extends Controller
             unset($expense['wallet_id']);
 
             return $wallet->withdraw(array_merge($expense, [
-                'user_id' => Auth::id()
+                'user_id' => Auth::id(),
             ]));
         });
     }

@@ -19,7 +19,7 @@ class WalletExpenseController extends Controller
     public function store(Request $request, Wallet $wallet)
     {
         return $wallet->withdraw(array_merge($request->all(), [
-            'user_id' => Auth::id()
+            'user_id' => Auth::id(),
         ]));
     }
 }

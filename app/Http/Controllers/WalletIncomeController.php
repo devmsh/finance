@@ -19,7 +19,7 @@ class WalletIncomeController extends Controller
     public function store(Request $request, Wallet $wallet)
     {
         return $wallet->deposit(array_merge($request->all(), [
-            'user_id' => Auth::id()
+            'user_id' => Auth::id(),
         ]));
     }
 }

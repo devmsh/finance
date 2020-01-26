@@ -19,7 +19,7 @@ class GoalTransactionController extends Controller
     public function store(Request $request, Goal $goal)
     {
         return $goal->addTransaction(array_merge($request->all(), [
-            'user_id' => Auth::id()
+            'user_id' => Auth::id(),
         ]));
     }
 }

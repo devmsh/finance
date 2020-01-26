@@ -36,6 +36,7 @@ class Category extends Model
     public static function scopeDefaultCategories($query)
     {
         $query->where('source_id', null);
+
         return $query;
     }
 }

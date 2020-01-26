@@ -51,11 +51,11 @@ class CategoryTest extends TestCase
             'user_id' => $user->id,
         ]);
 
-        $response = $this->get('api/categories?type=' . Category::INCOME);
+        $response = $this->get('api/categories?type='.Category::INCOME);
         $response->assertSuccessful();
         $response->assertJsonCount(3);
 
-        $response = $this->get('api/categories?type=' . Category::EXPENSES);
+        $response = $this->get('api/categories?type='.Category::EXPENSES);
         $response->assertSuccessful();
         $response->assertJsonCount(2);
     }

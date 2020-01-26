@@ -26,14 +26,14 @@ class Goal extends Model
     {
         parent::boot();
 
-        self::saving(function (Goal $goal) {
+        self::saving(function (self $goal) {
             $goal->suggestDueDate();
         });
     }
 
     public function suggestDueDate()
     {
-        if (!$this->due_date) {
+        if (! $this->due_date) {
             $periods = Plan::find(1)->expectedPeriods($this->total);
             $this->due_date = Carbon::today()->addMonths($periods);
         }

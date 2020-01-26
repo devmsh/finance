@@ -41,7 +41,7 @@ class User extends Authenticatable
     {
         parent::boot();
 
-        self::created(function (User $user) {
+        self::created(function (self $user) {
             Category::defaultCategories()->each(function ($category) use ($user) {
                 Category::create(array_merge($category->toArray(), [
                     'id' => null,

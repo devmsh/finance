@@ -18,7 +18,7 @@ class GoalController extends Controller
     public function store(Request $request)
     {
         return Goal::create(array_merge($request->all(), [
-            'user_id' => Auth::id()
+            'user_id' => Auth::id(),
         ]));
     }
 }
