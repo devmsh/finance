@@ -17,33 +17,31 @@ class WalletTest extends TestCase
     {
         Passport::actingAs($user = factory(User::class)->create());
 
-        $response = $this->post('api/wallets', [
-            'name' => 'Cash',
-            'initial_balance' => 1000,
-        ]);
+        collect([0, 100])->each(function($initial_balance) use ($user){
+            $response = $this->post('api/wallets', [
+                'name' => 'Cash',
+                'initial_balance' => $initial_balance,
+            ]);
 
-        $response->assertSuccessful();
-        $response->assertJsonStructure([
-            'id',
-            'name',
-        ]);
+            $response->assertSuccessful();
+            $response->assertJsonStructure([
+                'id',
+                'name',
+            ]);
 
-        $wallet = Wallet::find(1);
-        $this->assertEquals('Cash', $wallet->name);
-        $this->assertEquals($user->id, $wallet->user_id);
-
-        $transaction = Transaction::find(1);
-        $this->assertEquals(1000, $transaction->amount);
-        $this->assertEquals($user->id, $transaction->user_id);
-        $this->assertInstanceOf(Wallet::class, $transaction->trackable);
+            $transaction = Transaction::all()->last();
+            $this->assertEquals($initial_balance, $transaction->amount);
+            $this->assertEquals($user->id, $transaction->user_id);
+            $this->assertInstanceOf(Wallet::class, $transaction->trackable);
+        });
     }
 
     public function test_list_only_owned_wallets()
     {
         factory(Wallet::class)->create();
-
         Passport::actingAs($user = factory(User::class)->create());
         factory(Wallet::class)->create();
+
         $response = $this->get('api/wallets');
 
         $response->assertSuccessful();
@@ -52,12 +50,10 @@ class WalletTest extends TestCase
 
     public function test_can_access_wallets_details()
     {
-        factory(Wallet::class)->create();
-
         Passport::actingAs($user = factory(User::class)->create());
         factory(Wallet::class)->create();
 
-        $response = $this->get('api/wallets/2');
+        $response = $this->get('api/wallets/1');
 
         $response->assertSuccessful();
         $response->assertJsonStructure([
@@ -69,11 +65,9 @@ class WalletTest extends TestCase
     public function test_cannot_access_other_user_wallets()
     {
         factory(Wallet::class)->create();
-
-        $user = factory(User::class)->create();
+        Passport::actingAs($user = factory(User::class)->create());
         factory(Wallet::class)->create();
 
-        Passport::actingAs($user);
         $response = $this->get('api/wallets/1');
 
         $response->assertForbidden();

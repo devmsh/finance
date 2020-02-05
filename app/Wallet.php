@@ -4,6 +4,8 @@ namespace App;
 
 use App\Traits\HasTransactions;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
 
 class Wallet extends Model
 {
@@ -17,18 +19,17 @@ class Wallet extends Model
 
     public static function open($data)
     {
-        $initial_balance = $data['initial_balance'];
-        unset($data['initial_balance']);
-
-        /** @var Wallet $wallet */
-        $wallet = self::create($data);
-
-        $wallet->deposit([
-            'note' => 'initial balance',
-            'amount' => $initial_balance,
-            'user_id' => $data['user_id'],
-        ]);
-
-        return $wallet;
+        return DB::transaction(function () use ($data) {
+            return tap(
+                self::create(Arr::except($data, 'initial_balance')),
+                function (Wallet $wallet) use ($data) {
+                    $wallet->deposit([
+                        'note' => 'initial balance',
+                        'amount' => Arr::get($data, 'initial_balance', 0),
+                        'user_id' => $data['user_id'],
+                    ]);
+                }
+            );
+        });
     }
 }
