@@ -37,21 +37,6 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    protected static function boot()
-    {
-        parent::boot();
-
-        self::created(function (self $user) {
-            Category::defaultCategories()->each(function ($category) use ($user) {
-                Category::create(array_merge($category->toArray(), [
-                    'id' => null,
-                    'user_id' => $user->id,
-                    'source_id' => $category->id,
-                ]));
-            });
-        });
-    }
-
     public function wallets()
     {
         return $this->hasMany(Wallet::class);

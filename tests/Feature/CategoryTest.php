@@ -10,12 +10,6 @@ use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Laravel\Passport\Passport;
 use Tests\TestCase;
 
-/**
- * @property Category salary
- * @property Category commission
- * @property Category food
- * @property Category health
- */
 class CategoryTest extends TestCase
 {
     use DatabaseMigrations;
@@ -24,7 +18,9 @@ class CategoryTest extends TestCase
     {
         factory(Category::class, 5)->create();
 
-        Passport::actingAs($user = factory(User::class)->create());
+        $user = factory(User::class)->create();
+
+        Passport::actingAs($user);
         $response = $this->get('api/categories');
 
         $response->assertSuccessful();
@@ -36,6 +32,11 @@ class CategoryTest extends TestCase
                 'type',
             ],
         ]);
+
+        foreach ($response->json() as $category) {
+            $this->assertEquals($user->id,$category['user_id']);
+        }
+
     }
 
     public function test_can_filter_categories_per_type()

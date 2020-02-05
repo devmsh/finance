@@ -16,6 +16,9 @@ class CategoryController extends Controller
      */
     public function index(Request $request)
     {
-        return Auth::user()->categories()->filter($request->all())->sort($request->all())->get();
+        return Auth::user()->categories()
+            ->filter($request->all())
+            ->sort($request->all())
+            ->get();
     }
 }
