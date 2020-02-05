@@ -48,11 +48,11 @@ class PlanTest extends TestCase
         ]);
 
         $firstCategory = factory(Category::class)->create([
-            'type' => Category::EXPENSES,
+            'type' => Category::EXPENSES_TYPE,
         ]);
 
         $secondCategory = factory(Category::class)->create([
-            'type' => Category::EXPENSES,
+            'type' => Category::EXPENSES_TYPE,
         ]);
 
         $plan->setBudget([

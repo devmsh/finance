@@ -42,23 +42,26 @@ class CategoryTest extends TestCase
     public function test_can_filter_categories_per_type()
     {
         Passport::actingAs($user = factory(User::class)->create());
-        factory(Category::class, 3)->create([
-            'type' => Category::INCOME,
-            'user_id' => $user->id,
-        ]);
 
-        factory(Category::class, 2)->create([
-            'type' => Category::EXPENSES,
-            'user_id' => $user->id,
-        ]);
+        collect([
+            Category::INCOME_TYPE => 3,
+            Category::EXPENSES_TYPE => 2,
+            Category::TRANSFER_TYPE => 4,
+            '999' => 0,
+        ])->each(function($type, $count) use ($user){
+            factory(Category::class, $count)->create([
+                'type' => $type,
+                'user_id' => $user->id,
+            ]);
 
-        $response = $this->get('api/categories?type='.Category::INCOME);
+            $response = $this->get('api/categories?type='.$type);
+            $response->assertSuccessful();
+            $response->assertJsonCount($count);
+        });
+
+        $response = $this->get('api/categories?type=999');
         $response->assertSuccessful();
-        $response->assertJsonCount(3);
-
-        $response = $this->get('api/categories?type='.Category::EXPENSES);
-        $response->assertSuccessful();
-        $response->assertJsonCount(2);
+        $response->assertJsonCount(0);
     }
 
     public function test_can_sort_categories_based_on_usage()
@@ -73,8 +76,9 @@ class CategoryTest extends TestCase
         factory(Category::class, $categoriesTransactions->count())->create([
             'user_id' => $user->id,
         ]);
+
         $wallet = factory(Wallet::class)->create();
-        $categoriesTransactions->each(function ($category_id, $count) use ($user, $wallet) {
+        $categoriesTransactions->each(function ($category_id, $count) use ($wallet) {
             factory(Transaction::class, $count)->create([
                 'trackable_type' => Wallet::class,
                 'trackable_id' => $wallet->id,

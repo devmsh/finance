@@ -48,11 +48,11 @@ class MonthlyPlaningTest extends TestCase
         ]);
 
         $firstCategory = factory(Category::class)->create([
-            'type' => Category::EXPENSES,
+            'type' => Category::EXPENSES_TYPE,
         ]);
 
         $secondCategory = factory(Category::class)->create([
-            'type' => Category::EXPENSES,
+            'type' => Category::EXPENSES_TYPE,
         ]);
 
         $response = $this->post("api/plans/{$plan->id}/budget", [

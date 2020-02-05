@@ -18,7 +18,7 @@ class CategoryTest extends TestCase
 
         $category = Category::find(1);
         $this->assertEquals('Others', $category->name);
-        $this->assertEquals(Category::EXPENSES, $category->type);
+        $this->assertEquals(Category::EXPENSES_TYPE, $category->type);
     }
 
     public function test_app_create_copy_of_the_categories_for_each_user()

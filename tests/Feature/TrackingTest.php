@@ -21,7 +21,7 @@ class TrackingTest extends TestCase
         $wallet = factory(Wallet::class)->create();
 
         $category = factory(Category::class)->create([
-            'type' => Category::INCOME,
+            'type' => Category::INCOME_TYPE,
         ]);
 
         $response = $this->post("api/wallets/{$wallet->id}/income", [
@@ -51,7 +51,7 @@ class TrackingTest extends TestCase
         $wallet = factory(Wallet::class)->create();
 
         $category = factory(Category::class)->create([
-            'type' => Category::EXPENSES,
+            'type' => Category::EXPENSES_TYPE,
         ]);
 
         $response = $this->post("api/wallets/{$wallet->id}/expenses", [
@@ -80,12 +80,12 @@ class TrackingTest extends TestCase
 
         $firstWallet = factory(Wallet::class)->create();
         $firstCategory = factory(Category::class)->create([
-            'type' => Category::EXPENSES,
+            'type' => Category::EXPENSES_TYPE,
         ]);
 
         $secondWallet = factory(Wallet::class)->create();
         $secondCategory = factory(Category::class)->create([
-            'type' => Category::EXPENSES,
+            'type' => Category::EXPENSES_TYPE,
         ]);
 
         $response = $this->post('api/expenses', [
