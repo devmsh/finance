@@ -35,13 +35,13 @@ class Plan extends Model
 
     public function setBudget($budget)
     {
-        foreach ($budget as $category_id => $amount) {
-            $this->budgets()->create([
+        return $this->budgets()->createMany(collect($budget)->map(function ($amount, $category_id) {
+            return [
                 'category_id' => $category_id,
                 'amount' => $amount,
                 'user_id' => Auth::id(),
-            ]);
-        }
+            ];
+        })->toArray());
     }
 
     public function budgets()

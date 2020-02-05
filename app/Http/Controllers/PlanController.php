@@ -24,8 +24,6 @@ class PlanController extends Controller
 
     public function createBudget(Plan $plan, Request $request)
     {
-        $plan->setBudget($request->all());
-
-        return $plan->budgets()->get();
+        return $plan->setBudget($request->all());
     }
 }

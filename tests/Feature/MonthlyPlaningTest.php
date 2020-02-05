@@ -20,31 +20,24 @@ class MonthlyPlaningTest extends TestCase
             'total_income' => 3000,
             'must_have' => 1000,
             'min_saving' => 500,
+            'user_id' => 2
         ]);
 
         $response->assertSuccessful();
-        $response->assertJsonStructure([
-            'id',
-            'total_income',
-            'must_have',
-            'pocket_money',
-            'min_saving',
+        $response->assertJson([
+            'id' => 1,
+            'total_income' => 3000,
+            'must_have' => 1000,
+            'pocket_money' => 1500,
+            'min_saving' => 500,
         ]);
-
-        $plan = Plan::find(1);
-        $this->assertEquals(3000, $plan->total_income);
-        $this->assertEquals(1000, $plan->must_have);
-        $this->assertEquals(500, $plan->min_saving);
-        $this->assertEquals(1500, $plan->pocket_money);
     }
 
     public function test_can_specify_monthly_budget_details()
     {
         Passport::actingAs($user = factory(User::class)->create());
         $plan = factory(Plan::class)->create([
-            'total_income' => 3000,
-            'must_have' => 1000,
-            'min_saving' => 500,
+            'user_id' => $user->id
         ]);
 
         $firstCategory = factory(Category::class)->create([
@@ -65,11 +58,19 @@ class MonthlyPlaningTest extends TestCase
             [
                 'id',
                 'amount',
-                'category' => [
-                    'id',
-                    'name',
-                ],
+                'category_id',
             ],
         ]);
+
+        $categories_budget = $response->json();
+        $this->assertEquals($firstCategory->id,$categories_budget[0]['category_id']);
+        $this->assertEquals(100,$categories_budget[0]['amount']);
+        $this->assertEquals($secondCategory->id,$categories_budget[1]['category_id']);
+        $this->assertEquals(200,$categories_budget[1]['amount']);
+    }
+
+    public function test_user_can_get_monthly_budget()
+    {
+        $this->fail('TBD');
     }
 }
