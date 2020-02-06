@@ -37,4 +37,8 @@ class Goal extends Model
     {
         return $this->total <= $this->balance();
     }
+
+    public function path(){
+        return "/api/goals/{$this->id}/transactions";
+    }
 }

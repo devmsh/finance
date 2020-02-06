@@ -15,7 +15,7 @@ use Tests\TestCase;
 
 class MultiCurrencyTest extends TestCase
 {
-    use DatabaseMigrations;
+    use DatabaseMigrations, RefreshDatabase;
 
     public function test_can_create_wallet()
     {

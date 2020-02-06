@@ -32,4 +32,11 @@ class Category extends Model
 
         return $query;
     }
+
+    public function path($type = 'income'){
+        if ( $type === 'expenses'){
+            return "api/categories?type=2";
+        }
+        return "api/categories?type=1";
+    }
 }

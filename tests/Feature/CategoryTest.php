@@ -9,6 +9,7 @@ use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
+use Facades\Tests\Bootstrap\CategoryFactory;
 
 /**
  * @property Category salary
@@ -18,7 +19,7 @@ use Tests\TestCase;
  */
 class CategoryTest extends TestCase
 {
-    use DatabaseMigrations;
+    use DatabaseMigrations, RefreshDatabase;
 
     public function test_can_get_categories_list()
     {
@@ -38,14 +39,14 @@ class CategoryTest extends TestCase
 
     public function test_can_filter_categories_per_type()
     {
-        factory(Category::class, 3)->create(['type' => Category::INCOME]);
-        factory(Category::class, 2)->create(['type' => Category::EXPENSES]);
+        $incomeCategories = CategoryFactory::count(3)->type('income')->create();
+        $expensesCategories = CategoryFactory::count(2)->type('expenses')->create();
 
-        $response = $this->get('api/categories?type='.Category::INCOME);
+        $response = $this->get($incomeCategories[0]->path());
         $response->assertSuccessful();
         $response->assertJsonCount(3);
 
-        $response = $this->get('api/categories?type='.Category::EXPENSES);
+        $response = $this->get($expensesCategories[0]->path('expenses'));
         $response->assertSuccessful();
         $response->assertJsonCount(2);
     }
@@ -58,7 +59,8 @@ class CategoryTest extends TestCase
             3 => 7,
         ]);
 
-        factory(Category::class, $categoriesTransactions->count())->create();
+        CategoryFactory::count($categoriesTransactions->count())->create();
+
         $wallet = factory(Wallet::class)->create();
         $categoriesTransactions->each(function ($category_id, $count) use ($wallet) {
             factory(Transaction::class, $count)->create([

@@ -12,7 +12,7 @@ use Tests\TestCase;
 
 class TrackingTest extends TestCase
 {
-    use DatabaseMigrations;
+    use DatabaseMigrations, RefreshDatabase;
 
     public function test_wallet_can_track_income_with_category()
     {

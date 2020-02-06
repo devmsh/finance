@@ -14,7 +14,7 @@ use Tests\TestCase;
 
 class GoalTest extends TestCase
 {
-    use DatabaseMigrations;
+    use DatabaseMigrations, RefreshDatabase;
 
     public function test_can_specify_a_goal()
     {
@@ -44,7 +44,7 @@ class GoalTest extends TestCase
         /** @var Goal $goal */
         $goal = factory(Goal::class)->create();
 
-        $response = $this->post("/api/goals/{$goal->id}/transactions", [
+        $response = $this->post($goal->path(), [
             'note' => 'feb amount',
             'amount' => 100,
         ]);
@@ -73,14 +73,14 @@ class GoalTest extends TestCase
             'total' => 1000,
         ]);
 
-        $this->post("/api/goals/{$goal->id}/transactions", [
+        $this->post($goal->path(), [
             'note' => 'feb amount',
             'amount' => 900,
         ]);
 
         Event::assertNotDispatched(GoalAchieved::class);
 
-        $this->post("/api/goals/{$goal->id}/transactions", [
+        $this->post($goal->path(), [
             'note' => 'feb amount',
             'amount' => 100,
         ]);

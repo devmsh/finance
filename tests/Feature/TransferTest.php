@@ -11,7 +11,7 @@ use Tests\TestCase;
 
 class TransferTest extends TestCase
 {
-    use DatabaseMigrations;
+    use DatabaseMigrations, RefreshDatabase;
 
     public function test_can_transfer_amount_from_wallet_to_goal()
     {

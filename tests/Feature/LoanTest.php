@@ -14,7 +14,7 @@ use Tests\TestCase;
 
 class LoanTest extends TestCase
 {
-    use DatabaseMigrations;
+    use DatabaseMigrations, RefreshDatabase;
 
     public function test_can_log_a_loan()
     {

@@ -64,4 +64,11 @@ class GoalTest extends TestCase
 
         $this->assertEquals(200, $goal->balance());
     }
+
+    public function test_a_goal_has_path()
+    {
+        $goal = factory(Goal::class)->create();
+
+        $this->assertEquals($goal->path(), "/api/goals/{$goal->id}/transactions");
+    }
 }

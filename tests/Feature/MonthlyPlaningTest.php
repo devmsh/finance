@@ -11,7 +11,7 @@ use Tests\TestCase;
 
 class MonthlyPlaningTest extends TestCase
 {
-    use DatabaseMigrations;
+    use DatabaseMigrations, RefreshDatabase;
 
     public function test_can_set_our_monthly_plan()
     {
