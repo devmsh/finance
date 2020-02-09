@@ -28,9 +28,9 @@ class CategoryTest extends TestCase
     {
         factory(Category::class, 5)->create();
 
-        Passport::actingAs($user = factory(User::class)->create());
-
-        $this->get('api/categories')->assertSuccessful()
+        $this->passportAs($user = factory(User::class)->create())
+            ->get('api/categories')
+            ->assertSuccessful()
             ->assertJsonPaths('*.user_id', $user->id)
             ->assertJsonCount(5)
             ->assertJsonStructure([
@@ -54,9 +54,8 @@ class CategoryTest extends TestCase
         ];
 
         collect($scenarios)->each(function ($type, $count) use ($user) {
-            factory(Category::class, $count)->create([
+            factory(Category::class, $count)->createForAuth([
                 'type' => $type,
-                'user_id' => $user->id,
             ]);
 
             $this->get('api/categories?type=' . $type)
@@ -76,8 +75,8 @@ class CategoryTest extends TestCase
         ];
 
         foreach ($transactionsCount as $count) {
-            factory(Transaction::class, $count)->create([
-                'category_id' => factory(Category::class)->create()->id,
+            factory(Transaction::class, $count)->createForAuth([
+                'category_id' => factory(Category::class)->createForAuth()->id,
             ]);
         }
 

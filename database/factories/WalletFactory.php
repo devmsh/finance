@@ -11,7 +11,7 @@ $factory->define(Wallet::class, function (Faker $faker) {
     return [
         'name' => $faker->word,
         'user_id' => function () {
-            return Auth::id() ? Auth::id() : factory(User::class)->create()->id;
+            return factory(User::class)->create()->id;
         },
     ];
 });

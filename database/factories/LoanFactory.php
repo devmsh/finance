@@ -15,7 +15,7 @@ $factory->define(Loan::class, function (Faker $faker) {
         'total' => $faker->numberBetween(100, 1000),
         'payoff_at' => \Carbon\Carbon::today()->addYear(),
         'user_id' => function () {
-            return Auth::id() ? Auth::id() : factory(User::class)->create()->id;
+            return factory(User::class)->create()->id;
         },
     ];
 });

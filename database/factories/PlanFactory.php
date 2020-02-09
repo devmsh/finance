@@ -13,7 +13,7 @@ $factory->define(Plan::class, function (Faker $faker) {
         'must_have' => 1000,
         'min_saving' => 500,
         'user_id' => function () {
-            return Auth::id() ? Auth::id() : factory(User::class)->create()->id;
+            return factory(User::class)->create()->id;
         },
     ];
 });

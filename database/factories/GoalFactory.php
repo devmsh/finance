@@ -15,7 +15,7 @@ $factory->define(Goal::class, function (Faker $faker) {
         'total' => $faker->numberBetween(100, 1000),
         'due_date' => Carbon::now()->addYear(),
         'user_id' => function () {
-            return Auth::id() ? Auth::id() : factory(User::class)->create()->id;
+            return factory(User::class)->create()->id;
         },
     ];
 });
