@@ -11,7 +11,7 @@ abstract class TestCase extends BaseTestCase
 
     public function passportAs($user, $scopes = [], $guard = 'api')
     {
-        Passport::actingAs($user);
+        Passport::actingAs($user, $scopes, $guard);
 
         return $this;
     }

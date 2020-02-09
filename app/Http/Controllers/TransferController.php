@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Goal;
 use App\Wallet;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -13,7 +14,7 @@ class TransferController extends Controller
      * Store a newly created resource in storage.
      *
      * @param Request $request
-     * @return Response
+     * @return JsonResponse
      */
     public function store(Request $request)
     {
@@ -33,9 +34,10 @@ class TransferController extends Controller
 
         $from->transfer($to, $from_amount, $to_amount);
 
-        return [
-            'success' => 'amount transferred',
-        ];
+        return response()->json([
+            'new_from_amount' => $from->balance(),
+            'new_to_amount' => $to->balance(),
+        ]);
     }
 
     /**

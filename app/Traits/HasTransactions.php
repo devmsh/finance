@@ -8,7 +8,7 @@ trait HasTransactions
 {
     public function balance()
     {
-        return $this->transactions()->sum('amount');
+        return (int) $this->transactions()->sum('amount');
     }
 
     public function transactions()

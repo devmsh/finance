@@ -11,11 +11,22 @@ class Wallet extends Model
 {
     use HasTransactions;
 
-    protected $guarded = [];
+    protected $guarded = [
+        'balance'
+    ];
 
     protected $attributes = [
         'currency' => Currency::USD,
     ];
+
+    protected $appends = [
+        'balance'
+    ];
+
+    public function getBalanceAttribute()
+    {
+        return $this->balance();
+    }
 
     public static function open($data)
     {

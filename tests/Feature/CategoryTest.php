@@ -44,8 +44,6 @@ class CategoryTest extends TestCase
 
     public function test_can_filter_categories_per_type()
     {
-        Passport::actingAs($user = factory(User::class)->create());
-
         $scenarios = [
             Category::INCOME_TYPE => 3,
             Category::EXPENSES_TYPE => 2,
@@ -53,12 +51,13 @@ class CategoryTest extends TestCase
             '999' => 0,
         ];
 
-        collect($scenarios)->each(function ($type, $count) use ($user) {
-            factory(Category::class, $count)->createForAuth([
+        collect($scenarios)->each(function ($count, $type) {
+            factory(Category::class, $count)->attachTo([
                 'type' => $type,
-            ]);
+            ], $user = factory(User::class)->create());
 
-            $this->get('api/categories?type=' . $type)
+            $this->passportAs($user)
+                ->get('api/categories?type=' . $type)
                 ->assertSuccessful()
                 ->assertJsonCount($count);
         });
@@ -66,21 +65,21 @@ class CategoryTest extends TestCase
 
     public function test_can_sort_categories_based_on_usage()
     {
-        Passport::actingAs($user = factory(User::class)->create());
-
         $transactionsCount = [
             1 => 5,
             2 => 3,
             3 => 7
         ];
 
+        $user = factory(User::class)->create();
         foreach ($transactionsCount as $count) {
-            factory(Transaction::class, $count)->createForAuth([
-                'category_id' => factory(Category::class)->createForAuth()->id,
-            ]);
+            factory(Transaction::class, $count)->attachTo([
+                'category_id' => factory(Category::class)->attachTo([], $user)->id,
+            ], $user);
         }
 
-        $this->get('api/categories?sort=usage')
+        $this->passportAs($user)
+            ->get('api/categories?sort=usage')
             ->assertSuccessful()
             ->assertJsonPath('*.id', [3, 1, 2]);
     }
