@@ -5,7 +5,7 @@ namespace Tests\Feature;
 use App\Goal;
 use App\User;
 use Carbon\Carbon;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Tests\DatabaseMigrations;
 use Tests\TestCase;
 
 class GoalTest extends TestCase

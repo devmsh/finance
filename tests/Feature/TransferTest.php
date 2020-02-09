@@ -5,7 +5,7 @@ namespace Tests\Feature;
 use App\Goal;
 use App\User;
 use App\Wallet;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Tests\DatabaseMigrations;
 use Laravel\Passport\Passport;
 use Tests\TestCase;
 

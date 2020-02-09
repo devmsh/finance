@@ -7,7 +7,7 @@ use App\Category;
 use App\Exceptions\NotAbleToSaveException;
 use App\Plan;
 use App\User;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Tests\DatabaseMigrations;
 use Laravel\Passport\Passport;
 use Tests\TestCase;
 

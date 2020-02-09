@@ -5,7 +5,7 @@ namespace Tests\Feature;
 use App\Category;
 use App\User;
 use App\Wallet;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Tests\DatabaseMigrations;
 use Tests\TestCase;
 
 class TrackingTest extends TestCase

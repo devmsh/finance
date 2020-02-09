@@ -5,7 +5,7 @@ namespace Tests\Unit\Listeners;
 use App\Events\LoanRecorded;
 use App\Goal;
 use App\Loan;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Tests\DatabaseMigrations;
 use Tests\TestCase;
 
 class PayoffTheLoanGoal extends TestCase

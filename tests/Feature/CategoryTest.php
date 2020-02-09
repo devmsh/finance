@@ -5,7 +5,7 @@ namespace Tests\Feature;
 use App\Category;
 use App\Transaction;
 use App\User;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Tests\DatabaseMigrations;
 use Laravel\Passport\Passport;
 use Tests\TestCase;
 
@@ -42,37 +42,33 @@ class CategoryTest extends TestCase
             ]);
     }
 
-    public function test_can_filter_categories_per_type()
+    /**
+     * @dataProvider typesCountProvider
+     * @param int $type
+     * @param int $count
+     */
+    public function test_can_filter_categories_per_type($type, $count)
     {
-        $scenarios = [
-            Category::INCOME_TYPE => 3,
-            Category::EXPENSES_TYPE => 2,
-            Category::TRANSFER_TYPE => 4,
-            '999' => 0,
-        ];
+        factory(Category::class, $count)->attachTo([
+            'type' => $type,
+        ], $user = factory(User::class)->create());
 
-        collect($scenarios)->each(function ($count, $type) {
-            factory(Category::class, $count)->attachTo([
-                'type' => $type,
-            ], $user = factory(User::class)->create());
-
-            $this->passportAs($user)
-                ->get('api/categories?type=' . $type)
-                ->assertSuccessful()
-                ->assertJsonCount($count);
-        });
+        $this->passportAs($user)
+            ->get('api/categories?type=' . $type)
+            ->assertSuccessful()
+            ->assertJsonCount($count);
     }
 
     public function test_can_sort_categories_based_on_usage()
     {
-        $transactionsCount = [
+        $transactionsPerCategory = [
             1 => 5,
             2 => 3,
             3 => 7
         ];
 
         $user = factory(User::class)->create();
-        foreach ($transactionsCount as $count) {
+        foreach ($transactionsPerCategory as $count) {
             factory(Transaction::class, $count)->attachTo([
                 'category_id' => factory(Category::class)->attachTo([], $user)->id,
             ], $user);
@@ -82,5 +78,16 @@ class CategoryTest extends TestCase
             ->get('api/categories?sort=usage')
             ->assertSuccessful()
             ->assertJsonPath('*.id', [3, 1, 2]);
+    }
+
+    public function typesCountProvider()
+    {
+        return [
+            // type, count
+            [Category::INCOME_TYPE, 3],
+            [Category::EXPENSES_TYPE, 2],
+            [Category::TRANSFER_TYPE, 4],
+            [999, 0],
+        ];
     }
 }

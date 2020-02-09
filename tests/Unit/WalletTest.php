@@ -5,7 +5,7 @@ namespace Tests\Unit;
 use App\Transaction;
 use App\User;
 use App\Wallet;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Tests\DatabaseMigrations;
 use Tests\TestCase;
 
 class WalletTest extends TestCase

@@ -5,7 +5,7 @@ namespace Tests\Unit;
 use App\Category;
 use App\User;
 use CategorySeeder;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Tests\DatabaseMigrations;
 use Tests\TestCase;
 
 class CategoryTest extends TestCase

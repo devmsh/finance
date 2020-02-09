@@ -5,7 +5,7 @@ namespace Tests\Feature;
 use App\Category;
 use App\Plan;
 use App\User;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Tests\DatabaseMigrations;
 use Tests\TestCase;
 
 class MonthlyPlaningTest extends TestCase

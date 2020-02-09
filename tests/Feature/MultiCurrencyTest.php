@@ -6,7 +6,7 @@ use App\Currency;
 use App\User;
 use App\Wallet;
 use Carbon\Carbon;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Tests\DatabaseMigrations;
 use Tests\TestCase;
 
 class MultiCurrencyTest extends TestCase
