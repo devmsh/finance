@@ -6,12 +6,12 @@ use App\Currency;
 use App\User;
 use App\Wallet;
 use Carbon\Carbon;
-use Tests\DatabaseMigrations;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class MultiCurrencyTest extends TestCase
 {
-    use DatabaseMigrations;
+    use RefreshDatabase;
 
     public function test_can_create_wallet()
     {

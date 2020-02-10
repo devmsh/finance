@@ -5,12 +5,12 @@ namespace Tests\Feature;
 use App\Goal;
 use App\User;
 use Carbon\Carbon;
-use Tests\DatabaseMigrations;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class GoalTest extends TestCase
 {
-    use DatabaseMigrations;
+    use RefreshDatabase;
 
     public function test_can_specify_a_goal()
     {

@@ -5,12 +5,12 @@ namespace Tests\Unit;
 use App\Transaction;
 use App\User;
 use App\Wallet;
-use Tests\DatabaseMigrations;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class WalletTest extends TestCase
 {
-    use DatabaseMigrations;
+    use RefreshDatabase;
 
     public function test_can_create_wallet()
     {

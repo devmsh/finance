@@ -5,13 +5,13 @@ namespace Tests\Feature;
 use App\Goal;
 use App\User;
 use App\Wallet;
-use Tests\DatabaseMigrations;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Passport\Passport;
 use Tests\TestCase;
 
 class TransferTest extends TestCase
 {
-    use DatabaseMigrations;
+    use RefreshDatabase;
 
     public function test_can_transfer_amount_from_wallet_to_goal()
     {

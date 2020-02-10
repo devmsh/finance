@@ -8,14 +8,14 @@ use App\Plan;
 use App\Transaction;
 use App\User;
 use Carbon\Carbon;
-use Tests\DatabaseMigrations;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
 use Laravel\Passport\Passport;
 use Tests\TestCase;
 
 class GoalTest extends TestCase
 {
-    use DatabaseMigrations;
+    use RefreshDatabase;
 
     public function test_goal_track_some_transactions()
     {

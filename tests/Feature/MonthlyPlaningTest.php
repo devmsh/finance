@@ -5,12 +5,12 @@ namespace Tests\Feature;
 use App\Category;
 use App\Plan;
 use App\User;
-use Tests\DatabaseMigrations;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class MonthlyPlaningTest extends TestCase
 {
-    use DatabaseMigrations;
+    use RefreshDatabase;
 
     public function test_can_set_our_monthly_plan()
     {

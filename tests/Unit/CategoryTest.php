@@ -5,12 +5,12 @@ namespace Tests\Unit;
 use App\Category;
 use App\User;
 use CategorySeeder;
-use Tests\DatabaseMigrations;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class CategoryTest extends TestCase
 {
-    use DatabaseMigrations;
+    use RefreshDatabase;
 
     public function test_app_include_default_categories()
     {

@@ -5,12 +5,12 @@ namespace Tests\Feature;
 use App\User;
 use App\Wallet;
 use Carbon\Carbon;
-use Tests\DatabaseMigrations;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class LoanTest extends TestCase
 {
-    use DatabaseMigrations;
+    use RefreshDatabase;
 
     public function test_can_log_a_loan()
     {

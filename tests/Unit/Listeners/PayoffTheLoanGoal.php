@@ -5,12 +5,12 @@ namespace Tests\Unit\Listeners;
 use App\Events\LoanRecorded;
 use App\Goal;
 use App\Loan;
-use Tests\DatabaseMigrations;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class PayoffTheLoanGoal extends TestCase
 {
-    use DatabaseMigrations;
+    use RefreshDatabase;
 
     public function test_loan_goal_created()
     {

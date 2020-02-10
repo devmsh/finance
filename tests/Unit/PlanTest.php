@@ -7,13 +7,13 @@ use App\Category;
 use App\Exceptions\NotAbleToSaveException;
 use App\Plan;
 use App\User;
-use Tests\DatabaseMigrations;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Passport\Passport;
 use Tests\TestCase;
 
 class PlanTest extends TestCase
 {
-    use DatabaseMigrations;
+    use RefreshDatabase;
 
     public function test_plan_can_suggest_needed_periods_based_on_amount()
     {

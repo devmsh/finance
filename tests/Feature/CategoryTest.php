@@ -5,13 +5,13 @@ namespace Tests\Feature;
 use App\Category;
 use App\Transaction;
 use App\User;
-use Tests\DatabaseMigrations;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Passport\Passport;
 use Tests\TestCase;
 
 class CategoryTest extends TestCase
 {
-    use DatabaseMigrations;
+    use RefreshDatabase;
 
     public function test_users_have_their_own_categories_copies()
     {
