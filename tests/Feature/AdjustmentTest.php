@@ -14,7 +14,7 @@ class AdjustmentTest extends TestCase
     /**
      * @dataProvider walletBalanceProvider
      */
-    public function test_can_adjust_wallet_balance($initial_balance ,$new_balance)
+    public function test_can_adjust_wallet_balance($initial_balance, $new_balance)
     {
         $user = factory(User::class)->create();
         $wallet = Wallet::open([
@@ -57,9 +57,9 @@ class AdjustmentTest extends TestCase
     public function walletBalanceProvider()
     {
         return [
-            [1000,200],
-            [100,200],
-            [200,200],
+            [1000, 200],
+            [100, 200],
+            [200, 200],
         ];
     }
 }

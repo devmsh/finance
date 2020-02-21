@@ -85,12 +85,12 @@ class Wallet extends Model
         if ($adjustment > 0) {
             $this->withdraw([
                 'amount' => $adjustment,
-                'note' => 'adjustment transaction'
+                'note' => 'adjustment transaction',
             ]);
         } elseif ($adjustment < 0) {
             $this->deposit([
                 'amount' => abs($adjustment),
-                'note' => 'adjustment transaction'
+                'note' => 'adjustment transaction',
             ]);
         }
 
@@ -100,7 +100,7 @@ class Wallet extends Model
     public function adjustOpenBalance($new_balance)
     {
         $this->transactions()->first()->update([
-            'amount' => $new_balance
+            'amount' => $new_balance,
         ]);
 
         return $this;
