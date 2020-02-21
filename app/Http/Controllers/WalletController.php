@@ -29,4 +29,9 @@ class WalletController extends Controller
             'user_id' => Auth::id(),
         ]));
     }
+
+    public function adjust(Wallet $wallet, Request $request)
+    {
+        return $wallet->adjustBalance($request->new_balance);
+    }
 }
