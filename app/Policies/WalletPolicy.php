@@ -44,6 +44,7 @@ class WalletPolicy
         return true;
     }
 
+    // @codeCoverageIgnoreStart
     /**
      * Determine whether the user can update the wallet.
      *
@@ -91,4 +92,5 @@ class WalletPolicy
     {
         //
     }
+    // @codeCoverageIgnoreEnd
 }

@@ -24,6 +24,7 @@ class UserObserver
         });
     }
 
+    // @codeCoverageIgnoreStart
     /**
      * Handle the user "updated" event.
      *
@@ -67,4 +68,5 @@ class UserObserver
     {
         //
     }
+    // @codeCoverageIgnoreEnd
 }
