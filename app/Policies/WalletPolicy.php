@@ -30,7 +30,7 @@ class WalletPolicy
      */
     public function view(User $user, Wallet $wallet)
     {
-        return $wallet->user_id == $user->id;
+        return $wallet->hasAccess($user);
     }
 
     /**

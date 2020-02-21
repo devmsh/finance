@@ -28,6 +28,7 @@ Route::middleware('auth:api')->group(function () {
     Route::resource('wallets', 'WalletController');
     Route::resource('goals.transactions', 'GoalTransactionController');
     Route::resource('wallets.income', 'WalletIncomeController');
+    Route::resource('wallets.users', 'ShareController');
     Route::resource('wallets.expenses', 'WalletExpenseController');
     Route::resource('expenses', 'ExpenseController');
 });

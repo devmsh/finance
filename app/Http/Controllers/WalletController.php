@@ -15,7 +15,7 @@ class WalletController extends Controller
 
     public function index(Request $request)
     {
-        return Auth::user()->wallets()->get();
+        return Auth::user()->allWallets();
     }
 
     public function show(Wallet $wallet, Request $request)
