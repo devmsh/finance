@@ -43,4 +43,38 @@ class Wallet extends Model
             );
         });
     }
+
+    public function share(User $user)
+    {
+        return WalletAccess::updateOrCreate([
+            'wallet_id' => $this->id,
+            'user_id' => $user->id,
+        ]);
+    }
+
+    public function unshare(User $user)
+    {
+        return WalletAccess::where([
+            'wallet_id' => $this->id,
+            'user_id' => $user->id,
+        ])->delete();
+    }
+
+    public function hasAccess(User $user)
+    {
+        return $this->own($user) || $this->sharedWith($user);
+    }
+
+    public function own(User $user)
+    {
+        return $this->user_id == $user->id;
+    }
+
+    public function sharedWith(User $user)
+    {
+        return WalletAccess::where([
+            'wallet_id' => $this->id,
+            'user_id' => $user->id,
+        ])->exists();
+    }
 }

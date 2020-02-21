@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
 use Laravel\Passport\HasApiTokens;
 
 class User extends Authenticatable
@@ -37,9 +38,22 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public function allWallets()
+    {
+        $ownedWallets = $this->wallets()->get();
+        $sharedWallets = $this->sharedWallets()->get();
+
+        return $ownedWallets->merge($sharedWallets);
+    }
+
     public function wallets()
     {
         return $this->hasMany(Wallet::class);
+    }
+
+    public function sharedWallets()
+    {
+        return $this->belongsToMany(Wallet::class, 'wallet_access');
     }
 
     public function categories()
