@@ -8,6 +8,7 @@ class Transaction extends Model
 {
     protected $guarded = [];
 
+    // Todo remove the default category or get the default by user.
     protected $attributes = [
         'category_id' => Category::DEFAULT_CATEGORY,
     ];

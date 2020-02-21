@@ -3,8 +3,6 @@
 namespace App\Listeners;
 
 use App\Events\LoanRecorded;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 
 class DepositLoanToWallet
 {
@@ -21,7 +19,7 @@ class DepositLoanToWallet
     /**
      * Handle the event.
      *
-     * @param  LoanRecorded  $event
+     * @param LoanRecorded $event
      * @return void
      */
     public function handle(LoanRecorded $event)
@@ -31,7 +29,8 @@ class DepositLoanToWallet
         $loan->wallet->deposit([
             'note' => 'caused by loan',
             'amount' => $loan->total,
-            'causedby_id'=> $loan->id,
+            'causedby_id' => $loan->id,
+            'user_id' => $loan->user_id,
         ]);
     }
 }

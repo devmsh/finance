@@ -5,14 +5,15 @@ namespace Tests\Unit;
 use App\Budget;
 use App\Category;
 use App\Exceptions\NotAbleToSaveException;
-use App\Goal;
 use App\Plan;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
+use App\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Laravel\Passport\Passport;
 use Tests\TestCase;
 
 class PlanTest extends TestCase
 {
-    use DatabaseMigrations;
+    use RefreshDatabase;
 
     public function test_plan_can_suggest_needed_periods_based_on_amount()
     {
@@ -40,17 +41,18 @@ class PlanTest extends TestCase
 
     public function test_can_set_detailed_budget()
     {
+        Passport::actingAs($user = factory(User::class)->create());
         /** @var Plan $plan */
         $plan = factory(Plan::class)->create([
             'min_saving' => 0,
         ]);
 
         $firstCategory = factory(Category::class)->create([
-            'type' => Category::EXPENSES,
+            'type' => Category::EXPENSES_TYPE,
         ]);
 
         $secondCategory = factory(Category::class)->create([
-            'type' => Category::EXPENSES,
+            'type' => Category::EXPENSES_TYPE,
         ]);
 
         $plan->setBudget([

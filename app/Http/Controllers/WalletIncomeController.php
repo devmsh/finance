@@ -2,21 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use App\Transaction;
 use App\Wallet;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 
 class WalletIncomeController extends Controller
 {
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Wallet  $wallet
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param Wallet $wallet
+     * @return Response
      */
     public function store(Request $request, Wallet $wallet)
     {
-        return $wallet->deposit($request->all());
+        return $wallet->deposit(array_merge($request->all(), [
+            'user_id' => Auth::id(),
+        ]));
     }
 }

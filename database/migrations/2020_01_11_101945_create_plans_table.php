@@ -18,6 +18,8 @@ class CreatePlansTable extends Migration
             $table->bigInteger('total_income');
             $table->bigInteger('must_have');
             $table->bigInteger('min_saving');
+
+            $table->bigInteger('user_id');
             $table->timestamps();
         });
     }

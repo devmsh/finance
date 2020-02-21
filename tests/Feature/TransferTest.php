@@ -3,112 +3,133 @@
 namespace Tests\Feature;
 
 use App\Goal;
+use App\User;
 use App\Wallet;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
+use Laravel\Passport\Passport;
 use Tests\TestCase;
 
 class TransferTest extends TestCase
 {
-    use DatabaseMigrations;
+    use RefreshDatabase;
 
     public function test_can_transfer_amount_from_wallet_to_goal()
     {
+        $user = factory(User::class)->create();
+
         $wallet = Wallet::open(factory(Wallet::class)->data([
             'initial_balance' => 1000,
+            'user_id' => $user->id,
         ]));
 
-        $goal = factory(Goal::class)->create();
+        $goal = factory(Goal::class)->attachTo([], $user);
 
-        $response = $this->post('api/transfers', [
-            'amount' => 400,
-            'from_type' => 'wallet',
-            'from_id' => $wallet->id,
-            'to_type' => 'goal',
-            'to_id' => $goal->id,
-        ]);
-
-        $response->assertSuccessful();
-        $this->assertEquals(600, $wallet->balance());
-        $this->assertEquals(400, $goal->balance());
+        $this->passportAs($user)
+            ->post('api/transfers', [
+                'amount' => 400,
+                'from_type' => 'wallet',
+                'from_id' => $wallet->id,
+                'to_type' => 'goal',
+                'to_id' => $goal->id,
+            ])
+            ->assertSuccessful()
+            ->assertJson([
+                'new_from_amount' => 600,
+                'new_to_amount' => 400,
+            ]);
     }
 
     public function test_can_transfer_amount_from_goal_to_wallet()
     {
+        $user = factory(User::class)->create();
+
         $wallet = Wallet::open(factory(Wallet::class)->data([
             'initial_balance' => 1000,
+            'user_id' => $user->id,
         ]));
 
-        /** @var Goal $goal */
-        $goal = factory(Goal::class)->create();
-        $goal->deposit([
-            'note' => 'test',
-            'amount' => 500,
-        ]);
+        // Todo consider having initial balance for goals?
+        $goal = tap(factory(Goal::class)->attachTo([], $user), function (Goal $goal) {
+            $goal->deposit([
+                'note' => 'test',
+                'amount' => 500,
+            ]);
+        });
 
-        $response = $this->post('api/transfers', [
-            'amount' => 400,
-            'from_type' => 'goal',
-            'from_id' => $goal->id,
-            'to_type' => 'wallet',
-            'to_id' => $wallet->id,
-        ]);
-
-        $response->assertSuccessful();
-        $this->assertEquals(1400, $wallet->balance());
-        $this->assertEquals(100, $goal->balance());
+        $this->passportAs($user)
+            ->post('api/transfers', [
+                'amount' => 400,
+                'from_type' => 'goal',
+                'from_id' => $goal->id,
+                'to_type' => 'wallet',
+                'to_id' => $wallet->id,
+            ])
+            ->assertSuccessful()
+            ->assertJson([
+                'new_from_amount' => 100,
+                'new_to_amount' => 1400,
+            ]);
     }
 
     public function test_can_transfer_amount_from_goal_to_goal()
     {
-        /** @var Goal $firstGoal */
-        $firstGoal = factory(Goal::class)->create();
-        $firstGoal->deposit([
-            'note' => 'test',
-            'amount' => 500,
-        ]);
+        Passport::actingAs($user = factory(User::class)->create());
 
-        /** @var Goal $secondGoal */
-        $secondGoal = factory(Goal::class)->create();
-        $secondGoal->deposit([
-            'note' => 'test',
-            'amount' => 500,
-        ]);
+        $firstGoal = tap(factory(Goal::class)->attachTo([], $user), function (Goal $goal) {
+            $goal->deposit([
+                'note' => 'test',
+                'amount' => 500,
+            ]);
+        });
 
-        $response = $this->post('api/transfers', [
-            'amount' => 400,
-            'from_type' => 'goal',
-            'from_id' => $firstGoal->id,
-            'to_type' => 'goal',
-            'to_id' => $secondGoal->id,
-        ]);
+        $secondGoal = tap(factory(Goal::class)->attachTo([], $user), function (Goal $goal) {
+            $goal->deposit([
+                'note' => 'test',
+                'amount' => 500,
+            ]);
+        });
 
-        $response->assertSuccessful();
-        $this->assertEquals(100, $firstGoal->balance());
-        $this->assertEquals(900, $secondGoal->balance());
+        $this->passportAs($user)
+            ->post('api/transfers', [
+                'amount' => 400,
+                'from_type' => 'goal',
+                'from_id' => $firstGoal->id,
+                'to_type' => 'goal',
+                'to_id' => $secondGoal->id,
+            ])
+            ->assertSuccessful()
+            ->assertJson([
+                'new_from_amount' => 100,
+                'new_to_amount' => 900,
+            ]);
     }
 
     public function test_can_transfer_amount_from_wallet_to_wallet()
     {
+        $user = factory(User::class)->create();
+
         $firstWallet = Wallet::open(factory(Wallet::class)->data([
             'initial_balance' => 1000,
+            'user_id' => $user->id,
         ]));
 
         $secondWallet = Wallet::open(factory(Wallet::class)->data([
             'initial_balance' => 500,
+            'user_id' => $user->id,
         ]));
 
-        $response = $this->post('api/transfers', [
-            'amount' => 400,
-            'from_type' => 'wallet',
-            'from_id' => $firstWallet->id,
-            'to_type' => 'wallet',
-            'to_id' => $secondWallet->id,
-        ]);
-
-        $response->assertSuccessful();
-        $this->assertEquals(600, $firstWallet->balance());
-        $this->assertEquals(900, $secondWallet->balance());
+        $this->passportAs($user)
+            ->post('api/transfers', [
+                'amount' => 400,
+                'from_type' => 'wallet',
+                'from_id' => $firstWallet->id,
+                'to_type' => 'wallet',
+                'to_id' => $secondWallet->id,
+            ])
+            ->assertSuccessful()
+            ->assertJson([
+                'new_from_amount' => 600,
+                'new_to_amount' => 900,
+            ]);
     }
 }

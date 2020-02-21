@@ -19,6 +19,7 @@ class CreateBudgetsTable extends Migration
 
             $table->bigInteger('plan_id');
             $table->bigInteger('category_id');
+            $table->bigInteger('user_id');
             $table->timestamps();
         });
     }

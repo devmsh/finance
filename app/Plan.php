@@ -3,7 +3,9 @@
 namespace App;
 
 use App\Exceptions\NotAbleToSaveException;
+use Exception;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * @property mixed total_income the total expected income
@@ -17,11 +19,6 @@ class Plan extends Model
 
     protected $appends = ['pocket_money'];
 
-    public function budgets()
-    {
-        return $this->hasMany(Budget::class);
-    }
-
     public function getPocketMoneyAttribute()
     {
         return $this->total_income - $this->must_have - $this->min_saving;
@@ -31,18 +28,24 @@ class Plan extends Model
     {
         try {
             return $amount / $this->min_saving;
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             throw new NotAbleToSaveException();
         }
     }
 
     public function setBudget($budget)
     {
-        foreach ($budget as $category_id => $amount) {
-            $this->budgets()->create([
+        return $this->budgets()->createMany(collect($budget)->map(function ($amount, $category_id) {
+            return [
                 'category_id' => $category_id,
                 'amount' => $amount,
-            ]);
-        }
+                'user_id' => Auth::id(),
+            ];
+        })->toArray());
+    }
+
+    public function budgets()
+    {
+        return $this->hasMany(Budget::class);
     }
 }

@@ -3,13 +3,37 @@
 namespace Tests\Unit;
 
 use App\Transaction;
+use App\User;
 use App\Wallet;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class WalletTest extends TestCase
 {
-    use DatabaseMigrations;
+    use RefreshDatabase;
+
+    public function test_can_create_wallet()
+    {
+        $user = factory(User::class)->create();
+
+        collect([0, 100])->each(function ($initial_balance) use ($user) {
+            $this->passportAs($user)
+                ->post('api/wallets', [
+                    'name' => 'Cash',
+                    'initial_balance' => $initial_balance,
+                ])
+                ->assertSuccessful()
+                ->assertJsonStructure([
+                    'id',
+                    'name',
+                ]);
+
+            $transaction = Transaction::all()->last();
+            $this->assertEquals($initial_balance, $transaction->amount);
+            $this->assertEquals($user->id, $transaction->user_id);
+            $this->assertInstanceOf(Wallet::class, $transaction->trackable);
+        });
+    }
 
     public function test_wallet_can_track_income()
     {

@@ -3,8 +3,6 @@
 namespace App\Listeners;
 
 use App\Events\LoanRecorded;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 
 class PayoffTheLoanGoal
 {
@@ -21,7 +19,7 @@ class PayoffTheLoanGoal
     /**
      * Handle the event.
      *
-     * @param  LoanRecorded  $event
+     * @param LoanRecorded $event
      * @return void
      */
     public function handle(LoanRecorded $event)
@@ -33,6 +31,7 @@ class PayoffTheLoanGoal
             'total' => $loan->total,
             'due_date' => $loan->payoff_at,
             'currency' => $loan->currency,
+            'user_id' => $loan->user_id,
         ]);
     }
 }

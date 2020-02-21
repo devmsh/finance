@@ -6,10 +6,11 @@ use App\Events\GoalAchieved;
 use App\Events\LoanRecorded;
 use App\Listeners\DepositLoanToWallet;
 use App\Listeners\PayoffTheLoanGoal;
+use App\Observers\UserObserver;
+use App\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
-use Illuminate\Support\Facades\Event;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -39,6 +40,6 @@ class EventServiceProvider extends ServiceProvider
     {
         parent::boot();
 
-        //
+        User::observe(UserObserver::class);
     }
 }

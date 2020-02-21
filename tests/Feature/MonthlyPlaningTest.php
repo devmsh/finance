@@ -4,70 +4,63 @@ namespace Tests\Feature;
 
 use App\Category;
 use App\Plan;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
+use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class MonthlyPlaningTest extends TestCase
 {
-    use DatabaseMigrations;
+    use RefreshDatabase;
 
     public function test_can_set_our_monthly_plan()
     {
-        $response = $this->post('api/plans', [
-            'total_income' => 3000,
-            'must_have' => 1000,
-            'min_saving' => 500,
-        ]);
-
-        $response->assertSuccessful();
-        $response->assertJsonStructure([
-            'id',
-            'total_income',
-            'must_have',
-            'pocket_money',
-            'min_saving',
-        ]);
-
-        $plan = Plan::find(1);
-        $this->assertEquals(3000, $plan->total_income);
-        $this->assertEquals(1000, $plan->must_have);
-        $this->assertEquals(500, $plan->min_saving);
-        $this->assertEquals(1500, $plan->pocket_money);
+        $this->passportAs($user = factory(User::class)->create())
+            ->post('api/plans', [
+                'total_income' => 3000,
+                'must_have' => 1000,
+                'min_saving' => 500,
+                'user_id' => 2,
+            ])->assertSuccessful()
+            ->assertJson([
+                'id' => 1,
+                'total_income' => 3000,
+                'must_have' => 1000,
+                'pocket_money' => 1500,
+                'min_saving' => 500,
+            ]);
     }
 
     public function test_can_specify_monthly_budget_details()
     {
-        $plan = factory(Plan::class)->create([
-            'total_income' => 3000,
-            'must_have' => 1000,
-            'min_saving' => 500,
-        ]);
+        $user = factory(User::class)->create();
 
-        $firstCategory = factory(Category::class)->create([
-            'type' => Category::EXPENSES,
-        ]);
+        $plan = factory(Plan::class)->attachTo([], $user);
 
-        $secondCategory = factory(Category::class)->create([
-            'type' => Category::EXPENSES,
-        ]);
+        $firstCategory = factory(Category::class)->attachTo([
+            'type' => Category::EXPENSES_TYPE,
+        ], $user);
 
-        $response = $this->post("api/plans/{$plan->id}/budget", [
-            "{$firstCategory->id}" => 100,
-            "{$secondCategory->id}" => 200,
-        ]);
+        $secondCategory = factory(Category::class)->attachTo([
+            'type' => Category::EXPENSES_TYPE,
+        ], $user);
 
-        $response->assertSuccessful();
-        $response->assertJsonStructure([
-            [
-                'id',
-                'amount',
-                'category' => [
-                    'id',
-                    'name',
+        $this->passportAs($user)
+            ->post("api/plans/{$plan->id}/budget", [
+                "{$firstCategory->id}" => 100,
+                "{$secondCategory->id}" => 200,
+            ])
+            ->assertSuccessful()
+            ->assertJson([
+                [
+                    'id' => 1,
+                    'amount' => 100,
+                    'category_id' => 1,
                 ],
-            ],
-        ]);
+                [
+                    'id' => 2,
+                    'amount' => 200,
+                    'category_id' => 2,
+                ],
+            ]);
     }
 }

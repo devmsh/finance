@@ -22,6 +22,23 @@ class Goal extends Model
 
     protected $dates = ['due_date'];
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        self::saving(function (self $goal) {
+            $goal->suggestDueDate();
+        });
+    }
+
+    public function suggestDueDate()
+    {
+        if (! $this->due_date) {
+            $periods = Plan::find(1)->expectedPeriods($this->total);
+            $this->due_date = Carbon::today()->addMonths($periods);
+        }
+    }
+
     public function addTransaction($data)
     {
         $transaction = $this->deposit($data);

@@ -2,36 +2,65 @@
 
 namespace Tests\Feature;
 
-use App\Category;
-use App\Transaction;
+use App\User;
 use App\Wallet;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class WalletTest extends TestCase
 {
-    use DatabaseMigrations;
+    use RefreshDatabase;
 
     public function test_can_create_wallet()
     {
-        $response = $this->post('api/wallets', [
-            'name' => 'Cash',
-            'initial_balance' => 1000,
-        ]);
+        collect([0, 100])->each(function ($initial_balance, $key) {
+            $this->passportAs(factory(User::class)->create())
+                ->post('api/wallets', [
+                    'name' => 'Cash',
+                    'initial_balance' => $initial_balance,
+                ])
+                ->assertSuccessful()
+                ->assertJson([
+                    'id' => $key + 1,
+                    'name' => 'Cash',
+                    'balance' => $initial_balance,
+                ]);
+        });
+    }
 
-        $response->assertSuccessful();
-        $response->assertJsonStructure([
-            'id',
-            'name',
-        ]);
+    public function test_list_only_owned_wallets()
+    {
+        factory(Wallet::class)->create();
+        $user = factory(User::class)->create();
+        factory(Wallet::class)->attachTo([], $user);
 
-        $wallet = Wallet::find(1);
-        $this->assertEquals('Cash', $wallet->name);
+        $this->passportAs($user)
+            ->get('api/wallets')
+            ->assertSuccessful()
+            ->assertJsonCount(1);
+    }
 
-        $transaction = Transaction::find(1);
-        $this->assertEquals(1000, $transaction->amount);
-        $this->assertInstanceOf(Wallet::class, $transaction->trackable);
+    public function test_can_access_wallets_details()
+    {
+        factory(Wallet::class)->attachTo([], $user = factory(User::class)->create());
+
+        $this->passportAs($user)
+            ->get('api/wallets/1')
+            ->assertSuccessful()
+            ->assertJsonStructure([
+                'id',
+                'name',
+            ]);
+    }
+
+    public function test_cannot_access_other_user_wallets()
+    {
+        factory(Wallet::class)->create();
+        $user = factory(User::class)->create();
+        factory(Wallet::class)->attachTo([], $user);
+
+        $this->passportAs($user)
+            ->get('api/wallets/1')
+            ->assertForbidden();
     }
 }

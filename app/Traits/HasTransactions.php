@@ -6,14 +6,14 @@ use App\Transaction;
 
 trait HasTransactions
 {
+    public function balance()
+    {
+        return (int) $this->transactions()->sum('amount');
+    }
+
     public function transactions()
     {
         return $this->morphMany(Transaction::class, 'trackable');
-    }
-
-    public function balance()
-    {
-        return $this->transactions()->sum('amount');
     }
 
     public function transfer($account, $from_amount, $to_amount = null)

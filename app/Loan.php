@@ -13,6 +13,10 @@ class Loan extends Model
         'created' => LoanRecorded::class,
     ];
 
+    protected $dates = [
+        'payoff_at',
+    ];
+
     protected $appends = [
         'currency',
     ];
