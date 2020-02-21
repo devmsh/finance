@@ -53,7 +53,7 @@ class User extends Authenticatable
 
     public function sharedWallets()
     {
-        return $this->belongsToMany(Wallet::class,'wallet_access');
+        return $this->belongsToMany(Wallet::class, 'wallet_access');
     }
 
     public function categories()

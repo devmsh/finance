@@ -15,7 +15,7 @@ class ShareTest extends TestCase
     public function test_can_share_wallet_with_other_user()
     {
         $user = factory(User::class)->create();
-        $wallet = factory(Wallet::class)->attachTo([],$user);
+        $wallet = factory(Wallet::class)->attachTo([], $user);
         $otherUser = factory(User::class)->create();
 
         $this->passportAs($user)
@@ -32,7 +32,7 @@ class ShareTest extends TestCase
     {
         $user = factory(User::class)->create();
         /** @var Wallet $wallet */
-        $wallet = factory(Wallet::class)->attachTo([],$user);
+        $wallet = factory(Wallet::class)->attachTo([], $user);
         $otherUser = factory(User::class)->create();
         $wallet->share($otherUser);
 
