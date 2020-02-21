@@ -26,7 +26,8 @@ Route::middleware('auth:api')->group(function () {
     Route::post('plans/{plan}/budget', 'PlanController@createBudget');
     Route::resource('goals', 'GoalController');
     Route::resource('wallets', 'WalletController');
-    Route::post('wallets/{wallet}/adjust', 'WalletController@adjust');
+    Route::post('wallets/{wallet}/balance', 'WalletAdjustmentController@balance');
+    Route::post('wallets/{wallet}/openBalance', 'WalletAdjustmentController@openBalance');
     Route::resource('goals.transactions', 'GoalTransactionController');
     Route::resource('wallets.income', 'WalletIncomeController');
     Route::resource('wallets.users', 'ShareController');

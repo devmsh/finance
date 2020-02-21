@@ -23,15 +23,34 @@ class AdjustmentTest extends TestCase
             'initial_balance' => $initial_balance,
         ]);
 
-        $this->withoutExceptionHandling()
-            ->passportAs(factory(User::class)->create())
-            ->post("api/wallets/{$wallet->id}/adjust", [
+        $this->passportAs(factory(User::class)->create())
+            ->post("api/wallets/{$wallet->id}/balance", [
                 'new_balance' => $new_balance,
             ])
             ->assertSuccessful()
             ->assertJson([
                 'id' => 1,
                 'balance' => $new_balance,
+            ]);
+    }
+
+    public function test_can_adjust_wallet_open_balance()
+    {
+        $user = factory(User::class)->create();
+        $wallet = Wallet::open([
+            'user_id' => $user->id,
+            'name' => 'Test',
+            'initial_balance' => 1000,
+        ]);
+
+        $this->passportAs(factory(User::class)->create())
+            ->post("api/wallets/{$wallet->id}/openBalance", [
+                'new_balance' => 500,
+            ])
+            ->assertSuccessful()
+            ->assertJson([
+                'id' => 1,
+                'balance' => 500,
             ]);
     }
 
