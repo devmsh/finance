@@ -97,7 +97,7 @@ class Wallet extends Model
         return $this;
     }
 
-    public function adjustOpenBalance($new_balance)
+    public function adjustOpeningBalance($new_balance)
     {
         $this->transactions()->first()->update([
             'amount' => $new_balance,
