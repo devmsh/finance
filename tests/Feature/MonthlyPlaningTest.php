@@ -19,7 +19,7 @@ class MonthlyPlaningTest extends TestCase
                 'total_income' => 3000,
                 'must_have' => 1000,
                 'min_saving' => 500,
-                'user_id' => 2
+                'user_id' => 2,
             ])->assertSuccessful()
             ->assertJson([
                 'id' => 1,

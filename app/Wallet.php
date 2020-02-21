@@ -12,7 +12,7 @@ class Wallet extends Model
     use HasTransactions;
 
     protected $guarded = [
-        'balance'
+        'balance',
     ];
 
     protected $attributes = [
@@ -20,7 +20,7 @@ class Wallet extends Model
     ];
 
     protected $appends = [
-        'balance'
+        'balance',
     ];
 
     public function getBalanceAttribute()
@@ -33,7 +33,7 @@ class Wallet extends Model
         return DB::transaction(function () use ($data) {
             return tap(
                 self::create(Arr::except($data, 'initial_balance')),
-                function (Wallet $wallet) use ($data) {
+                function (self $wallet) use ($data) {
                     $wallet->deposit([
                         'note' => 'initial balance',
                         'amount' => Arr::get($data, 'initial_balance', 0),

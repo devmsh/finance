@@ -23,7 +23,7 @@ class MultiCurrencyTest extends TestCase
             ])
             ->assertSuccessful()
             ->assertJson([
-                'currency' => Currency::USD
+                'currency' => Currency::USD,
             ]);
     }
 
@@ -33,12 +33,12 @@ class MultiCurrencyTest extends TestCase
 
         $firstWallet = Wallet::open(factory(Wallet::class)->data([
             'initial_balance' => 1000,
-            'user_id' => $user->id
+            'user_id' => $user->id,
         ]));
 
         $secondWallet = Wallet::open(factory(Wallet::class)->data([
             'initial_balance' => 500,
-            'user_id' => $user->id
+            'user_id' => $user->id,
         ]));
 
         $this->passportAs($user)
@@ -53,7 +53,7 @@ class MultiCurrencyTest extends TestCase
             ->assertSuccessful()
             ->assertJson([
                 'new_from_amount' => 600,
-                'new_to_amount' => 700
+                'new_to_amount' => 700,
             ]);
     }
 

@@ -23,10 +23,12 @@ class AppServiceProvider extends ServiceProvider
         });
 
         FactoryBuilder::macro('attachTo', function ($attributes = [], $user = null) {
-            if (!$user && !Auth::id()) throw new \Exception('No auth user available');
+            if (! $user && ! Auth::id()) {
+                throw new \Exception('No auth user available');
+            }
 
             return $this->create(array_merge($attributes, [
-                'user_id' => $user ?? Auth::id()
+                'user_id' => $user ?? Auth::id(),
             ]));
         });
 

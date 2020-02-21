@@ -19,9 +19,7 @@ trait DatabaseMigrations
         $this->app[Kernel::class]->setArtisan(null);
 
         $this->beforeApplicationDestroyed(function () {
-
             RefreshDatabaseState::$migrated = false;
         });
     }
 }
-

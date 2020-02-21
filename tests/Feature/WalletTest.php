@@ -23,7 +23,7 @@ class WalletTest extends TestCase
                 ->assertJson([
                     'id' => $key + 1,
                     'name' => 'Cash',
-                    'balance' => $initial_balance
+                    'balance' => $initial_balance,
                 ]);
         });
     }

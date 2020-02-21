@@ -54,7 +54,7 @@ class CategoryTest extends TestCase
         ], $user = factory(User::class)->create());
 
         $this->passportAs($user)
-            ->get('api/categories?type=' . $type)
+            ->get('api/categories?type='.$type)
             ->assertSuccessful()
             ->assertJsonCount($count);
     }
@@ -64,7 +64,7 @@ class CategoryTest extends TestCase
         $transactionsPerCategory = [
             1 => 5,
             2 => 3,
-            3 => 7
+            3 => 7,
         ];
 
         $user = factory(User::class)->create();

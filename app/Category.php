@@ -24,7 +24,7 @@ class Category extends Model
 
     public static function scopeFilter($query, $filters)
     {
-        if (Arr::exists($filters,'type')) {
+        if (Arr::exists($filters, 'type')) {
             $query->where('type', $filters['type']);
         }
 
@@ -33,7 +33,7 @@ class Category extends Model
 
     public static function scopeSort(Builder $query, $filters)
     {
-        if (Arr::get($filters,'sort') == 'usage') {
+        if (Arr::get($filters, 'sort') == 'usage') {
             $query->usage();
         }
 
