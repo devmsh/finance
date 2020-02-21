@@ -77,4 +77,32 @@ class Wallet extends Model
             'user_id' => $user->id,
         ])->exists();
     }
+
+    public function adjustBalance($new_balance)
+    {
+        $adjustment = $this->balance() - $new_balance;
+
+        if ($adjustment > 0) {
+            $this->withdraw([
+                'amount' => $adjustment,
+                'note' => 'adjustment transaction',
+            ]);
+        } elseif ($adjustment < 0) {
+            $this->deposit([
+                'amount' => abs($adjustment),
+                'note' => 'adjustment transaction',
+            ]);
+        }
+
+        return $this;
+    }
+
+    public function adjustOpenBalance($new_balance)
+    {
+        $this->transactions()->first()->update([
+            'amount' => $new_balance,
+        ]);
+
+        return $this;
+    }
 }
