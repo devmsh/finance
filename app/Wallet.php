@@ -105,4 +105,9 @@ class Wallet extends Model
 
         return $this;
     }
+
+    public function schedule($data)
+    {
+        return $this->scheduledTransactions()->create($data);
+    }
 }
