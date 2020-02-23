@@ -17,6 +17,12 @@ class GoalController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'name' => 'required',
+            'total' => 'required',
+            'due_date' => 'required|date',
+        ]);
+
         return Goal::create(array_merge($request->all(), [
             'user_id' => Auth::id(),
         ]));

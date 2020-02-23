@@ -45,4 +45,36 @@ class GoalTest extends TestCase
                 'amount' => 100,
             ]);
     }
+
+    public function test_goal_require_a_name()
+    {
+        $goal = factory(Goal::class)->raw(['name' => '']);
+
+        $this->passportAs($user = factory(User::class)->create())
+            ->post('/api/goals', $goal)
+            ->assertSessionHasErrors('name');
+    }
+
+    public function test_goal_require_a_total()
+    {
+        $goal = factory(Goal::class)->raw(['total' => '']);
+
+        $this->passportAs($user = factory(User::class)->create())
+            ->post('/api/goals', $goal)
+            ->assertSessionHasErrors('total');
+    }
+
+    public function test_goal_require_due_date()
+    {
+        $goal = factory(Goal::class)->raw(['due_date' => '']);
+
+        $this->passportAs($user = factory(User::class)->create())
+            ->post('/api/goals', $goal)
+            ->assertSessionHasErrors('due_date');
+
+        $goal = factory(Goal::class)->raw(['due_date' => 'DateThatNotData']);
+        $this->passportAs($user)
+            ->post('/api/goals', $goal)
+            ->assertSessionHasErrors('due_date');
+    }
 }
