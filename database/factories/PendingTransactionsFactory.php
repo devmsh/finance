@@ -2,12 +2,13 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
-use App\ScheduledTransaction;
+use App\PendingTransaction;
 use App\User;
 use App\Wallet;
+use Carbon\Carbon;
 use Faker\Generator as Faker;
 
-$factory->define(ScheduledTransaction::class, function (Faker $faker) {
+$factory->define(PendingTransaction::class, function (Faker $faker) {
     return [
         'note' => $faker->sentence,
         'amount' => $faker->numberBetween(1, 500),
@@ -18,8 +19,6 @@ $factory->define(ScheduledTransaction::class, function (Faker $faker) {
         'user_id' => function () {
             return factory(User::class)->create()->id;
         },
-        'rrule' => ScheduledTransaction::rule()
-            ->setFreq(ScheduledTransaction::FREQ_MONTHLY)
-            ->setByMonthDay([1])->getString()
+        'due_date' => Carbon::today()
     ];
 });

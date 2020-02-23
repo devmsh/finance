@@ -34,4 +34,5 @@ Route::middleware('auth:api')->group(function () {
     Route::resource('wallets.users', 'ShareController');
     Route::resource('wallets.expenses', 'WalletExpenseController');
     Route::resource('expenses', 'ExpenseController');
+    Route::post('pendingTransaction/{pendingTransaction}/complete', 'PendingTransactionController@complete');
 });
