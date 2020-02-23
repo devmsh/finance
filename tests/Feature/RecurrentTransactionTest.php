@@ -51,7 +51,7 @@ class RecurrentTransactionTest extends TestCase
         $user = factory(User::class)->create();
 
         /** @var PendingTransaction $pendingTransaction */
-        $pendingTransaction = factory(PendingTransaction::class)->attachTo([],$user);
+        $pendingTransaction = factory(PendingTransaction::class)->attachTo([], $user);
 
         $this->passportAs($user)
             ->post("api/pendingTransaction/{$pendingTransaction->id}/complete")
@@ -72,7 +72,7 @@ class RecurrentTransactionTest extends TestCase
     {
         $user = factory(User::class)->create();
 
-        $pendingTransaction = factory(PendingTransaction::class)->attachTo([],$user);
+        $pendingTransaction = factory(PendingTransaction::class)->attachTo([], $user);
 
         $this->withoutExceptionHandling()->passportAs($user)
             ->post("api/pendingTransaction/{$pendingTransaction->id}/complete", [

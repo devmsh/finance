@@ -12,7 +12,7 @@ class PendingTransaction extends Transaction
     const STATUS_CANCELED = 2;
 
     protected $dates = [
-        'due_date'
+        'due_date',
     ];
 
     /**
@@ -23,7 +23,7 @@ class PendingTransaction extends Transaction
         foreach ($scheduledTransaction->getMonthlyRecurrences(Carbon::today()) as $recurrence) {
             $attributes = Arr::except($scheduledTransaction->toArray(), ['id', 'rrule']);
             $attributes['due_date'] = $recurrence;
-            PendingTransaction::create($attributes);
+            self::create($attributes);
         }
     }
 
@@ -35,7 +35,7 @@ class PendingTransaction extends Transaction
     public function complete()
     {
         return $this->update([
-            'status' => self::STATUS_CANCELED
+            'status' => self::STATUS_CANCELED,
         ]);
     }
 }

@@ -19,6 +19,6 @@ $factory->define(PendingTransaction::class, function (Faker $faker) {
         'user_id' => function () {
             return factory(User::class)->create()->id;
         },
-        'due_date' => Carbon::today()
+        'due_date' => Carbon::today(),
     ];
 });

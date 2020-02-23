@@ -13,10 +13,10 @@ use Recurr\Transformer\Constraint\BetweenConstraint;
 
 class ScheduledTransaction extends Transaction
 {
-    const FREQ_YEARLY = "YEARLY";
-    const FREQ_MONTHLY = "MONTHLY";
-    const FREQ_WEEKLY = "WEEKLY";
-    const FREQ_DAILY = "DAILY";
+    const FREQ_YEARLY = 'YEARLY';
+    const FREQ_MONTHLY = 'MONTHLY';
+    const FREQ_WEEKLY = 'WEEKLY';
+    const FREQ_DAILY = 'DAILY';
 
     /**
      * @return Rule
@@ -41,7 +41,7 @@ class ScheduledTransaction extends Transaction
             true
         );
 
-        return $transformer->transform(new Rule($this->rrule), $betweenConstraint)->map(function($recurrence){
+        return $transformer->transform(new Rule($this->rrule), $betweenConstraint)->map(function ($recurrence) {
             return Carbon::instance($recurrence->getStart())->startOfDay();
         });
     }

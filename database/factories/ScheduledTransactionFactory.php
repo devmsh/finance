@@ -20,6 +20,6 @@ $factory->define(ScheduledTransaction::class, function (Faker $faker) {
         },
         'rrule' => ScheduledTransaction::rule()
             ->setFreq(ScheduledTransaction::FREQ_MONTHLY)
-            ->setByMonthDay([1])->getString()
+            ->setByMonthDay([1])->getString(),
     ];
 });

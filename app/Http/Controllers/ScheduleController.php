@@ -11,8 +11,8 @@ class ScheduleController extends Controller
 {
     public function store(Request $request, Wallet $wallet)
     {
-        return $wallet->schedule(array_merge($request->all(),[
-            'user_id' => Auth::id()
+        return $wallet->schedule(array_merge($request->all(), [
+            'user_id' => Auth::id(),
         ]));
     }
 }
