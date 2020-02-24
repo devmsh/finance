@@ -3,8 +3,10 @@
 namespace Tests\Feature;
 
 use App\Goal;
+use App\Http\Requests\GoalRequest;
 use App\User;
 use Carbon\Carbon;
+use Faker\Factory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -46,35 +48,62 @@ class GoalTest extends TestCase
             ]);
     }
 
-    public function test_goal_require_a_name()
+    /**
+     * @dataProvider validationProvider
+     * @param $shouldPass
+     * @param $mockedRequestData
+     */
+    public function test_validation_rules_for_goal($shouldPass, $mockedRequestData)
     {
-        $goal = factory(Goal::class)->raw(['name' => '']);
-
-        $this->passportAs($user = factory(User::class)->create())
-            ->post('/api/goals', $goal)
-            ->assertSessionHasErrors('name');
+        $rules = (new GoalRequest())->rules();
+        $this->assertEquals(
+            $shouldPass,
+            $this->validate($mockedRequestData, $rules)
+        );
     }
 
-    public function test_goal_require_a_total()
+    public function validationProvider()
     {
-        $goal = factory(Goal::class)->raw(['total' => '']);
+        $faker = Factory::create(Factory::DEFAULT_LOCALE);
 
-        $this->passportAs($user = factory(User::class)->create())
-            ->post('/api/goals', $goal)
-            ->assertSessionHasErrors('total');
-    }
-
-    public function test_goal_require_due_date()
-    {
-        $goal = factory(Goal::class)->raw(['due_date' => '']);
-
-        $this->passportAs($user = factory(User::class)->create())
-            ->post('/api/goals', $goal)
-            ->assertSessionHasErrors('due_date');
-
-        $goal = factory(Goal::class)->raw(['due_date' => 'DateThatNotData']);
-        $this->passportAs($user)
-            ->post('/api/goals', $goal)
-            ->assertSessionHasErrors('due_date');
+        return [
+            'request_should_fail_when_no_name_is_provided' => [
+                'passed' => false,
+                'data' => [
+                    'total' => $faker->numberBetween(1, 1000),
+                    'due_date' => $faker->date(),
+                ]
+            ],
+            'request_should_fail_when_no_total_is_provided' => [
+                'passed' => false,
+                'data' => [
+                    'name' => $faker->name,
+                    'due_date' => $faker->date(),
+                ]
+            ],
+            'request_should_fail_when_no_due_date_is_provided' => [
+                'passed' => false,
+                'data' => [
+                    'name' => $faker->name,
+                    'total' => $faker->numberBetween(1, 1000),
+                ]
+            ],
+            'request_should_fail_when_invalid_due_date_is_provided' => [
+                'passed' => false,
+                'data' => [
+                    'name' => $faker->name,
+                    'total' => $faker->numberBetween(1, 1000),
+                    'due_date' => $faker->name,
+                ]
+            ],
+            'request_should_pass_when_data_is_provided' => [
+                'passed' => true,
+                'data' => [
+                    'name' => $faker->name,
+                    'total' => $faker->numberBetween(1, 1000),
+                    'due_date' => $faker->date(),
+                ]
+            ],
+        ];
     }
 }
