@@ -34,21 +34,18 @@ class AdjustmentTest extends TestCase
             ]);
     }
 
-    /**
-     * @dataProvider walletBalanceProvider
-     */
-    public function test_unauthorized_user_cannot_adjust_wallet_balance($initial_balance, $new_balance)
+    public function test_unauthorized_user_cannot_adjust_wallet_balance()
     {
         $user = factory(User::class)->create();
         $wallet = Wallet::open([
             'user_id' => $user->id,
             'name' => 'Test',
-            'initial_balance' => $initial_balance,
+            'initial_balance' => 1000,
         ]);
 
         $this->passportAs(factory(User::class)->create())
             ->post("api/wallets/{$wallet->id}/balance", [
-                'new_balance' => $new_balance,
+                'new_balance' => 2000,
             ])
             ->assertStatus(403);
     }

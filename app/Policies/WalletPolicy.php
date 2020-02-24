@@ -94,5 +94,10 @@ class WalletPolicy
         //
     }
 
+    public function balanceAdjustment(User $user, Wallet $wallet)
+    {
+        return $user->id == $wallet->user_id;
+    }
+
     // @codeCoverageIgnoreEnd
 }

@@ -15,10 +15,7 @@ class WalletAdjustmentController extends Controller
 
     public function balance(Wallet $wallet, Request $request)
     {
-        if (auth()->user()->id != $wallet->user_id){
-            abort(403);
-        }
-//         abort_if(auth()->user()->isNot($wallet->user_id), 403);
+        $this->authorize('balanceAdjustment', $wallet);
         return $wallet->adjustBalance($request->new_balance);
     }
 
