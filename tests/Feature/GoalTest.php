@@ -33,7 +33,7 @@ class GoalTest extends TestCase
 
         $this->assertActionUsesFormRequest(
             GoalController::class,
-            "store",
+            'store',
             GoalRequest::class
         );
     }
@@ -44,7 +44,7 @@ class GoalTest extends TestCase
             ->postJson('api/goals')
             ->assertStatus(422)
             ->assertJsonValidationErrors([
-                'name','total','due_date'
+                'name', 'total', 'due_date',
             ]);
     }
 

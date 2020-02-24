@@ -50,6 +50,7 @@ class WalletPolicy
     }
 
     // @codeCoverageIgnoreStart
+
     /**
      * Determine whether the user can update the wallet.
      *
@@ -97,5 +98,6 @@ class WalletPolicy
     {
         //
     }
+
     // @codeCoverageIgnoreEnd
 }

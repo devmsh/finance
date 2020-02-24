@@ -15,8 +15,8 @@ class WalletAdjustmentController extends Controller
 
     protected function resourceAbilityMap()
     {
-        return array_merge(parent::resourceAbilityMap(),[
-            'balance' => 'adjustment'
+        return array_merge(parent::resourceAbilityMap(), [
+            'balance' => 'adjustment',
         ]);
     }
 
