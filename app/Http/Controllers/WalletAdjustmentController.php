@@ -13,6 +13,13 @@ class WalletAdjustmentController extends Controller
         $this->authorizeResource(Wallet::class);
     }
 
+    protected function resourceAbilityMap()
+    {
+        return array_merge(parent::resourceAbilityMap(), [
+            'balance' => 'adjustment',
+        ]);
+    }
+
     public function balance(Wallet $wallet, Request $request)
     {
         return $wallet->adjustBalance($request->new_balance);

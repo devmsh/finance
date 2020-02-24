@@ -23,8 +23,8 @@ class AdjustmentTest extends TestCase
             'initial_balance' => $initial_balance,
         ]);
 
-        $this->passportAs(factory(User::class)->create())
-            ->post("api/wallets/{$wallet->id}/balance", [
+        $this->passportAs($user)
+            ->postJson("api/wallets/{$wallet->id}/balance", [
                 'new_balance' => $new_balance,
             ])
             ->assertSuccessful()
@@ -32,6 +32,22 @@ class AdjustmentTest extends TestCase
                 'id' => 1,
                 'balance' => $new_balance,
             ]);
+    }
+
+    public function test_unauthorized_user_cannot_adjust_wallet_balance()
+    {
+        $user = factory(User::class)->create();
+        $wallet = Wallet::open([
+            'user_id' => $user->id,
+            'name' => 'Test',
+            'initial_balance' => 1000,
+        ]);
+
+        $this->passportAs(factory(User::class)->create())
+            ->postJson("api/wallets/{$wallet->id}/balance", [
+                'new_balance' => 2000,
+            ])
+            ->assertStatus(403);
     }
 
     public function test_can_adjust_wallet_open_balance()
@@ -44,7 +60,7 @@ class AdjustmentTest extends TestCase
         ]);
 
         $this->passportAs(factory(User::class)->create())
-            ->post("api/wallets/{$wallet->id}/openBalance", [
+            ->postJson("api/wallets/{$wallet->id}/openBalance", [
                 'new_balance' => 500,
             ])
             ->assertSuccessful()

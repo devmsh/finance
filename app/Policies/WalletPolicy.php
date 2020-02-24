@@ -44,6 +44,11 @@ class WalletPolicy
         return true;
     }
 
+    public function adjustment(User $user, Wallet $wallet)
+    {
+        return $user->id == $wallet->user_id;
+    }
+
     // @codeCoverageIgnoreStart
 
     /**

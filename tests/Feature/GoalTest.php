@@ -3,8 +3,11 @@
 namespace Tests\Feature;
 
 use App\Goal;
+use App\Http\Controllers\GoalController;
+use App\Http\Requests\GoalRequest;
 use App\User;
 use Carbon\Carbon;
+use Faker\Factory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -15,7 +18,7 @@ class GoalTest extends TestCase
     public function test_can_specify_a_goal()
     {
         $this->passportAs($user = factory(User::class)->create())
-            ->post('/api/goals', [
+            ->postJson('api/goals', [
                 'name' => 'Home',
                 'total' => 1000,
                 'due_date' => $due_date = Carbon::today()->addYear(),
@@ -27,6 +30,31 @@ class GoalTest extends TestCase
                 'total' => 1000,
                 'due_date' => $due_date,
             ]);
+
+        $this->assertActionUsesFormRequest(
+            GoalController::class,
+            'store',
+            GoalRequest::class
+        );
+    }
+
+    public function test_invalid_goal_creation_return_clear_validation_messages()
+    {
+        $this->passportAs($user = factory(User::class)->create())
+            ->postJson('api/goals')
+            ->assertStatus(422)
+            ->assertJsonValidationErrors([
+                'name', 'total', 'due_date',
+            ]);
+    }
+
+    public function test_validation_rules_for_goal()
+    {
+        $this->assertEquals([
+            'name' => 'required',
+            'total' => 'required',
+            'due_date' => 'required|date',
+        ], (new GoalRequest())->rules());
     }
 
     public function test_goal_tracks_some_transactions()
@@ -34,7 +62,7 @@ class GoalTest extends TestCase
         $goal = factory(Goal::class)->attachTo([], $user = factory(User::class)->create());
 
         $this->passportAs($user)
-            ->post("/api/goals/{$goal->id}/transactions", [
+            ->postJson("api/goals/{$goal->id}/transactions", [
                 'note' => 'feb amount',
                 'amount' => 100,
             ])

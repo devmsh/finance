@@ -45,7 +45,7 @@ class MonthlyPlaningTest extends TestCase
         ], $user);
 
         $this->passportAs($user)
-            ->post("api/plans/{$plan->id}/budget", [
+            ->postJson("api/plans/{$plan->id}/budget", [
                 "{$firstCategory->id}" => 100,
                 "{$secondCategory->id}" => 200,
             ])
