@@ -54,4 +54,9 @@ class Goal extends Model
     {
         return $this->total <= $this->balance();
     }
+
+    public function setDueDateAttribute($value)
+    {
+        $this->attributes['due_date'] = Carbon::parse($value);
+    }
 }
