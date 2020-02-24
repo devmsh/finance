@@ -23,7 +23,7 @@ class TrackingTest extends TestCase
         ], $user);
 
         $this->passportAs($user)
-            ->post("api/wallets/{$wallet->id}/income", [
+            ->postJson("api/wallets/{$wallet->id}/income", [
                 'note' => 'Salary',
                 'amount' => 1000,
                 'category_id' => $category->id,
@@ -50,7 +50,7 @@ class TrackingTest extends TestCase
         ], $user);
 
         $this->passportAs($user)
-            ->post("api/wallets/{$wallet->id}/expenses", [
+            ->postJson("api/wallets/{$wallet->id}/expenses", [
                 'note' => 'Restaurant',
                 'amount' => 100,
                 'category_id' => $category->id,

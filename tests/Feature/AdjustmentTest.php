@@ -24,7 +24,7 @@ class AdjustmentTest extends TestCase
         ]);
 
         $this->passportAs($user)
-            ->post("api/wallets/{$wallet->id}/balance", [
+            ->postJson("api/wallets/{$wallet->id}/balance", [
                 'new_balance' => $new_balance,
             ])
             ->assertSuccessful()
@@ -44,7 +44,7 @@ class AdjustmentTest extends TestCase
         ]);
 
         $this->passportAs(factory(User::class)->create())
-            ->post("api/wallets/{$wallet->id}/balance", [
+            ->postJson("api/wallets/{$wallet->id}/balance", [
                 'new_balance' => 2000,
             ])
             ->assertStatus(403);
@@ -60,7 +60,7 @@ class AdjustmentTest extends TestCase
         ]);
 
         $this->passportAs(factory(User::class)->create())
-            ->post("api/wallets/{$wallet->id}/openBalance", [
+            ->postJson("api/wallets/{$wallet->id}/openBalance", [
                 'new_balance' => 500,
             ])
             ->assertSuccessful()

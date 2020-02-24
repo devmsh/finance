@@ -44,8 +44,12 @@ class WalletPolicy
         return true;
     }
 
-    // @codeCoverageIgnoreStart
+    public function adjustment(User $user, Wallet $wallet)
+    {
+        return $user->id == $wallet->user_id;
+    }
 
+    // @codeCoverageIgnoreStart
     /**
      * Determine whether the user can update the wallet.
      *
@@ -93,11 +97,5 @@ class WalletPolicy
     {
         //
     }
-
-    public function balanceAdjustment(User $user, Wallet $wallet)
-    {
-        return $user->id == $wallet->user_id;
-    }
-
     // @codeCoverageIgnoreEnd
 }

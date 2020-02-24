@@ -4,11 +4,12 @@ namespace Tests;
 
 use App\Http\Requests\GoalRequest;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
+use JMac\Testing\Traits\HttpTestAssertions;
 use Laravel\Passport\Passport;
 
 abstract class TestCase extends BaseTestCase
 {
-    use CreatesApplication;
+    use CreatesApplication, HttpTestAssertions;
 
     public $validator;
 

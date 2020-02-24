@@ -83,7 +83,7 @@ class ShareTest extends TestCase
         ], $otherUser);
 
         $this->passportAs($otherUser)
-            ->post("api/wallets/{$wallet->id}/income", [
+            ->postJson("api/wallets/{$wallet->id}/income", [
                 'note' => 'Salary',
                 'amount' => 1000,
                 'category_id' => $category->id,

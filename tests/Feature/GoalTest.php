@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Goal;
+use App\Http\Controllers\GoalController;
 use App\Http\Requests\GoalRequest;
 use App\User;
 use Carbon\Carbon;
@@ -17,7 +18,7 @@ class GoalTest extends TestCase
     public function test_can_specify_a_goal()
     {
         $this->passportAs($user = factory(User::class)->create())
-            ->post('/api/goals', [
+            ->postJson('api/goals', [
                 'name' => 'Home',
                 'total' => 1000,
                 'due_date' => $due_date = Carbon::today()->addYear(),
@@ -29,6 +30,31 @@ class GoalTest extends TestCase
                 'total' => 1000,
                 'due_date' => $due_date,
             ]);
+
+        $this->assertActionUsesFormRequest(
+            GoalController::class,
+            "store",
+            GoalRequest::class
+        );
+    }
+
+    public function test_invalid_goal_creation_return_clear_validation_messages()
+    {
+        $this->passportAs($user = factory(User::class)->create())
+            ->postJson('api/goals')
+            ->assertStatus(422)
+            ->assertJsonValidationErrors([
+                'name','total','due_date'
+            ]);
+    }
+
+    public function test_validation_rules_for_goal()
+    {
+        $this->assertEquals([
+            'name' => 'required',
+            'total' => 'required',
+            'due_date' => 'required|date',
+        ], (new GoalRequest())->rules());
     }
 
     public function test_goal_tracks_some_transactions()
@@ -36,7 +62,7 @@ class GoalTest extends TestCase
         $goal = factory(Goal::class)->attachTo([], $user = factory(User::class)->create());
 
         $this->passportAs($user)
-            ->post("/api/goals/{$goal->id}/transactions", [
+            ->postJson("api/goals/{$goal->id}/transactions", [
                 'note' => 'feb amount',
                 'amount' => 100,
             ])
@@ -46,64 +72,5 @@ class GoalTest extends TestCase
                 'note' => 'feb amount',
                 'amount' => 100,
             ]);
-    }
-
-    /**
-     * @dataProvider validationProvider
-     * @param $shouldPass
-     * @param $mockedRequestData
-     */
-    public function test_validation_rules_for_goal($shouldPass, $mockedRequestData)
-    {
-        $rules = (new GoalRequest())->rules();
-        $this->assertEquals(
-            $shouldPass,
-            $this->validate($mockedRequestData, $rules)
-        );
-    }
-
-    public function validationProvider()
-    {
-        $faker = Factory::create(Factory::DEFAULT_LOCALE);
-
-        return [
-            'request_should_fail_when_no_name_is_provided' => [
-                'passed' => false,
-                'data' => [
-                    'total' => $faker->numberBetween(1, 1000),
-                    'due_date' => $faker->date(),
-                ]
-            ],
-            'request_should_fail_when_no_total_is_provided' => [
-                'passed' => false,
-                'data' => [
-                    'name' => $faker->name,
-                    'due_date' => $faker->date(),
-                ]
-            ],
-            'request_should_fail_when_no_due_date_is_provided' => [
-                'passed' => false,
-                'data' => [
-                    'name' => $faker->name,
-                    'total' => $faker->numberBetween(1, 1000),
-                ]
-            ],
-            'request_should_fail_when_invalid_due_date_is_provided' => [
-                'passed' => false,
-                'data' => [
-                    'name' => $faker->name,
-                    'total' => $faker->numberBetween(1, 1000),
-                    'due_date' => $faker->name,
-                ]
-            ],
-            'request_should_pass_when_data_is_provided' => [
-                'passed' => true,
-                'data' => [
-                    'name' => $faker->name,
-                    'total' => $faker->numberBetween(1, 1000),
-                    'due_date' => $faker->date(),
-                ]
-            ],
-        ];
     }
 }
