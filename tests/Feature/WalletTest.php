@@ -2,30 +2,52 @@
 
 namespace Tests\Feature;
 
+use App\Http\Controllers\WalletController;
+use App\Http\Requests\WalletRequest;
 use App\User;
 use App\Wallet;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class WalletTest extends TestCase
-{
+class WalletTest extends TestCase {
     use RefreshDatabase;
 
     public function test_can_create_wallet()
     {
         collect([0, 100])->each(function ($initial_balance, $key) {
             $this->passportAs(factory(User::class)->create())
-                ->post('api/wallets', [
-                    'name' => 'Cash',
+                ->postJson('api/wallets', [
+                    'name'            => 'Cash',
                     'initial_balance' => $initial_balance,
                 ])
                 ->assertSuccessful()
                 ->assertJson([
-                    'id' => $key + 1,
-                    'name' => 'Cash',
+                    'id'      => $key + 1,
+                    'name'    => 'Cash',
                     'balance' => $initial_balance,
                 ]);
         });
+
+        $this->assertActionUsesFormRequest(
+            WalletController::class,
+            'store',
+            WalletRequest::class
+        );
+
+    }
+
+    public function test_invalid_wallet_creation_return_error_masseges()
+    {
+        $this->passportAs(factory(User::class)->create())
+            ->postJson('api/wallets')
+            ->assertStatus(422)
+            ->assertJsonValidationErrors(['name']);
+
+        $this->assertActionUsesFormRequest(
+            WalletController::class,
+            'store',
+            WalletRequest::class
+        );
     }
 
     public function test_list_only_owned_wallets()
@@ -35,7 +57,7 @@ class WalletTest extends TestCase
         factory(Wallet::class)->attachTo([], $user);
 
         $this->passportAs($user)
-            ->get('api/wallets')
+            ->getJson('api/wallets')
             ->assertSuccessful()
             ->assertJsonCount(1);
     }
@@ -45,7 +67,7 @@ class WalletTest extends TestCase
         factory(Wallet::class)->attachTo([], $user = factory(User::class)->create());
 
         $this->passportAs($user)
-            ->get('api/wallets/1')
+            ->getJson('api/wallets/1')
             ->assertSuccessful()
             ->assertJsonStructure([
                 'id',
@@ -60,7 +82,7 @@ class WalletTest extends TestCase
         factory(Wallet::class)->attachTo([], $user);
 
         $this->passportAs($user)
-            ->get('api/wallets/1')
+            ->getJson('api/wallets/1')
             ->assertForbidden();
     }
 }

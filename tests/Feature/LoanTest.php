@@ -35,7 +35,7 @@ class LoanTest extends TestCase
         $this->assertActionUsesFormRequest(
             LoanController::class,
             'store',
-            LoanRequest::class,
+            LoanRequest::class
         );
     }
 

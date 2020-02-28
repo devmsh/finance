@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\WalletRequest;
 use App\Wallet;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -23,7 +24,7 @@ class WalletController extends Controller
         return $wallet;
     }
 
-    public function store(Request $request)
+    public function store(WalletRequest $request)
     {
         return Wallet::open(array_merge($request->all(), [
             'user_id' => Auth::id(),
