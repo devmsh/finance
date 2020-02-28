@@ -18,7 +18,7 @@ class GoalTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_validation_rules_for_goal()
+    public function test_validation_rules_on_goal()
     {
         $this->assertEquals([
             'name' => 'required',
