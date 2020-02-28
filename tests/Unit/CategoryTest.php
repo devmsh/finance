@@ -3,6 +3,7 @@
 namespace Tests\Unit;
 
 use App\Category;
+use App\Http\Requests\PlanRequest;
 use App\User;
 use CategorySeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -11,6 +12,16 @@ use Tests\TestCase;
 class CategoryTest extends TestCase
 {
     use RefreshDatabase;
+
+    public function test_validation_rules_for_plan()
+    {
+        $this->assertEquals([
+            'total_income' => 'required|numeric',
+            'must_have' => 'required|numeric',
+            'min_saving' => 'required|numeric',
+            'user_id' => 'required|exists:users,id',
+        ], (new PlanRequest())->rules());
+    }
 
     public function test_app_include_default_categories()
     {

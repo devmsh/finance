@@ -3,6 +3,8 @@
 namespace Tests\Feature;
 
 use App\Category;
+use App\Http\Controllers\PlanController;
+use App\Http\Requests\PlanRequest;
 use App\Plan;
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -14,12 +16,13 @@ class MonthlyPlaningTest extends TestCase
 
     public function test_can_set_our_monthly_plan()
     {
+        $this->withoutExceptionHandling();
         $this->passportAs($user = factory(User::class)->create())
-            ->post('api/plans', [
+            ->postJson('api/plans', [
                 'total_income' => 3000,
                 'must_have' => 1000,
                 'min_saving' => 500,
-                'user_id' => 2,
+                'user_id' => auth()->id(),
             ])->assertSuccessful()
             ->assertJson([
                 'id' => 1,
@@ -28,6 +31,28 @@ class MonthlyPlaningTest extends TestCase
                 'pocket_money' => 1500,
                 'min_saving' => 500,
             ]);
+
+        $this->assertActionUsesFormRequest(
+            PlanController::class,
+            'store',
+            PlanRequest::class
+        );
+    }
+
+    public function test_invalid_plan_creation_return_error_masseges()
+    {
+        $this->passportAs($user = factory(User::class)->create())
+            ->postJson('api/plans')
+            ->assertStatus(422)
+            ->assertJsonValidationErrors([
+                'total_income', 'must_have', 'min_saving', 'user_id'
+            ]);
+
+        $this->assertActionUsesFormRequest(
+            PlanController::class,
+            'store',
+            PlanRequest::class
+        );
     }
 
     public function test_can_specify_monthly_budget_details()
