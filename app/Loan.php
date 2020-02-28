@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Events\LoanRecorded;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class Loan extends Model
@@ -39,5 +40,10 @@ class Loan extends Model
     public function getCurrencyAttribute()
     {
         return $this->wallet->currency;
+    }
+
+    public function setPayoffAtAttribute($value)
+    {
+        $this->attributes['payoff_at'] = Carbon::parse($value);
     }
 }

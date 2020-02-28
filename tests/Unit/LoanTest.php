@@ -4,6 +4,7 @@ namespace Tests\Unit;
 
 use App\Currency;
 use App\Goal;
+use App\Http\Requests\LoanRequest;
 use App\Loan;
 use App\Transaction;
 use App\User;
@@ -17,6 +18,15 @@ use Tests\TestCase;
 class LoanTest extends TestCase
 {
     use RefreshDatabase;
+
+    public function test_validation_rules_on_loan()
+    {
+        $this->assertEquals([
+            'wallet_id' => 'required|exists:wallets,id',
+            'total' => 'required',
+            'payoff_at' => 'required',
+        ], (new LoanRequest())->rules());
+    }
 
     public function test_can_log_a_loan()
     {
