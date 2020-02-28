@@ -48,15 +48,6 @@ class GoalTest extends TestCase
             ]);
     }
 
-    public function test_validation_rules_for_goal()
-    {
-        $this->assertEquals([
-            'name' => 'required',
-            'total' => 'required',
-            'due_date' => 'required|date',
-        ], (new GoalRequest())->rules());
-    }
-
     public function test_goal_tracks_some_transactions()
     {
         $goal = factory(Goal::class)->attachTo([], $user = factory(User::class)->create());
