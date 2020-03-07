@@ -3,6 +3,8 @@
 namespace Tests\Feature;
 
 use App\Goal;
+use App\Http\Controllers\TransferController;
+use App\Http\Requests\TransferRequest;
 use App\User;
 use App\Wallet;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -25,7 +27,7 @@ class TransferTest extends TestCase
         $goal = factory(Goal::class)->attachTo([], $user);
 
         $this->passportAs($user)
-            ->post('api/transfers', [
+            ->postJson('api/transfers', [
                 'amount' => 400,
                 'from_type' => 'wallet',
                 'from_id' => $wallet->id,
@@ -37,6 +39,12 @@ class TransferTest extends TestCase
                 'new_from_amount' => 600,
                 'new_to_amount' => 400,
             ]);
+
+        $this->assertActionUsesFormRequest(
+            TransferController::class,
+            'store',
+            TransferRequest::class,
+        );
     }
 
     public function test_can_transfer_amount_from_goal_to_wallet()
@@ -57,7 +65,7 @@ class TransferTest extends TestCase
         });
 
         $this->passportAs($user)
-            ->post('api/transfers', [
+            ->postJson('api/transfers', [
                 'amount' => 400,
                 'from_type' => 'goal',
                 'from_id' => $goal->id,
@@ -90,7 +98,7 @@ class TransferTest extends TestCase
         });
 
         $this->passportAs($user)
-            ->post('api/transfers', [
+            ->postJson('api/transfers', [
                 'amount' => 400,
                 'from_type' => 'goal',
                 'from_id' => $firstGoal->id,
@@ -119,7 +127,7 @@ class TransferTest extends TestCase
         ]));
 
         $this->passportAs($user)
-            ->post('api/transfers', [
+            ->postJson('api/transfers', [
                 'amount' => 400,
                 'from_type' => 'wallet',
                 'from_id' => $firstWallet->id,
@@ -130,6 +138,20 @@ class TransferTest extends TestCase
             ->assertJson([
                 'new_from_amount' => 600,
                 'new_to_amount' => 900,
+            ]);
+    }
+
+    public function test_invalid_transfer_return_error_messages()
+    {
+        $this->passportAs(factory(User::class)->create())
+            ->postJson('api/transfers')
+            ->assertStatus(422)
+            ->assertJsonValidationErrors([
+                'amount',
+                'from_type',
+                'from_id',
+                'to_type',
+                'to_id',
             ]);
     }
 }

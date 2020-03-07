@@ -39,7 +39,7 @@ class LoanTest extends TestCase
         );
     }
 
-    public function test_invalid_loan_creation_return_error_masseges()
+    public function test_invalid_loan_creation_return_error_messages()
     {
         $wallet = factory(Wallet::class)->attachTo([], $user = factory(User::class)->create());
 
