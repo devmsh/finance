@@ -3,6 +3,8 @@
 namespace Tests\Feature;
 
 use App\Category;
+use App\Http\Controllers\WalletIncomeController;
+use App\Http\Requests\WalletExpenseIncomeRequest;
 use App\User;
 use App\Wallet;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -97,5 +99,11 @@ class ShareTest extends TestCase
                 'category_id' => $category->id,
                 'trackable_id' => $wallet->id,
             ]);
+
+        $this->assertActionUsesFormRequest(
+            WalletIncomeController::class,
+            'store',
+            WalletExpenseIncomeRequest::class
+        );
     }
 }
