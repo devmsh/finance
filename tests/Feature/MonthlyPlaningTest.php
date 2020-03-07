@@ -16,7 +16,6 @@ class MonthlyPlaningTest extends TestCase
 
     public function test_can_set_our_monthly_plan()
     {
-        $this->withoutExceptionHandling();
         $this->passportAs($user = factory(User::class)->create())
             ->postJson('api/plans', [
                 'total_income' => 3000,

@@ -13,7 +13,7 @@ class WalletTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_validation_reules_for_wallet()
+    public function test_validation_rules_for_wallet()
     {
         $this->assertEquals([
             'name' => 'required|string',
