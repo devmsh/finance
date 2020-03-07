@@ -38,7 +38,7 @@ class MonthlyPlaningTest extends TestCase
         );
     }
 
-    public function test_invalid_plan_creation_return_error_masseges()
+    public function test_invalid_plan_creation_return_error_messages()
     {
         $this->passportAs($user = factory(User::class)->create())
             ->postJson('api/plans')

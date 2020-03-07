@@ -164,7 +164,7 @@ class TrackingTest extends TestCase
         );
     }
 
-    public function test_invalid_daily_expenses_creation_return_errors()
+    public function test_invalid_daily_expenses_creation_return_error_messages()
     {
         $user = factory(User::class)->create();
 
