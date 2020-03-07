@@ -13,9 +13,10 @@ class TransferTest extends TestCase
     public function test_validation_rules_on_amount_transformation()
     {
         $this->assertEquals([
-            'amount' => 'required|numeric',
+            'from_amount' => 'required|numeric',
             'from_type' => 'required',
             'from_id' => 'required|numeric',
+            'to_amount' => 'required|numeric',
             'to_type' => 'required',
             'to_id' => 'required|numeric',
         ], (new TransferRequest())->rules());

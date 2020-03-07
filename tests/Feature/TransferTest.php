@@ -28,9 +28,10 @@ class TransferTest extends TestCase
 
         $this->passportAs($user)
             ->postJson('api/transfers', [
-                'amount' => 400,
+                'from_amount' => 400,
                 'from_type' => 'wallet',
                 'from_id' => $wallet->id,
+                'to_amount' => 400,
                 'to_type' => 'goal',
                 'to_id' => $goal->id,
             ])
@@ -43,7 +44,7 @@ class TransferTest extends TestCase
         $this->assertActionUsesFormRequest(
             TransferController::class,
             'store',
-            TransferRequest::class,
+            TransferRequest::class
         );
     }
 
@@ -66,9 +67,10 @@ class TransferTest extends TestCase
 
         $this->passportAs($user)
             ->postJson('api/transfers', [
-                'amount' => 400,
+                'from_amount' => 400,
                 'from_type' => 'goal',
                 'from_id' => $goal->id,
+                'to_amount' => 400,
                 'to_type' => 'wallet',
                 'to_id' => $wallet->id,
             ])
@@ -99,9 +101,10 @@ class TransferTest extends TestCase
 
         $this->passportAs($user)
             ->postJson('api/transfers', [
-                'amount' => 400,
+                'from_amount' => 400,
                 'from_type' => 'goal',
                 'from_id' => $firstGoal->id,
+                'to_amount' => 400,
                 'to_type' => 'goal',
                 'to_id' => $secondGoal->id,
             ])
@@ -128,9 +131,10 @@ class TransferTest extends TestCase
 
         $this->passportAs($user)
             ->postJson('api/transfers', [
-                'amount' => 400,
+                'from_amount' => 400,
                 'from_type' => 'wallet',
                 'from_id' => $firstWallet->id,
+                'to_amount' => 400,
                 'to_type' => 'wallet',
                 'to_id' => $secondWallet->id,
             ])
@@ -147,9 +151,10 @@ class TransferTest extends TestCase
             ->postJson('api/transfers')
             ->assertStatus(422)
             ->assertJsonValidationErrors([
-                'amount',
+                'from_amount',
                 'from_type',
                 'from_id',
+                'to_amount',
                 'to_type',
                 'to_id',
             ]);

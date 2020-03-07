@@ -16,7 +16,6 @@ class LoanTest extends TestCase
 
     public function test_can_log_a_loan()
     {
-        $this->withoutExceptionHandling();
         $wallet = factory(Wallet::class)->attachTo([], $user = factory(User::class)->create());
 
         $this->passportAs($user)

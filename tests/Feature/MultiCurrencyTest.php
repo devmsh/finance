@@ -16,7 +16,7 @@ class MultiCurrencyTest extends TestCase
     public function test_can_create_wallet()
     {
         $this->passportAs($user = factory(User::class)->create())
-            ->post('api/wallets', [
+            ->postJson('api/wallets', [
                 'name' => 'Cash',
                 'currency' => Currency::USD,
                 'initial_balance' => 1000,
@@ -42,7 +42,7 @@ class MultiCurrencyTest extends TestCase
         ]));
 
         $this->passportAs($user)
-            ->post('api/transfers', [
+            ->postJson('api/transfers', [
                 'from_amount' => 400,
                 'from_type' => 'wallet',
                 'from_id' => $firstWallet->id,
@@ -66,7 +66,7 @@ class MultiCurrencyTest extends TestCase
         ], $user);
 
         $this->passportAs($user)
-            ->post('api/loans', [
+            ->postJson('api/loans', [
                 'total' => 1000,
                 'payoff_at' => Carbon::today()->addYear(),
                 'wallet_id' => $wallet->id,
@@ -80,7 +80,7 @@ class MultiCurrencyTest extends TestCase
     public function test_can_specify_a_goal()
     {
         $this->passportAs($user = factory(User::class)->create())
-            ->post('/api/goals', [
+            ->postJson('/api/goals', [
                 'name' => 'Home',
                 'total' => 1000,
                 'currency' => Currency::USD,

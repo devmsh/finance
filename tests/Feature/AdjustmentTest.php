@@ -38,7 +38,7 @@ class AdjustmentTest extends TestCase
         $this->assertActionUsesFormRequest(
             WalletAdjustmentController::class,
             'balance',
-            WalletAdjustmentRequest::class,
+            WalletAdjustmentRequest::class
         );
     }
 
@@ -57,7 +57,7 @@ class AdjustmentTest extends TestCase
         $this->assertActionUsesFormRequest(
             WalletAdjustmentController::class,
             'openBalance',
-            WalletAdjustmentRequest::class,
+            WalletAdjustmentRequest::class
         );
     }
 
@@ -99,7 +99,7 @@ class AdjustmentTest extends TestCase
         $this->assertActionUsesFormRequest(
             WalletAdjustmentController::class,
             'openBalance',
-            WalletAdjustmentRequest::class,
+            WalletAdjustmentRequest::class
         );
     }
 

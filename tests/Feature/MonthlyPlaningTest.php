@@ -44,7 +44,7 @@ class MonthlyPlaningTest extends TestCase
             ->postJson('api/plans')
             ->assertStatus(422)
             ->assertJsonValidationErrors([
-                'total_income', 'must_have', 'min_saving', 'user_id'
+                'total_income', 'must_have', 'min_saving', 'user_id',
             ]);
 
         $this->assertActionUsesFormRequest(

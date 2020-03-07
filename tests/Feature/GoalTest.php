@@ -71,7 +71,7 @@ class GoalTest extends TestCase
         $this->assertActionUsesFormRequest(
             GoalTransactionController::class,
             'store',
-            GoalTransactionRequest::class,
+            GoalTransactionRequest::class
         );
     }
 
@@ -90,7 +90,7 @@ class GoalTest extends TestCase
         $this->assertActionUsesFormRequest(
             GoalTransactionController::class,
             'store',
-            GoalTransactionRequest::class,
+            GoalTransactionRequest::class
         );
     }
 }
