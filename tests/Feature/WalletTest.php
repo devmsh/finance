@@ -9,7 +9,8 @@ use App\Wallet;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class WalletTest extends TestCase {
+class WalletTest extends TestCase
+{
     use RefreshDatabase;
 
     public function test_can_create_wallet()

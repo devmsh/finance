@@ -18,7 +18,7 @@ class PlanController extends Controller
      */
     public function store(PlanRequest $request)
     {
-        return Plan::create($request->all());
+        return Plan::create($request->validated());
     }
 
     public function createBudget(Plan $plan, Request $request)
