@@ -60,4 +60,14 @@ class User extends Authenticatable
     {
         return $this->hasMany(Category::class);
     }
+
+    public function scheduledTransactions()
+    {
+        return $this->hasMany(ScheduledTransaction::class);
+    }
+
+    public function pendingTransactions()
+    {
+        return $this->hasMany(PendingTransaction::class);
+    }
 }

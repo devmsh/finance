@@ -2,6 +2,7 @@
 
 namespace App\Traits;
 
+use App\ScheduledTransaction;
 use App\Transaction;
 
 trait HasTransactions
@@ -14,6 +15,11 @@ trait HasTransactions
     public function transactions()
     {
         return $this->morphMany(Transaction::class, 'trackable');
+    }
+
+    public function scheduledTransactions()
+    {
+        return $this->morphMany(ScheduledTransaction::class, 'trackable');
     }
 
     public function transfer($account, $from_amount, $to_amount = null)

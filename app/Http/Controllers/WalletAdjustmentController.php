@@ -27,6 +27,6 @@ class WalletAdjustmentController extends Controller
 
     public function openBalance(Wallet $wallet, Request $request)
     {
-        return $wallet->adjustOpenBalance($request->new_balance);
+        return $wallet->adjustOpeningBalance($request->new_balance);
     }
 }

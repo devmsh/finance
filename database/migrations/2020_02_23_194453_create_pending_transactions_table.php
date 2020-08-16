@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTransactionsTable extends Migration
+class CreatePendingTransactionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateTransactionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('transactions', function (Blueprint $table) {
+        Schema::create('pending_transactions', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('note');
             $table->bigInteger('amount');
@@ -22,6 +22,8 @@ class CreateTransactionsTable extends Migration
             $table->morphs('trackable');
             $table->bigInteger('causedby_id')->nullable();
             $table->bigInteger('user_id')->nullable();
+            $table->timestamp('due_date');
+            $table->integer('status')->default(0);
             $table->timestamps();
         });
     }
@@ -33,6 +35,6 @@ class CreateTransactionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('transactions');
+        Schema::dropIfExists('pending_transactions');
     }
 }

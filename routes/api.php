@@ -30,7 +30,9 @@ Route::middleware('auth:api')->group(function () {
     Route::post('wallets/{wallet}/openBalance', 'WalletAdjustmentController@openBalance');
     Route::resource('goals.transactions', 'GoalTransactionController');
     Route::resource('wallets.income', 'WalletIncomeController');
+    Route::resource('wallets.schedule', 'ScheduleController');
     Route::resource('wallets.users', 'ShareController');
     Route::resource('wallets.expenses', 'WalletExpenseController');
     Route::resource('expenses', 'ExpenseController');
+    Route::post('pendingTransaction/{pendingTransaction}/complete', 'PendingTransactionController@complete');
 });
