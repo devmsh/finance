@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class GoalRequest extends FormRequest
+class PlanRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -14,9 +14,10 @@ class GoalRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required',
-            'total' => 'required',
-            'due_date' => 'required|date',
+            'total_income' => 'required|numeric',
+            'must_have' => 'required|numeric',
+            'min_saving' => 'required|numeric',
+            'user_id' => 'required|exists:users,id',
         ];
     }
 }

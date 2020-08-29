@@ -4,6 +4,8 @@ namespace Tests\Unit;
 
 use App\Events\GoalAchieved;
 use App\Goal;
+use App\Http\Requests\GoalRequest;
+use App\Http\Requests\GoalTransactionRequest;
 use App\Plan;
 use App\Transaction;
 use App\User;
@@ -16,6 +18,23 @@ use Tests\TestCase;
 class GoalTest extends TestCase
 {
     use RefreshDatabase;
+
+    public function test_validation_rules_on_goal()
+    {
+        $this->assertEquals([
+            'name' => 'required',
+            'total' => 'required',
+            'due_date' => 'required|date',
+        ], (new GoalRequest())->rules());
+    }
+
+    public function test_validation_rules_on_goal_transactions()
+    {
+        $this->assertEquals([
+            'note' => 'required',
+            'amount' => 'required',
+        ], (new GoalTransactionRequest())->rules());
+    }
 
     public function test_goal_track_some_transactions()
     {

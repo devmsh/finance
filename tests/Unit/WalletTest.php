@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+use App\Http\Requests\WalletRequest;
 use App\Transaction;
 use App\User;
 use App\Wallet;
@@ -11,6 +12,13 @@ use Tests\TestCase;
 class WalletTest extends TestCase
 {
     use RefreshDatabase;
+
+    public function test_validation_rules_for_wallet()
+    {
+        $this->assertEquals([
+            'name' => 'required|string',
+        ], (new WalletRequest())->rules());
+    }
 
     public function test_can_create_wallet()
     {

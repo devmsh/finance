@@ -2,6 +2,8 @@
 
 namespace Tests\Feature;
 
+use App\Http\Controllers\WalletAdjustmentController;
+use App\Http\Requests\WalletAdjustmentRequest;
 use App\User;
 use App\Wallet;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -32,6 +34,31 @@ class AdjustmentTest extends TestCase
                 'id' => 1,
                 'balance' => $new_balance,
             ]);
+
+        $this->assertActionUsesFormRequest(
+            WalletAdjustmentController::class,
+            'balance',
+            WalletAdjustmentRequest::class
+        );
+    }
+
+    public function test_invalid_adjustment_creation_return_error_messages()
+    {
+        $user = factory(User::class)->create();
+        $wallet = factory(Wallet::class)->create(['user_id' => $user->id]);
+
+        $this->passportAs($user)
+            ->postJson("api/wallets/{$wallet->id}/balance")
+            ->assertStatus(422)
+            ->assertJsonValidationErrors([
+                'new_balance',
+            ]);
+
+        $this->assertActionUsesFormRequest(
+            WalletAdjustmentController::class,
+            'openBalance',
+            WalletAdjustmentRequest::class
+        );
     }
 
     public function test_unauthorized_user_cannot_adjust_wallet_balance()
@@ -68,6 +95,12 @@ class AdjustmentTest extends TestCase
                 'id' => 1,
                 'balance' => 500,
             ]);
+
+        $this->assertActionUsesFormRequest(
+            WalletAdjustmentController::class,
+            'openBalance',
+            WalletAdjustmentRequest::class
+        );
     }
 
     public function walletBalanceProvider()

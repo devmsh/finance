@@ -3,6 +3,10 @@
 namespace Tests\Feature;
 
 use App\Category;
+use App\Http\Controllers\ExpenseController;
+use App\Http\Controllers\WalletExpenseController;
+use App\Http\Requests\DailyExpenseRequest;
+use App\Http\Requests\WalletExpenseIncomeRequest;
 use App\User;
 use App\Wallet;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -37,6 +41,12 @@ class TrackingTest extends TestCase
                 'category_id' => $category->id,
                 'trackable_id' => $wallet->id,
             ]);
+
+        $this->assertActionUsesFormRequest(
+            WalletExpenseController::class,
+            'store',
+            WalletExpenseIncomeRequest::class
+        );
     }
 
     public function test_wallet_can_track_expenses_with_category()
@@ -64,6 +74,39 @@ class TrackingTest extends TestCase
                 'category_id' => $category->id,
                 'trackable_id' => $wallet->id,
             ]);
+
+        $this->assertActionUsesFormRequest(
+            WalletExpenseController::class,
+            'store',
+            WalletExpenseIncomeRequest::class
+        );
+    }
+
+    public function test_invalid_wallet_expenses_and_income_creation_return_errors()
+    {
+        $user = factory(User::class)->create();
+
+        $wallet = factory(Wallet::class)->attachTo([], $user);
+
+        $this->passportAs($user)
+            ->postJson("api/wallets/{$wallet->id}/expenses")
+            ->assertStatus(422)
+            ->assertJsonValidationErrors([
+                'note', 'amount', 'category_id',
+            ]);
+
+        $this->passportAs($user)
+            ->postJson("api/wallets/{$wallet->id}/income")
+            ->assertStatus(422)
+            ->assertJsonValidationErrors([
+                'note', 'amount', 'category_id',
+            ]);
+
+        $this->assertActionUsesFormRequest(
+            WalletExpenseController::class,
+            'store',
+            WalletExpenseIncomeRequest::class
+        );
     }
 
     public function test_can_track_bulk_daily_expenses()
@@ -81,7 +124,7 @@ class TrackingTest extends TestCase
         ], $user);
 
         $this->passportAs($user)
-            ->post('api/expenses', [
+            ->postJson('api/expenses', [
                 [
                     'note' => 'Restaurant',
                     'amount' => 100,
@@ -113,5 +156,26 @@ class TrackingTest extends TestCase
                     'trackable_id' => $secondWallet->id,
                 ],
             ]);
+
+        $this->assertActionUsesFormRequest(
+            ExpenseController::class,
+            'store',
+            DailyExpenseRequest::class
+        );
+    }
+
+    public function test_invalid_daily_expenses_creation_return_error_messages()
+    {
+        $user = factory(User::class)->create();
+
+        $this->passportAs($user)
+            ->postJson('api/expenses', [[]])
+            ->assertStatus(422);
+
+        $this->assertActionUsesFormRequest(
+            ExpenseController::class,
+            'store',
+            DailyExpenseRequest::class
+        );
     }
 }

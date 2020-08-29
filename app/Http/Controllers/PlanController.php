@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PlanRequest;
 use App\Plan;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -15,11 +16,9 @@ class PlanController extends Controller
      * @param Request $request
      * @return Response
      */
-    public function store(Request $request)
+    public function store(PlanRequest $request)
     {
-        return Plan::create(array_merge($request->all(), [
-            'user_id' => Auth::id(),
-        ]));
+        return Plan::create($request->validated());
     }
 
     public function createBudget(Plan $plan, Request $request)

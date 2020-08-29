@@ -3,6 +3,7 @@
 namespace Tests\Unit;
 
 use App\Category;
+use App\Http\Requests\PlanRequest;
 use App\User;
 use CategorySeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;

@@ -4,7 +4,9 @@ namespace Tests\Feature;
 
 use App\Goal;
 use App\Http\Controllers\GoalController;
+use App\Http\Controllers\GoalTransactionController;
 use App\Http\Requests\GoalRequest;
+use App\Http\Requests\GoalTransactionRequest;
 use App\User;
 use Carbon\Carbon;
 use Faker\Factory;
@@ -44,17 +46,10 @@ class GoalTest extends TestCase
             ->postJson('api/goals')
             ->assertStatus(422)
             ->assertJsonValidationErrors([
-                'name', 'total', 'due_date',
+                'name',
+                'total',
+                'due_date',
             ]);
-    }
-
-    public function test_validation_rules_for_goal()
-    {
-        $this->assertEquals([
-            'name' => 'required',
-            'total' => 'required',
-            'due_date' => 'required|date',
-        ], (new GoalRequest())->rules());
     }
 
     public function test_goal_tracks_some_transactions()
@@ -72,5 +67,30 @@ class GoalTest extends TestCase
                 'note' => 'feb amount',
                 'amount' => 100,
             ]);
+
+        $this->assertActionUsesFormRequest(
+            GoalTransactionController::class,
+            'store',
+            GoalTransactionRequest::class
+        );
+    }
+
+    public function test_invalid_goal_transaction_creation_return_clear_validation_messages()
+    {
+        $goal = factory(Goal::class)->attachTo([], $user = factory(User::class)->create());
+
+        $this->passportAs($user)
+            ->postJson("api/goals/{$goal->id}/transactions")
+            ->assertStatus(422)
+            ->assertJsonValidationErrors([
+                'note',
+                'amount',
+            ]);
+
+        $this->assertActionUsesFormRequest(
+            GoalTransactionController::class,
+            'store',
+            GoalTransactionRequest::class
+        );
     }
 }

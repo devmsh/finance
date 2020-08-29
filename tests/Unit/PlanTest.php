@@ -5,6 +5,7 @@ namespace Tests\Unit;
 use App\Budget;
 use App\Category;
 use App\Exceptions\NotAbleToSaveException;
+use App\Http\Requests\PlanRequest;
 use App\Plan;
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -14,6 +15,16 @@ use Tests\TestCase;
 class PlanTest extends TestCase
 {
     use RefreshDatabase;
+
+    public function test_validation_rules_on_plan()
+    {
+        $this->assertEquals([
+            'total_income' => 'required|numeric',
+            'must_have' => 'required|numeric',
+            'min_saving' => 'required|numeric',
+            'user_id' => 'required|exists:users,id',
+        ], (new PlanRequest())->rules());
+    }
 
     public function test_plan_can_suggest_needed_periods_based_on_amount()
     {
