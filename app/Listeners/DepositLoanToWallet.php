@@ -19,7 +19,7 @@ class DepositLoanToWallet
     /**
      * Handle the event.
      *
-     * @param LoanRecorded $event
+     * @param  LoanRecorded  $event
      * @return void
      */
     public function handle(LoanRecorded $event)
