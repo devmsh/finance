@@ -13,7 +13,7 @@ class TransferController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param Request $request
+     * @param  Request  $request
      * @return JsonResponse
      */
     public function store(Request $request)
@@ -41,8 +41,9 @@ class TransferController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param  Request  $request
      * @return array
+     *
      * @deprecated
      */
     private function singleToManyCurrency(Request $request): array
