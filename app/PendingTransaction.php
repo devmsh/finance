@@ -16,7 +16,7 @@ class PendingTransaction extends Transaction
     ];
 
     /**
-     * @param ScheduledTransaction $scheduledTransaction
+     * @param  ScheduledTransaction  $scheduledTransaction
      */
     public static function generateMonthlyTransactions($scheduledTransaction)
     {
