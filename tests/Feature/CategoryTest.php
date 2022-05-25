@@ -44,8 +44,9 @@ class CategoryTest extends TestCase
 
     /**
      * @dataProvider typesCountProvider
-     * @param int $type
-     * @param int $count
+     *
+     * @param  int  $type
+     * @param  int  $count
      */
     public function test_can_filter_categories_per_type($type, $count)
     {
