@@ -20,7 +20,7 @@ class LoanRecorded
     /**
      * Create a new event instance.
      *
-     * @param Loan $loan
+     * @param  Loan  $loan
      */
     public function __construct(Loan $loan)
     {
