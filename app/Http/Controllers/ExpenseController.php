@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 class ExpenseController extends Controller
 {
     /**
-     * @param Request $request
+     * @param  Request  $request
      * @return Collection
      */
     public function store(Request $request)
