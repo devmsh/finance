@@ -20,6 +20,7 @@ class ScheduledTransaction extends Transaction
 
     /**
      * @return Rule
+     *
      * @throws InvalidRRule
      */
     public static function rule()

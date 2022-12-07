@@ -20,7 +20,7 @@ class GoalAchieved
     /**
      * Create a new event instance.
      *
-     * @param Goal $goal
+     * @param  Goal  $goal
      */
     public function __construct(Goal $goal)
     {

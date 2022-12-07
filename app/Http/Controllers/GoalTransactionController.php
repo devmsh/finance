@@ -12,8 +12,8 @@ class GoalTransactionController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param Request $request
-     * @param Goal $goal
+     * @param  Request  $request
+     * @param  Goal  $goal
      * @return Response
      */
     public function store(Request $request, Goal $goal)
