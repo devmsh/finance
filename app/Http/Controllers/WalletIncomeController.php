@@ -12,8 +12,8 @@ class WalletIncomeController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param Request $request
-     * @param Wallet $wallet
+     * @param  Request  $request
+     * @param  Wallet  $wallet
      * @return Response
      */
     public function store(Request $request, Wallet $wallet)
